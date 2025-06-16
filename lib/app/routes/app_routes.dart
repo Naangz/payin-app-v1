@@ -18,4 +18,7 @@ abstract class AppRoutes {
   static const CREATE_QUOTATION = '/create-quotation';
   static const QUOTATION_DETAIL = '/quotation-detail';
   static const EDIT_QUOTATION = '/edit-quotation';
+
+  //Client
+  static const CLIENT_LIST = '/client-list';
 }

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:payin_app/data/models/client_info_model.dart';
+import 'package:payin_app/presentation/clients/client_list_controller.dart';
+import 'package:uuid/uuid.dart';
 
 class AddClientScreen extends StatefulWidget {
   @override
@@ -9,6 +13,8 @@ class _AddClientScreenState extends State<AddClientScreen> {
   final _formKey = GlobalKey<FormState>();
   String companyName = '';
   String contactEmail = '';
+
+  final controller = Get.find<ClientListController>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +59,17 @@ class _AddClientScreenState extends State<AddClientScreen> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    // Simpan data dummy
-                    Navigator.pop(context);
+
+                    final newClient = ClientInfo(
+                      id: const Uuid().v4(),
+                      name: companyName,
+                      email: contactEmail,
+                      phone: '', // Tambah field jika diperlukan
+                    );
+
+                    controller.addClient(newClient);
+
+                    Navigator.pop(context, true); // <- Penting: beri return true
                   }
                 },
               ),
