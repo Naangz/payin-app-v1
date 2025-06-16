@@ -1,6 +1,7 @@
 /// Model untuk informasi client yang hanya digunakan sementara
 /// Tidak disimpan ke database terpisah, hanya sebagai bagian dari invoice
 class ClientInfo {
+  final String id;
   final String name;
   final String email;
   final String phone;
@@ -8,6 +9,7 @@ class ClientInfo {
   final String? company;
 
   ClientInfo({
+     required this.id,
     required this.name,
     required this.email,
     required this.phone,
@@ -24,6 +26,7 @@ class ClientInfo {
   };
 
   factory ClientInfo.fromJson(Map<String, dynamic> json) => ClientInfo(
+    id: json['id'] ?? '',
     name: json['name'] ?? '',
     email: json['email'] ?? '',
     phone: json['phone'] ?? '',

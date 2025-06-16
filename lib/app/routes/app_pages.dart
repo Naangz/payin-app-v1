@@ -13,8 +13,8 @@ import '../bindings/settings_binding.dart';
 import '../../presentation/quotations/quotation_list_screen.dart';
 import '../../presentation/quotations/create_quotation_screen.dart';
 import '../bindings/quotation_binding.dart';
-import 'package:payin_app/presentation/clients/client_list_screen.dart';
-import 'package:payin_app/app/bindings/client_binding.dart';
+import 'package:pay_in/presentation/client/client_list_screen.dart';
+import 'package:pay_in/app/bindings/client_binding.dart';
 
 class AppPages {
   static const INITIAL = AppRoutes.DASHBOARD;

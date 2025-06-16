@@ -1,5 +1,5 @@
-import 'package:payin_app/data/models/client_info_model.dart';
-import 'package:payin_app/core/services/local_storage_service.dart';
+import '../models/client_info_model.dart';
+import '../services/local_storage_service.dart';
 
 class ClientRepository {
   final _boxKey = 'clients';

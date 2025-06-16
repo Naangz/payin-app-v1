@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:payin_app/data/models/client_info_model.dart';
-import 'package:payin_app/data/repositories/client_repository.dart';
+import '../../../data/models/client_info_model.dart';
+import '../../../data/repositories/client_repository.dart';
 
 class ClientListController extends GetxController {
   final ClientRepository _repository = ClientRepository();

@@ -218,4 +218,38 @@ class LocalStorageService {
   Set<String> getKeys() {
     return _preferences?.getKeys() ?? <String>{};
   }
+  // Tambahan: method generik untuk menyimpan dan mengambil list of objects (dalam bentuk JSON String List)
+
+// Simpan list objek (yang memiliki toJson()) ke SharedPreferences
+static Future<void> saveList<T>(
+  String key,
+  List<T> items,
+) async {
+  final prefs = _preferences;
+  if (prefs == null) return;
+
+  final jsonStringList = items.map((item) {
+    return json.encode((item as dynamic).toJson());
+  }).toList();
+
+  await prefs.setStringList(key, jsonStringList);
+}
+
+// Ambil list objek dan ubah ke bentuk objek model dari json
+static Future<List<T>> getList<T>(
+  String key,
+  T Function(Map<String, dynamic>) fromJson,
+) async {
+  final prefs = _preferences;
+  if (prefs == null) return [];
+
+  final jsonStringList = prefs.getStringList(key);
+  if (jsonStringList == null) return [];
+
+  return jsonStringList.map((jsonStr) {
+    final jsonMap = json.decode(jsonStr) as Map<String, dynamic>;
+    return fromJson(jsonMap);
+  }).toList();
+}
+
 }

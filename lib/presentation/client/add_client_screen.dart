@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:payin_app/data/models/client_info_model.dart';
-import 'package:payin_app/presentation/clients/client_list_controller.dart';
+import '../../../data/models/client_info_model.dart';
+import '../../presentation/client/client_list_controller.dart';
 import 'package:uuid/uuid.dart';
 
 class AddClientScreen extends StatefulWidget {
@@ -13,6 +13,8 @@ class _AddClientScreenState extends State<AddClientScreen> {
   final _formKey = GlobalKey<FormState>();
   String companyName = '';
   String contactEmail = '';
+  String address = '';
+
 
   final controller = Get.find<ClientListController>();
 
@@ -48,6 +50,15 @@ class _AddClientScreenState extends State<AddClientScreen> {
                     value!.isEmpty ? 'Email wajib diisi' : null,
                 onSaved: (value) => contactEmail = value!,
               ),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Alamat Perusahaan',
+                  border: OutlineInputBorder(),
+                ),
+                onSaved: (value) => address = value ?? '',
+              ),
+              SizedBox(height: 16),
+
               SizedBox(height: 24),
               ElevatedButton.icon(
                 icon: Icon(Icons.save),
@@ -65,6 +76,7 @@ class _AddClientScreenState extends State<AddClientScreen> {
                       name: companyName,
                       email: contactEmail,
                       phone: '', // Tambah field jika diperlukan
+                      address: '',
                     );
 
                     controller.addClient(newClient);

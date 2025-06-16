@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:payin_app/data/models/client_info_model.dart';
-import 'package:payin_app/presentation/clients/client_list_controller.dart';
+import '../../../data/models/client_info_model.dart';
+import '../../presentation/client/client_list_controller.dart';
 
 class ClientListScreen extends GetView<ClientListController> {
   @override
