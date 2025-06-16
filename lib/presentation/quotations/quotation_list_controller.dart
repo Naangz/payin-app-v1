@@ -61,4 +61,29 @@ class QuotationListController extends GetxController {
   void navigateToQuotationDetail(String quotationId) {
     Get.toNamed('/quotation-detail', arguments: quotationId);
   }
+
+  void confirmDeleteQuotation(String id) {
+    Get.defaultDialog(
+      title: 'Hapus Quotation',
+      middleText: 'Apakah kamu yakin ingin menghapus quotation ini?',
+      textCancel: 'Batal',
+      textConfirm: 'Hapus',
+      confirmTextColor: const Color.fromARGB(255, 255, 0, 0),
+      onConfirm: () async {
+        Get.back();
+        await deleteQuotation(id);
+      },
+    );
+  }
+
+  Future<void> deleteQuotation(String id) async {
+    final success = await _quotationRepository.deleteQuotation(id);
+    if (success) {
+      quotations.removeWhere((q) => q.id == id);
+      filterQuotations();
+      Get.snackbar('Berhasil', 'Quotation berhasil dihapus');
+    } else {
+      Get.snackbar('Gagal', 'Gagal menghapus quotation');
+    }
+  }
 }

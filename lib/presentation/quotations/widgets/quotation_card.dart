@@ -301,20 +301,20 @@ class QuotationCard extends StatelessWidget {
     }
     
     // Delete (only for draft)
-    if (quotation.status.toLowerCase() == 'draft') {
-      items.add(
-        const PopupMenuItem(
-          value: 'delete',
-          child: Row(
-            children: [
-              Icon(Icons.delete, size: 16, color: Colors.red),
-              SizedBox(width: 8),
-              Text('Hapus'),
-            ],
-          ),
-        ),
-      );
-    }
+    // Tampilkan tombol hapus untuk semua status
+items.add(
+  const PopupMenuItem(
+    value: 'delete',
+    child: Row(
+      children: [
+        Icon(Icons.delete, size: 16, color: Colors.red),
+        SizedBox(width: 8),
+        Text('Hapus'),
+      ],
+    ),
+  ),
+);
+
     
     return items;
   }

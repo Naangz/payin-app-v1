@@ -218,10 +218,9 @@ List<Map<String, String>> _getStatusOptions() {
     );
   }
 
-  void _deleteQuotation(String quotationId) {
-    // Implementation will be added when repository methods are ready
-    Get.snackbar('Info', 'Fitur hapus quotation sedang dikembangkan');
-  }
+  void _deleteQuotation(String quotationId) async {
+  await controller.deleteQuotation(quotationId);
+}
 
   void _duplicateQuotation(String quotationId) {
     // Implementation will be added when repository methods are ready

@@ -96,16 +96,24 @@ class QuotationRepository extends GetxService {
   }
 
   Future<bool> deleteQuotation(String id) async {
-    try {
-      final quotations = getAllQuotations();
-      quotations.removeWhere((quotation) => quotation.id == id);
-      await _saveQuotations(quotations);
-      return true;
-    } catch (e) {
-      print('Error deleting quotation: $e');
-      return false;
-    }
+  try {
+    print('Start deleteQuotation with id: $id');
+
+    final quotations = getAllQuotations();
+    print('Before delete: ${quotations.length} quotations');
+
+    quotations.removeWhere((quotation) => quotation.id == id);
+
+    print('After delete: ${quotations.length} quotations');
+
+    await _saveQuotations(quotations);
+    return true;
+  } catch (e) {
+    print('Error deleting quotation: $e');
+    return false;
   }
+}
+
 
   Future<bool> updateQuotationStatus(String id, String status) async {
     try {
