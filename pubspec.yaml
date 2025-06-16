@@ -54,6 +54,7 @@ dependencies:
   # Update google_fonts sesuai search results untuk mengatasi konflik versi
   google_fonts: ^4.0.5
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

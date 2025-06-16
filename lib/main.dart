@@ -5,6 +5,9 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'app/app.dart';
 import 'data/services/hive_service.dart';
+import 'data/repositories/client_repository.dart';
+import 'data/repositories/invoice_repository.dart';
+
 
 void main() async {
   // Pastikan Flutter binding sudah diinisialisasi
@@ -43,6 +46,9 @@ Future<void> _initializeServices() async {
     
     // Register ke GetX dependency injection
     Get.put<HiveService>(hiveService, permanent: true);
+    Get.put(ClientRepository());
+    Get.put(InvoiceRepository());
+
     
     print('✅ Services initialized successfully (using SharedPreferences)');
   } catch (e) {
