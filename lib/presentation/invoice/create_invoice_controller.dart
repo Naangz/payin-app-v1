@@ -4,6 +4,7 @@ import '../../../data/repositories/invoice_repository.dart';
 import '../../../data/models/invoice_model.dart';
 import '../../../data/models/invoice_item_model.dart';
 import '../../../data/services/local_storage_service.dart';
+import '../../../data/repositories/client_repository.dart';
 
 class CreateInvoiceController extends GetxController {
   final InvoiceRepository _invoiceRepository = Get.find<InvoiceRepository>();
@@ -30,6 +31,9 @@ class CreateInvoiceController extends GetxController {
 
   // Form key
   final formKey = GlobalKey<FormState>();
+
+  // Save Client
+  final ClientRepository _clientRepository = Get.find<ClientRepository>();
 
   @override
   void onInit() {
@@ -117,6 +121,8 @@ class CreateInvoiceController extends GetxController {
         Get.snackbar('Error', 'Format tanggal jatuh tempo tidak valid');
         return;
       }
+
+      await saveClientIfNotExists();
 
       final invoice = Invoice.create(
         clientName: clientNameController.text.trim(),
@@ -280,4 +286,30 @@ class CreateInvoiceController extends GetxController {
       ],
     );
   }
+
+  Future<void> saveClientIfNotExists() async {
+  final name = clientNameController.text.trim();
+  final email = clientEmailController.text.trim();
+  final phone = clientPhoneController.text.trim();
+  final address = clientAddressController.text.trim();
+  final company = clientCompanyController.text.trim().isEmpty
+      ? null
+      : clientCompanyController.text.trim();
+
+  if (email.isEmpty) return;
+
+  final existingClient = await _clientRepository.findByEmail(email);
+
+  if (existingClient == null) {
+    await _clientRepository.createClient(
+      name: name,
+      email: email,
+      phone: phone,
+      address: address,
+      company: company,
+    );
+  }
+}
+
+
 }

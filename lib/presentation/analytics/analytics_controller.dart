@@ -4,15 +4,17 @@ import '../../data/repositories/analytics_repository.dart';
 import '../../data/repositories/invoice_repository.dart';
 
 class AnalyticsController extends GetxController {
-  final AnalyticsRepository _analyticsRepository = Get.find<AnalyticsRepository>();
+  final AnalyticsRepository _analyticsRepository =
+      Get.find<AnalyticsRepository>();
   final InvoiceRepository _invoiceRepository = Get.find<InvoiceRepository>();
-  
+
   // Observable variables
   final RxBool isLoading = false.obs;
   final RxMap<String, dynamic> salesAnalytics = <String, dynamic>{}.obs;
   final RxMap<String, int> statusDistribution = <String, int>{}.obs;
   final RxList<Map<String, dynamic>> topClients = <Map<String, dynamic>>[].obs;
-  final RxList<Map<String, dynamic>> monthlyTrend = <Map<String, dynamic>>[].obs;
+  final RxList<Map<String, dynamic>> monthlyTrend =
+      <Map<String, dynamic>>[].obs;
   final RxList<Map<String, dynamic>> dailySales = <Map<String, dynamic>>[].obs;
   final RxString selectedPeriod = 'thisMonth'.obs;
 
@@ -25,19 +27,22 @@ class AnalyticsController extends GetxController {
   Future<void> loadAnalyticsData() async {
     try {
       isLoading.value = true;
-      
+
       // Load sales analytics
       salesAnalytics.value = _analyticsRepository.getSalesAnalytics();
-      
+
       // Load status distribution
-      statusDistribution.value = _analyticsRepository.getInvoiceStatusDistribution();
-      
+      statusDistribution.value =
+          _analyticsRepository.getInvoiceStatusDistribution();
+
       // Load top clients
       topClients.value = _analyticsRepository.getTopClients(limit: 5);
-      
+
       // Load monthly trend
-      monthlyTrend.value = _analyticsRepository.getMonthlyRevenueTrend(months: 6);
-      
+      monthlyTrend.value = _analyticsRepository.getMonthlyRevenueTrend(
+        months: 6,
+      );
+
       // Load daily sales for current period
       final now = DateTime.now();
       final startDate = _getStartDateForPeriod(selectedPeriod.value);
@@ -45,7 +50,7 @@ class AnalyticsController extends GetxController {
         startDate: startDate,
         endDate: now,
       );
-      
+
       print('✅ Analytics data loaded successfully');
     } catch (e) {
       print('❌ Error loading analytics data: $e');
@@ -101,8 +106,13 @@ class AnalyticsController extends GetxController {
     }
   }
 
-  List<String> get periodOptions => ['thisWeek', 'thisMonth', 'thisQuarter', 'thisYear'];
-  
+  List<String> get periodOptions => [
+    'thisWeek',
+    'thisMonth',
+    'thisQuarter',
+    'thisYear',
+  ];
+
   String getPeriodText(String period) {
     switch (period) {
       case 'thisWeek':

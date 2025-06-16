@@ -6,10 +6,7 @@ import '../analytics_controller.dart';
 class SalesChart extends StatelessWidget {
   final AnalyticsController controller;
 
-  const SalesChart({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  const SalesChart({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +39,10 @@ class SalesChart extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.blue.shade50,
                   borderRadius: BorderRadius.circular(20),
@@ -61,93 +61,94 @@ class SalesChart extends StatelessWidget {
           const SizedBox(height: 20),
           SizedBox(
             height: 200,
-            child: controller.dailySales.isEmpty
-                ? _buildEmptyChart()
-                : LineChart(
-                    LineChartData(
-                      gridData: FlGridData(
-                        show: true,
-                        drawVerticalLine: false,
-                        horizontalInterval: _getHorizontalInterval(),
-                        getDrawingHorizontalLine: (value) {
-                          return FlLine(
-                            color: Colors.grey.shade200,
-                            strokeWidth: 1,
-                          );
-                        },
-                      ),
-                      titlesData: FlTitlesData(
-                        show: true,
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
+            child:
+                controller.dailySales.isEmpty
+                    ? _buildEmptyChart()
+                    : LineChart(
+                      LineChartData(
+                        gridData: FlGridData(
+                          show: true,
+                          drawVerticalLine: false,
+                          horizontalInterval: _getHorizontalInterval(),
+                          getDrawingHorizontalLine: (value) {
+                            return FlLine(
+                              color: Colors.grey.shade200,
+                              strokeWidth: 1,
+                            );
+                          },
                         ),
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            getTitlesWidget: _getBottomTitles,
-                            interval: 1,
+                        titlesData: FlTitlesData(
+                          show: true,
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
                           ),
-                        ),
-                        leftTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            getTitlesWidget: _getLeftTitles,
-                            reservedSize: 60,
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
                           ),
-                        ),
-                      ),
-                      borderData: FlBorderData(
-                        show: true,
-                        border: Border(
-                          bottom: BorderSide(color: Colors.grey.shade300),
-                          left: BorderSide(color: Colors.grey.shade300),
-                        ),
-                      ),
-                      minX: 0,
-                      maxX: (controller.dailySales.length - 1).toDouble(),
-                      minY: 0,
-                      maxY: _getMaxY(),
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: _getSpots(),
-                          isCurved: true,
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.blue.shade400,
-                              Colors.blue.shade600,
-                            ],
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: _getBottomTitles,
+                              interval: 1,
+                            ),
                           ),
-                          barWidth: 3,
-                          isStrokeCapRound: true,
-                          dotData: FlDotData(
-                            show: true,
-                            getDotPainter: (spot, percent, barData, index) {
-                              return FlDotCirclePainter(
-                                radius: 4,
-                                color: Colors.blue.shade600,
-                                strokeWidth: 2,
-                                strokeColor: Colors.white,
-                              );
-                            },
-                          ),
-                          belowBarData: BarAreaData(
-                            show: true,
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.blue.shade100.withOpacity(0.3),
-                                Colors.blue.shade50.withOpacity(0.1),
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: _getLeftTitles,
+                              reservedSize: 60,
                             ),
                           ),
                         ),
-                      ],
+                        borderData: FlBorderData(
+                          show: true,
+                          border: Border(
+                            bottom: BorderSide(color: Colors.grey.shade300),
+                            left: BorderSide(color: Colors.grey.shade300),
+                          ),
+                        ),
+                        minX: 0,
+                        maxX: (controller.dailySales.length - 1).toDouble(),
+                        minY: 0,
+                        maxY: _getMaxY(),
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: _getSpots(),
+                            isCurved: true,
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.blue.shade400,
+                                Colors.blue.shade600,
+                              ],
+                            ),
+                            barWidth: 3,
+                            isStrokeCapRound: true,
+                            dotData: FlDotData(
+                              show: true,
+                              getDotPainter: (spot, percent, barData, index) {
+                                return FlDotCirclePainter(
+                                  radius: 4,
+                                  color: Colors.blue.shade600,
+                                  strokeWidth: 2,
+                                  strokeColor: Colors.white,
+                                );
+                              },
+                            ),
+                            belowBarData: BarAreaData(
+                              show: true,
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.blue.shade100.withOpacity(0.3),
+                                  Colors.blue.shade50.withOpacity(0.1),
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
           ),
           const SizedBox(height: 16),
           _buildChartLegend(),
@@ -161,26 +162,16 @@ class SalesChart extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.show_chart,
-            size: 48,
-            color: Colors.grey.shade300,
-          ),
+          Icon(Icons.show_chart, size: 48, color: Colors.grey.shade300),
           const SizedBox(height: 16),
           Text(
             'Belum ada data penjualan',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey.shade600,
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
           ),
           const SizedBox(height: 8),
           Text(
             'Data akan muncul setelah ada invoice yang lunas',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade500,
-            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
             textAlign: TextAlign.center,
           ),
         ],
@@ -199,16 +190,13 @@ class SalesChart extends StatelessWidget {
 
   double _getMaxY() {
     if (controller.dailySales.isEmpty) return 100;
-    
+
     // Perbaikan: menggunakan math.max untuk membandingkan nilai
-    final maxAmount = controller.dailySales.fold<double>(
-      0,
-      (max, data) {
-        final amount = (data['amount'] as double?) ?? 0.0;
-        return amount > max ? amount : max;
-      },
-    );
-    
+    final maxAmount = controller.dailySales.fold<double>(0, (max, data) {
+      final amount = (data['amount'] as double?) ?? 0.0;
+      return amount > max ? amount : max;
+    });
+
     return maxAmount * 1.2; // Add 20% padding
   }
 
@@ -221,18 +209,15 @@ class SalesChart extends StatelessWidget {
     if (value.toInt() >= controller.dailySales.length) {
       return const SizedBox.shrink();
     }
-    
+
     final data = controller.dailySales[value.toInt()];
     final date = data['date'] as String? ?? '';
-    
+
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Text(
         date,
-        style: TextStyle(
-          fontSize: 10,
-          color: Colors.grey.shade600,
-        ),
+        style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
       ),
     );
   }
@@ -240,10 +225,7 @@ class SalesChart extends StatelessWidget {
   Widget _getLeftTitles(double value, TitleMeta meta) {
     return Text(
       _formatCurrency(value),
-      style: TextStyle(
-        fontSize: 10,
-        color: Colors.grey.shade600,
-      ),
+      style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
     );
   }
 
@@ -272,10 +254,7 @@ class SalesChart extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           'Penjualan Harian',
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey.shade600,
-          ),
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
         ),
       ],
     );

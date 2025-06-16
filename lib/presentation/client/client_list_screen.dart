@@ -4,15 +4,11 @@ import '../../../data/models/client_info_model.dart';
 import '../../presentation/client/client_list_controller.dart';
 import '../../app/routes/app_routes.dart';
 
-
 class ClientListScreen extends GetView<ClientListController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Daftar Klien'),
-        backgroundColor: Colors.blue,
-      ),
+      appBar: AppBar(title: Text('Daftar Klien'), backgroundColor: Colors.blue),
       body: Obx(() {
         if (controller.clients.isEmpty) {
           return Center(child: Text("Belum ada klien"));
@@ -48,7 +44,10 @@ class ClientListScreen extends GetView<ClientListController> {
         backgroundColor: Colors.blue,
         child: Icon(Icons.add),
         onPressed: () async {
-          final result = await Navigator.pushNamed(context, AppRoutes.ADD_CLIENT);
+          final result = await Navigator.pushNamed(
+            context,
+            AppRoutes.ADD_CLIENT,
+          );
           if (result == true) {
             controller.fetchClients(); // Refresh list setelah tambah
           }

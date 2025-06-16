@@ -27,6 +27,7 @@ dependencies:
   
   # Date & Time
   intl: ^0.20.2
+
   
   # Email & Sharing
   share_plus: ^7.2.2
@@ -53,6 +54,7 @@ dependencies:
 
   # Update google_fonts sesuai search results untuk mengatasi konflik versi
   google_fonts: ^4.0.5
+
 
 dev_dependencies:
   flutter_test:

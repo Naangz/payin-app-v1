@@ -91,7 +91,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
           onTap: widget.onTap,
           readOnly: widget.readOnly,
           enabled: widget.enabled,
-          maxLines: widget.type == TextFieldType.multiline ? (widget.maxLines ?? 3) : 1,
+          maxLines:
+              widget.type == TextFieldType.multiline
+                  ? (widget.maxLines ?? 3)
+                  : 1,
           maxLength: widget.maxLength,
           obscureText: _obscureText,
           autofocus: widget.autofocus,
@@ -146,10 +149,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 width: AppSizes.textFieldBorderWidthFocused,
               ),
             ),
-            contentPadding: widget.contentPadding ?? const EdgeInsets.symmetric(
-              horizontal: AppSizes.paddingM,
-              vertical: AppSizes.paddingM,
-            ),
+            contentPadding:
+                widget.contentPadding ??
+                const EdgeInsets.symmetric(
+                  horizontal: AppSizes.paddingM,
+                  vertical: AppSizes.paddingM,
+                ),
             hintStyle: TextStyle(
               color: AppColors.textHint,
               fontSize: AppSizes.fontM,
@@ -238,33 +243,31 @@ class _CurrencyInputFormatter extends TextInputFormatter {
 
     final int selectionIndex = newValue.selection.end;
     final String newText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
-    
+
     if (newText.isEmpty) {
       return const TextEditingValue();
     }
 
     final int value = int.parse(newText);
     final String formattedText = _formatCurrency(value);
-    
+
     return TextEditingValue(
       text: formattedText,
-      selection: TextSelection.collapsed(
-        offset: formattedText.length,
-      ),
+      selection: TextSelection.collapsed(offset: formattedText.length),
     );
   }
 
   String _formatCurrency(int value) {
     final String valueStr = value.toString();
     String result = '';
-    
+
     for (int i = 0; i < valueStr.length; i++) {
       if (i > 0 && (valueStr.length - i) % 3 == 0) {
         result += '.';
       }
       result += valueStr[i];
     }
-    
+
     return 'Rp $result';
   }
 }
@@ -291,12 +294,10 @@ class SearchTextField extends StatelessWidget {
       hint: hintText,
       onChanged: onChanged,
       prefixIcon: const Icon(Icons.search),
-      suffixIcon: controller?.text.isNotEmpty == true
-          ? IconButton(
-              icon: const Icon(Icons.clear),
-              onPressed: onClear,
-            )
-          : null,
+      suffixIcon:
+          controller?.text.isNotEmpty == true
+              ? IconButton(icon: const Icon(Icons.clear), onPressed: onClear)
+              : null,
     );
   }
 }

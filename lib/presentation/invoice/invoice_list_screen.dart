@@ -13,18 +13,18 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
         children: [
           // Search and Filter Section
           _buildSearchAndFilter(),
-          
+
           // Invoice List
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
                 return _buildLoadingState();
               }
-              
+
               if (controller.filteredInvoices.isEmpty) {
                 return _buildEmptyState();
               }
-              
+
               return RefreshIndicator(
                 onRefresh: controller.loadInvoices,
                 color: const Color(0xFF1E40AF),
@@ -66,10 +66,7 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF1E40AF),
-              Color(0xFF3B82F6),
-            ],
+            colors: [Color(0xFF1E40AF), Color(0xFF3B82F6)],
           ),
         ),
       ),
@@ -118,10 +115,7 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
             ),
             child: TextField(
               controller: controller.searchController,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Color(0xFF1F2937),
-              ),
+              style: const TextStyle(fontSize: 16, color: Color(0xFF1F2937)),
               decoration: InputDecoration(
                 hintText: 'Cari invoice...',
                 hintStyle: const TextStyle(
@@ -141,19 +135,22 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
                     size: 20,
                   ),
                 ),
-                suffixIcon: Obx(() => controller.searchQuery.value.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(
-                          Icons.clear,
-                          color: Color(0xFF6B7280),
-                        ),
-                        onPressed: () {
-                          controller.searchController.clear();
-                          controller.searchQuery.value = '';
-                          controller.filterInvoices();
-                        },
-                      )
-                    : const SizedBox.shrink()),
+                suffixIcon: Obx(
+                  () =>
+                      controller.searchQuery.value.isNotEmpty
+                          ? IconButton(
+                            icon: const Icon(
+                              Icons.clear,
+                              color: Color(0xFF6B7280),
+                            ),
+                            onPressed: () {
+                              controller.searchController.clear();
+                              controller.searchQuery.value = '';
+                              controller.filterInvoices();
+                            },
+                          )
+                          : const SizedBox.shrink(),
+                ),
                 filled: true,
                 fillColor: const Color(0xFFF8FAFC),
                 border: OutlineInputBorder(
@@ -188,60 +185,77 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
               },
             ),
           ),
-          
+
           const SizedBox(height: 20),
-          
+
           // Status Filter
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Obx(() => Row(
-              children: _getStatusOptions().map((status) {
-                final isSelected = controller.selectedStatus.value == (status['value'] ?? '');
-                return Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: isSelected ? [
-                        BoxShadow(
-                          color: const Color(0xFF3B82F6).withOpacity(0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
+            child: Obx(
+              () => Row(
+                children:
+                    _getStatusOptions().map((status) {
+                      final isSelected =
+                          controller.selectedStatus.value ==
+                          (status['value'] ?? '');
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow:
+                                isSelected
+                                    ? [
+                                      BoxShadow(
+                                        color: const Color(
+                                          0xFF3B82F6,
+                                        ).withOpacity(0.3),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ]
+                                    : [],
+                          ),
+                          child: FilterChip(
+                            label: Text(
+                              status['label'] ?? '',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color:
+                                    isSelected
+                                        ? Colors.white
+                                        : const Color(0xFF6B7280),
+                              ),
+                            ),
+                            selected: isSelected,
+                            onSelected: (selected) {
+                              if (selected) {
+                                controller.selectedStatus.value =
+                                    status['value'] ?? '';
+                                controller.filterInvoices();
+                              }
+                            },
+                            backgroundColor: const Color(0xFFF1F5F9),
+                            selectedColor: const Color(0xFF3B82F6),
+                            checkmarkColor: Colors.white,
+                            elevation: 0,
+                            pressElevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(
+                                color:
+                                    isSelected
+                                        ? const Color(0xFF3B82F6)
+                                        : const Color(0xFFE2E8F0),
+                                width: 2,
+                              ),
+                            ),
+                          ),
                         ),
-                      ] : [],
-                    ),
-                    child: FilterChip(
-                      label: Text(
-                        status['label'] ?? '',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: isSelected ? Colors.white : const Color(0xFF6B7280),
-                        ),
-                      ),
-                      selected: isSelected,
-                      onSelected: (selected) {
-                        if (selected) {
-                          controller.selectedStatus.value = status['value'] ?? '';
-                          controller.filterInvoices();
-                        }
-                      },
-                      backgroundColor: const Color(0xFFF1F5F9),
-                      selectedColor: const Color(0xFF3B82F6),
-                      checkmarkColor: Colors.white,
-                      elevation: 0,
-                      pressElevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(
-                          color: isSelected ? const Color(0xFF3B82F6) : const Color(0xFFE2E8F0),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            )),
+                      );
+                    }).toList(),
+              ),
+            ),
           ),
         ],
       ),
@@ -335,10 +349,7 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    const Color(0xFF3B82F6),
-                    const Color(0xFF1E40AF),
-                  ],
+                  colors: [const Color(0xFF3B82F6), const Color(0xFF1E40AF)],
                 ),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
@@ -354,15 +365,15 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
                 icon: const Icon(Icons.add, size: 20),
                 label: const Text(
                   'Buat Invoice',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -427,9 +438,9 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
                     _buildStatusChip(invoice.status),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -472,16 +483,19 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: invoice.isOverdue ? const Color(0xFFEF4444) : const Color(0xFF374151),
+                            color:
+                                invoice.isOverdue
+                                    ? const Color(0xFFEF4444)
+                                    : const Color(0xFF374151),
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 Row(
                   children: [
                     Expanded(
@@ -523,7 +537,7 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
   Widget _buildStatusChip(String status) {
     Color color;
     String text;
-    
+
     switch (status.toLowerCase()) {
       case 'paid':
         color = const Color(0xFF10B981);
@@ -551,10 +565,7 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withOpacity(0.3),
-          width: 1,
-        ),
+        border: Border.all(color: color.withOpacity(0.3), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -562,10 +573,7 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
           Container(
             width: 6,
             height: 6,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           ),
           const SizedBox(width: 6),
           Text(
@@ -591,10 +599,7 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withOpacity(0.2),
-          width: 1,
-        ),
+        border: Border.all(color: color.withOpacity(0.2), width: 1),
       ),
       child: Material(
         color: Colors.transparent,
@@ -627,10 +632,7 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            const Color(0xFF3B82F6),
-            const Color(0xFF1E40AF),
-          ],
+          colors: [const Color(0xFF3B82F6), const Color(0xFF1E40AF)],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [

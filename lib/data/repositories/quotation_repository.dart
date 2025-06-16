@@ -7,7 +7,7 @@ import '../services/local_storage_service.dart';
 class QuotationRepository extends GetxService {
   HiveService? _hiveService;
   LocalStorageService? _localStorage;
-  
+
   static const String _quotationKey = 'quotations_data';
 
   @override
@@ -24,16 +24,17 @@ class QuotationRepository extends GetxService {
   Future<String> createQuotation(Quotation quotation) async {
     try {
       final quotationWithNumber = quotation.copyWith(
-        quotationNumber: quotation.quotationNumber.isEmpty 
-            ? await _generateQuotationNumber() 
-            : quotation.quotationNumber,
+        quotationNumber:
+            quotation.quotationNumber.isEmpty
+                ? await _generateQuotationNumber()
+                : quotation.quotationNumber,
       );
 
       // Save using SharedPreferences through LocalStorageService
       final quotations = getAllQuotations();
       quotations.add(quotationWithNumber);
       await _saveQuotations(quotations);
-      
+
       return quotationWithNumber.id;
     } catch (e) {
       throw Exception('Gagal membuat quotation: $e');
@@ -43,7 +44,7 @@ class QuotationRepository extends GetxService {
   List<Quotation> getAllQuotations() {
     try {
       if (_localStorage == null) return [];
-      
+
       // PERBAIKAN: Menggunakan method yang benar
       final quotationsJson = _localStorage!.getStringList(_quotationKey) ?? [];
       return quotationsJson
@@ -81,7 +82,7 @@ class QuotationRepository extends GetxService {
     try {
       final quotations = getAllQuotations();
       final index = quotations.indexWhere((q) => q.id == quotation.id);
-      
+
       if (index != -1) {
         quotations[index] = quotation;
         await _saveQuotations(quotations);
@@ -129,7 +130,7 @@ class QuotationRepository extends GetxService {
 
       final newId = Quotation.generateId();
       final newQuotationNumber = await _generateQuotationNumber();
-      
+
       final duplicatedQuotation = originalQuotation.copyWith(
         id: newId,
         quotationNumber: newQuotationNumber,
@@ -154,7 +155,7 @@ class QuotationRepository extends GetxService {
       // Convert quotation to invoice (implementation depends on your invoice model)
       // This is a placeholder - you'll need to implement based on your invoice structure
       print('Converting quotation ${quotation.quotationNumber} to invoice');
-      
+
       // Return mock invoice ID for now
       return 'inv_${DateTime.now().millisecondsSinceEpoch}';
     } catch (e) {
@@ -166,11 +167,12 @@ class QuotationRepository extends GetxService {
   Future<void> _saveQuotations(List<Quotation> quotations) async {
     try {
       if (_localStorage == null) return;
-      
-      final quotationsJson = quotations
-          .map((quotation) => jsonEncode(quotation.toJson()))
-          .toList();
-      
+
+      final quotationsJson =
+          quotations
+              .map((quotation) => jsonEncode(quotation.toJson()))
+              .toList();
+
       // PERBAIKAN: Menggunakan method yang benar
       await _localStorage!.setStringList(_quotationKey, quotationsJson);
     } catch (e) {
@@ -184,7 +186,7 @@ class QuotationRepository extends GetxService {
       final counter = _localStorage?.getQuotationCounter() ?? 1;
       final year = DateTime.now().year;
       final month = DateTime.now().month.toString().padLeft(2, '0');
-      
+
       // PERBAIKAN: Menggunakan method yang benar
       await _localStorage?.incrementQuotationCounter();
       return 'QUO-$year$month-${counter.toString().padLeft(4, '0')}';
@@ -192,5 +194,6 @@ class QuotationRepository extends GetxService {
       return 'QUO-${DateTime.now().millisecondsSinceEpoch}';
     }
   }
+
   LocalStorageService? get localStorage => _localStorage;
 }

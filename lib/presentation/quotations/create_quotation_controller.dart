@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../data/repositories/quotation_repository.dart';
+import '../../../data/repositories/client_repository.dart'; // ✅ Tambahan
 import '../../../data/models/quotation_model.dart';
 import '../../../data/models/quotation_item_model.dart';
 import '../../../data/services/local_storage_service.dart';
+import '../../../data/repositories/client_repository.dart';
 
 class CreateQuotationController extends GetxController {
   final QuotationRepository _quotationRepository = Get.find<QuotationRepository>();
+  final ClientRepository _clientRepository = Get.find<ClientRepository>(); // ✅ Tambahan
   LocalStorageService? _localStorage;
-  
-  // Observable variables
+
   final RxBool isLoading = false.obs;
   final RxList<QuotationItem> items = <QuotationItem>[].obs;
   final RxDouble subtotal = 0.0.obs;
@@ -18,7 +20,6 @@ class CreateQuotationController extends GetxController {
   final RxDouble total = 0.0.obs;
   final RxDouble taxRate = 11.0.obs;
 
-  // Form controllers
   final clientNameController = TextEditingController();
   final clientEmailController = TextEditingController();
   final clientPhoneController = TextEditingController();
@@ -28,7 +29,6 @@ class CreateQuotationController extends GetxController {
   final notesController = TextEditingController();
   final discountController = TextEditingController();
 
-  // Form key
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -113,6 +113,15 @@ class CreateQuotationController extends GetxController {
         Get.snackbar('Error', 'Format tanggal berlaku sampai tidak valid');
         return;
       }
+
+      // ✅ Tambahkan penyimpanan client otomatis
+      await _clientRepository.saveClientIfNotExists(
+        name: clientNameController.text.trim(),
+        email: clientEmailController.text.trim(),
+        phone: clientPhoneController.text.trim(),
+        address: clientAddressController.text.trim(),
+        company: clientCompanyController.text.trim(),
+      );
 
       final quotation = Quotation(
         id: Quotation.generateId(),
