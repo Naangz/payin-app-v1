@@ -21,4 +21,5 @@ abstract class AppRoutes {
 
   //Client
   static const CLIENT_LIST = '/client-list';
+  static const ADD_CLIENT = '/add-client';
 }

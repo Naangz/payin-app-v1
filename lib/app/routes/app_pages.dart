@@ -15,6 +15,8 @@ import '../../presentation/quotations/create_quotation_screen.dart';
 import '../bindings/quotation_binding.dart';
 import 'package:pay_in/presentation/client/client_list_screen.dart';
 import 'package:pay_in/app/bindings/client_binding.dart';
+import 'package:pay_in/presentation/client/add_client_screen.dart';
+
 
 class AppPages {
   static const INITIAL = AppRoutes.DASHBOARD;
@@ -92,7 +94,12 @@ class AppPages {
     name: AppRoutes.CLIENT_LIST,
     page: () => ClientListScreen(),
     binding: ClientBinding(),
-  ),
+    ),
+    GetPage(
+    name: AppRoutes.ADD_CLIENT,
+    page: () => AddClientScreen(), // <- ganti dengan nama class screen kamu
+    ),
+
   ];
 }
 

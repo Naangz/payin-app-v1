@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../data/models/client_info_model.dart';
 import '../../presentation/client/client_list_controller.dart';
+import '../../app/routes/app_routes.dart';
+
 
 class ClientListScreen extends GetView<ClientListController> {
   @override
@@ -46,7 +48,7 @@ class ClientListScreen extends GetView<ClientListController> {
         backgroundColor: Colors.blue,
         child: Icon(Icons.add),
         onPressed: () async {
-          final result = await Navigator.pushNamed(context, '/add-client');
+          final result = await Navigator.pushNamed(context, AppRoutes.ADD_CLIENT);
           if (result == true) {
             controller.fetchClients(); // Refresh list setelah tambah
           }
