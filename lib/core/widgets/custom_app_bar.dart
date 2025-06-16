@@ -17,7 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool automaticallyImplyLeading;
 
   const CustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.actions,
     this.leading,
@@ -29,7 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onBackPressed,
     this.bottom,
     this.automaticallyImplyLeading = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       foregroundColor: foregroundColor ?? Colors.white,
       elevation: elevation ?? AppSizes.elevationNone,
       automaticallyImplyLeading: automaticallyImplyLeading,
-      leading: leading ?? (showBackButton && _canPop(context) ? _buildBackButton() : null),
+      leading:
+          leading ??
+          (showBackButton && _canPop(context) ? _buildBackButton() : null),
       actions: actions,
       bottom: bottom,
       iconTheme: IconThemeData(
@@ -84,12 +86,12 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onSettings;
 
   const DashboardAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.actions,
     this.onRefresh,
     this.onSettings,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -129,14 +131,14 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
 
   const SearchAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.hintText = 'Cari...',
     this.searchController,
     this.onSearchChanged,
     this.onSearchClear,
     this.actions,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -165,12 +167,13 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
               hintText: hintText,
               hintStyle: const TextStyle(color: Colors.white70),
               prefixIcon: const Icon(Icons.search, color: Colors.white70),
-              suffixIcon: searchController?.text.isNotEmpty == true
-                  ? IconButton(
-                      icon: const Icon(Icons.clear, color: Colors.white70),
-                      onPressed: onSearchClear,
-                    )
-                  : null,
+              suffixIcon:
+                  searchController?.text.isNotEmpty == true
+                      ? IconButton(
+                        icon: const Icon(Icons.clear, color: Colors.white70),
+                        onPressed: onSearchClear,
+                      )
+                      : null,
               filled: true,
               fillColor: Colors.white.withOpacity(0.2),
               border: OutlineInputBorder(
@@ -200,12 +203,12 @@ class TabAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
 
   const TabAppBar({
-    Key? key,
+    super.key,
     required this.title,
     required this.tabs,
     this.tabController,
     this.actions,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -237,9 +240,8 @@ class TabAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(
-    AppSizes.appBarHeight + kTextTabBarHeight,
-  );
+  Size get preferredSize =>
+      const Size.fromHeight(AppSizes.appBarHeight + kTextTabBarHeight);
 }
 
 // Simple App Bar untuk halaman sederhana
@@ -249,11 +251,11 @@ class SimpleAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
 
   const SimpleAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.onBackPressed,
     this.showBackButton = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -269,13 +271,14 @@ class SimpleAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.primary,
       foregroundColor: Colors.white,
       elevation: AppSizes.elevationNone,
-      leading: showBackButton && Navigator.canPop(context)
-          ? IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: onBackPressed ?? () => Navigator.pop(context),
-              tooltip: 'Kembali',
-            )
-          : null,
+      leading:
+          showBackButton && Navigator.canPop(context)
+              ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: onBackPressed ?? () => Navigator.pop(context),
+                tooltip: 'Kembali',
+              )
+              : null,
     );
   }
 

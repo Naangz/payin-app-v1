@@ -30,7 +30,7 @@ class CustomTextField extends StatefulWidget {
   final Color? fillColor;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     this.label,
     this.hint,
     this.helperText,
@@ -53,7 +53,7 @@ class CustomTextField extends StatefulWidget {
     this.contentPadding,
     this.filled = true,
     this.fillColor,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -76,7 +76,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         if (widget.label != null) ...[
           Text(
             widget.label!,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: AppSizes.fontM,
               fontWeight: FontWeight.w500,
               color: AppColors.textPrimary,
@@ -103,7 +103,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           onFieldSubmitted: widget.onFieldSubmitted,
           keyboardType: _getKeyboardType(),
           inputFormatters: _getInputFormatters(),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: AppSizes.fontM,
             color: AppColors.textPrimary,
           ),
@@ -155,7 +155,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   horizontal: AppSizes.paddingM,
                   vertical: AppSizes.paddingM,
                 ),
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
               color: AppColors.textHint,
               fontSize: AppSizes.fontM,
             ),
@@ -280,12 +280,12 @@ class SearchTextField extends StatelessWidget {
   final VoidCallback? onClear;
 
   const SearchTextField({
-    Key? key,
+    super.key,
     this.controller,
     this.hintText = 'Cari...',
     this.onChanged,
     this.onClear,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

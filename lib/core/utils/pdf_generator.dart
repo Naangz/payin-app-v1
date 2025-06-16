@@ -20,7 +20,7 @@ class PdfGenerator {
   // Generate invoice PDF
   static Future<Uint8List> generateInvoicePdf(Invoice invoice) async {
     await _initLocalStorage();
-    
+
     final pdf = pw.Document();
     final businessInfo = _localStorage?.getBusinessInfo();
 
@@ -33,19 +33,19 @@ class PdfGenerator {
             // Header
             _buildHeader(businessInfo),
             pw.SizedBox(height: 30),
-            
+
             // Invoice Info and Client
             _buildInvoiceInfo(invoice),
             pw.SizedBox(height: 30),
-            
+
             // Items Table
             _buildItemsTable(invoice),
             pw.SizedBox(height: 30),
-            
+
             // Summary
             _buildSummary(invoice),
             pw.SizedBox(height: 40),
-            
+
             // Footer
             _buildFooter(invoice),
           ];
@@ -77,19 +77,19 @@ class PdfGenerator {
             pw.SizedBox(height: 8),
             pw.Text(
               businessInfo?['address'] ?? 'Alamat Bisnis',
-              style: pw.TextStyle(fontSize: 12),
+              style: const pw.TextStyle(fontSize: 12),
             ),
             pw.Text(
               'Tel: ${businessInfo?['phone'] ?? 'Nomor Telepon'}',
-              style: pw.TextStyle(fontSize: 12),
+              style: const pw.TextStyle(fontSize: 12),
             ),
             pw.Text(
               'Email: ${businessInfo?['email'] ?? 'email@business.com'}',
-              style: pw.TextStyle(fontSize: 12),
+              style: const pw.TextStyle(fontSize: 12),
             ),
           ],
         ),
-        
+
         // Invoice Title
         pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.end,
@@ -138,39 +138,48 @@ class PdfGenerator {
                 pw.SizedBox(height: 4),
                 pw.Text(
                   invoice.clientCompany!,
-                  style: pw.TextStyle(fontSize: 14),
+                  style: const pw.TextStyle(fontSize: 14),
                 ),
               ],
               pw.SizedBox(height: 4),
               pw.Text(
                 invoice.clientAddress,
-                style: pw.TextStyle(fontSize: 12),
+                style: const pw.TextStyle(fontSize: 12),
               ),
               pw.Text(
                 'Tel: ${invoice.clientPhone}',
-                style: pw.TextStyle(fontSize: 12),
+                style: const pw.TextStyle(fontSize: 12),
               ),
               pw.Text(
                 'Email: ${invoice.clientEmail}',
-                style: pw.TextStyle(fontSize: 12),
+                style: const pw.TextStyle(fontSize: 12),
               ),
             ],
           ),
         ),
-        
+
         pw.SizedBox(width: 40),
-        
+
         // Invoice Details
         pw.Expanded(
           child: pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.end,
             children: [
               _buildInfoRow('No. Invoice:', invoice.invoiceNumber),
-              _buildInfoRow('Tanggal:', DateFormatter.formatForInvoice(invoice.createdDate)),
-              _buildInfoRow('Jatuh Tempo:', DateFormatter.formatForInvoice(invoice.dueDate)),
+              _buildInfoRow(
+                'Tanggal:',
+                DateFormatter.formatForInvoice(invoice.createdDate),
+              ),
+              _buildInfoRow(
+                'Jatuh Tempo:',
+                DateFormatter.formatForInvoice(invoice.dueDate),
+              ),
               pw.SizedBox(height: 8),
               pw.Container(
-                padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const pw.EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
+                ),
                 decoration: pw.BoxDecoration(
                   color: _getStatusColor(invoice.status),
                   borderRadius: pw.BorderRadius.circular(4),
@@ -207,10 +216,7 @@ class PdfGenerator {
             ),
           ),
           pw.SizedBox(width: 8),
-          pw.Text(
-            value,
-            style: pw.TextStyle(fontSize: 12),
-          ),
+          pw.Text(value, style: const pw.TextStyle(fontSize: 12)),
         ],
       ),
     );
@@ -219,10 +225,7 @@ class PdfGenerator {
   // Build items table
   static pw.Widget _buildItemsTable(Invoice invoice) {
     return pw.Table(
-      border: pw.TableBorder.all(
-        color: PdfColors.grey300,
-        width: 1,
-      ),
+      border: pw.TableBorder.all(color: PdfColors.grey300, width: 1),
       columnWidths: const {
         0: pw.FlexColumnWidth(3),
         1: pw.FlexColumnWidth(1),
@@ -233,7 +236,7 @@ class PdfGenerator {
       children: [
         // Header
         pw.TableRow(
-          decoration: pw.BoxDecoration(color: PdfColors.grey100),
+          decoration: const pw.BoxDecoration(color: PdfColors.grey100),
           children: [
             _buildTableHeader('Deskripsi'),
             _buildTableHeader('Qty'),
@@ -242,20 +245,25 @@ class PdfGenerator {
             _buildTableHeader('Total'),
           ],
         ),
-        
+
         // Items
-        ...invoice.items.map((item) => pw.TableRow(
-          children: [
-            _buildTableCell('${item.name}\n${item.description}', isDescription: true),
-            _buildTableCell('${item.quantity}'),
-            _buildTableCell(CurrencyFormatter.formatIDR(item.price)),
-            _buildTableCell(CurrencyFormatter.formatIDR(item.discount)),
-            _buildTableCell(
-              CurrencyFormatter.formatIDR(item.total),
-              isBold: true,
-            ),
-          ],
-        )).toList(),
+        ...invoice.items.map(
+          (item) => pw.TableRow(
+            children: [
+              _buildTableCell(
+                '${item.name}\n${item.description}',
+                isDescription: true,
+              ),
+              _buildTableCell('${item.quantity}'),
+              _buildTableCell(CurrencyFormatter.formatIDR(item.price)),
+              _buildTableCell(CurrencyFormatter.formatIDR(item.discount)),
+              _buildTableCell(
+                CurrencyFormatter.formatIDR(item.total),
+                isBold: true,
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -266,10 +274,7 @@ class PdfGenerator {
       padding: const pw.EdgeInsets.all(8),
       child: pw.Text(
         text,
-        style: pw.TextStyle(
-          fontSize: 12,
-          fontWeight: pw.FontWeight.bold,
-        ),
+        style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold),
         textAlign: pw.TextAlign.center,
       ),
     );
@@ -303,11 +308,20 @@ class PdfGenerator {
           width: 250,
           child: pw.Column(
             children: [
-              _buildSummaryRow('Subtotal:', CurrencyFormatter.formatIDR(invoice.subtotal)),
+              _buildSummaryRow(
+                'Subtotal:',
+                CurrencyFormatter.formatIDR(invoice.subtotal),
+              ),
               if (invoice.discount > 0)
-                _buildSummaryRow('Diskon:', '- ${CurrencyFormatter.formatIDR(invoice.discount)}'),
+                _buildSummaryRow(
+                  'Diskon:',
+                  '- ${CurrencyFormatter.formatIDR(invoice.discount)}',
+                ),
               if (invoice.tax > 0)
-                _buildSummaryRow('Pajak:', CurrencyFormatter.formatIDR(invoice.tax)),
+                _buildSummaryRow(
+                  'Pajak:',
+                  CurrencyFormatter.formatIDR(invoice.tax),
+                ),
               pw.Container(
                 margin: const pw.EdgeInsets.symmetric(vertical: 8),
                 height: 2,
@@ -326,7 +340,11 @@ class PdfGenerator {
   }
 
   // Build summary row
-  static pw.Widget _buildSummaryRow(String label, String value, {bool isTotal = false}) {
+  static pw.Widget _buildSummaryRow(
+    String label,
+    String value, {
+    bool isTotal = false,
+  }) {
     return pw.Padding(
       padding: const pw.EdgeInsets.symmetric(vertical: 3),
       child: pw.Row(
@@ -360,19 +378,13 @@ class PdfGenerator {
         if (invoice.notes != null && invoice.notes!.isNotEmpty) ...[
           pw.Text(
             'Catatan:',
-            style: pw.TextStyle(
-              fontSize: 12,
-              fontWeight: pw.FontWeight.bold,
-            ),
+            style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold),
           ),
           pw.SizedBox(height: 4),
-          pw.Text(
-            invoice.notes!,
-            style: pw.TextStyle(fontSize: 11),
-          ),
+          pw.Text(invoice.notes!, style: const pw.TextStyle(fontSize: 11)),
           pw.SizedBox(height: 20),
         ],
-        
+
         pw.Container(
           padding: const pw.EdgeInsets.all(16),
           decoration: pw.BoxDecoration(
@@ -393,7 +405,7 @@ class PdfGenerator {
               pw.SizedBox(height: 4),
               pw.Text(
                 'Invoice ini dibuat menggunakan aplikasi pay.in',
-                style: pw.TextStyle(
+                style: const pw.TextStyle(
                   fontSize: 10,
                   color: PdfColors.blue600,
                 ),
@@ -446,10 +458,7 @@ class PdfGenerator {
 
   // Share PDF
   static Future<void> sharePdf(Uint8List pdfBytes, String fileName) async {
-    await Printing.sharePdf(
-      bytes: pdfBytes,
-      filename: '$fileName.pdf',
-    );
+    await Printing.sharePdf(bytes: pdfBytes, filename: '$fileName.pdf');
   }
 
   // Preview PDF

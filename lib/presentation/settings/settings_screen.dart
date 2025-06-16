@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'settings_controller.dart';
 
 class SettingsScreen extends GetView<SettingsController> {
+  const SettingsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,19 +27,24 @@ class SettingsScreen extends GetView<SettingsController> {
                   icon: Icons.business,
                   title: 'Nama Bisnis',
                   subtitle: 'pay.in Business',
-                  onTap: () => _showEditDialog('Nama Bisnis', 'pay.in Business'),
+                  onTap:
+                      () => _showEditDialog('Nama Bisnis', 'pay.in Business'),
                 ),
                 _buildSettingsTile(
                   icon: Icons.email,
                   title: 'Email Bisnis',
                   subtitle: 'business@payin.com',
-                  onTap: () => _showEditDialog('Email Bisnis', 'business@payin.com'),
+                  onTap:
+                      () =>
+                          _showEditDialog('Email Bisnis', 'business@payin.com'),
                 ),
                 _buildSettingsTile(
                   icon: Icons.phone,
                   title: 'Nomor Telepon',
                   subtitle: '+62 812 3456 7890',
-                  onTap: () => _showEditDialog('Nomor Telepon', '+62 812 3456 7890'),
+                  onTap:
+                      () =>
+                          _showEditDialog('Nomor Telepon', '+62 812 3456 7890'),
                 ),
                 _buildSettingsTile(
                   icon: Icons.location_on,
@@ -47,9 +54,9 @@ class SettingsScreen extends GetView<SettingsController> {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Invoice Settings Section
             _buildSection(
               title: 'Pengaturan Invoice',
@@ -74,9 +81,9 @@ class SettingsScreen extends GetView<SettingsController> {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // App Settings Section - PERBAIKAN: Hanya tema terang
             _buildSection(
               title: 'Pengaturan Aplikasi',
@@ -98,14 +105,19 @@ class SettingsScreen extends GetView<SettingsController> {
                   value: true,
                   onChanged: (value) {
                     // Toggle notifications
-                    Get.snackbar('Info', value ? 'Notifikasi diaktifkan' : 'Notifikasi dinonaktifkan');
+                    Get.snackbar(
+                      'Info',
+                      value
+                          ? 'Notifikasi diaktifkan'
+                          : 'Notifikasi dinonaktifkan',
+                    );
                   },
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // About Section
             _buildSection(
               title: 'Tentang',
@@ -130,9 +142,9 @@ class SettingsScreen extends GetView<SettingsController> {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // PERBAIKAN: Tombol keluar dihilangkan sesuai permintaan
           ],
         ),
@@ -140,7 +152,10 @@ class SettingsScreen extends GetView<SettingsController> {
     );
   }
 
-  Widget _buildSection({required String title, required List<Widget> children}) {
+  Widget _buildSection({
+    required String title,
+    required List<Widget> children,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -191,17 +206,11 @@ class SettingsScreen extends GetView<SettingsController> {
       ),
       title: Text(
         title,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(
-          fontSize: 14,
-          color: Colors.grey[600],
-        ),
+        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
       ),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,
@@ -225,17 +234,11 @@ class SettingsScreen extends GetView<SettingsController> {
       ),
       title: Text(
         title,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(
-          fontSize: 14,
-          color: Colors.grey[600],
-        ),
+        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
       ),
       trailing: Icon(Icons.info_outline, size: 16, color: Colors.grey[400]),
     );
@@ -259,17 +262,11 @@ class SettingsScreen extends GetView<SettingsController> {
       ),
       title: Text(
         title,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(
-          fontSize: 14,
-          color: Colors.grey[600],
-        ),
+        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
       ),
       trailing: Switch(
         value: value,
@@ -292,10 +289,7 @@ class SettingsScreen extends GetView<SettingsController> {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Batal'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Batal')),
           ElevatedButton(
             onPressed: () {
               Get.back();
@@ -314,10 +308,7 @@ class SettingsScreen extends GetView<SettingsController> {
         title: const Text('Tarif Pajak'),
         content: const Text('Pilih tarif pajak yang akan digunakan:'),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Batal'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Batal')),
           ElevatedButton(
             onPressed: () {
               Get.back();
@@ -350,10 +341,7 @@ class SettingsScreen extends GetView<SettingsController> {
           ],
         ),
         actions: [
-          ElevatedButton(
-            onPressed: () => Get.back(),
-            child: const Text('OK'),
-          ),
+          ElevatedButton(onPressed: () => Get.back(), child: const Text('OK')),
         ],
       ),
     );
@@ -363,12 +351,11 @@ class SettingsScreen extends GetView<SettingsController> {
     Get.dialog(
       AlertDialog(
         title: const Text('Format Nomor Invoice'),
-        content: const Text('Format saat ini: INV-YYYYMM-XXXX\n\nContoh: INV-202506-0001'),
+        content: const Text(
+          'Format saat ini: INV-YYYYMM-XXXX\n\nContoh: INV-202506-0001',
+        ),
         actions: [
-          ElevatedButton(
-            onPressed: () => Get.back(),
-            child: const Text('OK'),
-          ),
+          ElevatedButton(onPressed: () => Get.back(), child: const Text('OK')),
         ],
       ),
     );
@@ -431,7 +418,9 @@ class SettingsScreen extends GetView<SettingsController> {
     Get.dialog(
       AlertDialog(
         title: const Text('Kebijakan Privasi'),
-        content: const Text('Data Anda aman dan hanya disimpan secara lokal di perangkat Anda. Kami tidak mengumpulkan atau membagikan informasi pribadi Anda.'),
+        content: const Text(
+          'Data Anda aman dan hanya disimpan secara lokal di perangkat Anda. Kami tidak mengumpulkan atau membagikan informasi pribadi Anda.',
+        ),
         actions: [
           ElevatedButton(
             onPressed: () => Get.back(),

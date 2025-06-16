@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'create_invoice_controller.dart';
 
 class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
+  const CreateInvoiceScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,37 +19,37 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
             children: [
               // Progress Indicator
               _buildProgressIndicator(),
-              
+
               const SizedBox(height: 24),
-              
+
               // Client Information Section
               _buildClientInfoSection(),
-              
+
               const SizedBox(height: 24),
-              
+
               // Invoice Details Section
               _buildInvoiceDetailsSection(),
-              
+
               const SizedBox(height: 24),
-              
+
               // Items Section
               _buildItemsSection(),
-              
+
               const SizedBox(height: 24),
-              
+
               // Summary Section
               _buildSummarySection(),
-              
+
               const SizedBox(height: 24),
-              
+
               // Notes Section
               _buildNotesSection(),
-              
+
               const SizedBox(height: 32),
-              
+
               // Action Buttons
               _buildActionButtons(),
-              
+
               const SizedBox(height: 20),
             ],
           ),
@@ -74,68 +76,77 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF1E40AF),
-              Color(0xFF3B82F6),
-            ],
+            colors: [Color(0xFF1E40AF), Color(0xFF3B82F6)],
           ),
         ),
       ),
       actions: [
-        Obx(() => controller.isLoading.value
-            ? const Padding(
-                padding: EdgeInsets.all(16),
-                child: SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                ),
-              )
-            : Container(
-                margin: const EdgeInsets.only(right: 16),
-                child: PopupMenuButton<String>(
-                  icon: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(Icons.more_vert, color: Colors.white),
-                  ),
-                  onSelected: (value) {
-                    if (value == 'save_draft') {
-                      controller.saveInvoice(isDraft: true);
-                    } else if (value == 'save_send') {
-                      controller.saveInvoice(isDraft: false);
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'save_draft',
-                      child: Row(
-                        children: [
-                          Icon(Icons.save, size: 18, color: Color(0xFF6B7280)),
-                          SizedBox(width: 12),
-                          Text('Simpan sebagai Draft'),
-                        ],
+        Obx(
+          () =>
+              controller.isLoading.value
+                  ? const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     ),
-                    const PopupMenuItem(
-                      value: 'save_send',
-                      child: Row(
-                        children: [
-                          Icon(Icons.send, size: 18, color: Color(0xFF3B82F6)),
-                          SizedBox(width: 12),
-                          Text('Simpan & Kirim'),
-                        ],
+                  )
+                  : Container(
+                    margin: const EdgeInsets.only(right: 16),
+                    child: PopupMenuButton<String>(
+                      icon: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(Icons.more_vert, color: Colors.white),
                       ),
+                      onSelected: (value) {
+                        if (value == 'save_draft') {
+                          controller.saveInvoice(isDraft: true);
+                        } else if (value == 'save_send') {
+                          controller.saveInvoice(isDraft: false);
+                        }
+                      },
+                      itemBuilder:
+                          (context) => [
+                            const PopupMenuItem(
+                              value: 'save_draft',
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.save,
+                                    size: 18,
+                                    color: Color(0xFF6B7280),
+                                  ),
+                                  SizedBox(width: 12),
+                                  Text('Simpan sebagai Draft'),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem(
+                              value: 'save_send',
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.send,
+                                    size: 18,
+                                    color: Color(0xFF3B82F6),
+                                  ),
+                                  SizedBox(width: 12),
+                                  Text('Simpan & Kirim'),
+                                ],
+                              ),
+                            ),
+                          ],
                     ),
-                  ],
-                ),
-              )),
+                  ),
+        ),
       ],
     );
   }
@@ -180,11 +191,11 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
             ),
           ),
           const SizedBox(width: 16),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Membuat Invoice Baru',
                   style: TextStyle(
                     fontSize: 16,
@@ -192,13 +203,10 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
                     color: Color(0xFF1F2937),
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   'Lengkapi informasi di bawah untuk membuat invoice',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: const Color(0xFF6B7280),
-                  ),
+                  style: TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
                 ),
               ],
             ),
@@ -273,7 +281,7 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
               ],
             ),
           ),
-          
+
           // Form Fields
           Padding(
             padding: const EdgeInsets.all(20),
@@ -388,7 +396,7 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
               ],
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(20),
             child: _buildTextField(
@@ -418,7 +426,8 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
                   },
                 );
                 if (date != null) {
-                  controller.dueDateController.text = '${date.day}/${date.month}/${date.year}';
+                  controller.dueDateController.text =
+                      '${date.day}/${date.month}/${date.year}';
                 }
               },
             ),
@@ -496,11 +505,8 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color(0xFF3B82F6),
-                        const Color(0xFF1E40AF),
-                      ],
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF3B82F6), Color(0xFF1E40AF)],
                     ),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
@@ -522,7 +528,10 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
                       backgroundColor: Colors.transparent,
                       foregroundColor: Colors.white,
                       shadowColor: Colors.transparent,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -532,7 +541,7 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
               ],
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(20),
             child: Obx(() {
@@ -556,10 +565,10 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
                           color: const Color(0xFFF59E0B).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.inventory_2_outlined,
                           size: 48,
-                          color: const Color(0xFFF59E0B),
+                          color: Color(0xFFF59E0B),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -572,11 +581,11 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
+                      const Text(
                         'Tambahkan item untuk invoice Anda',
                         style: TextStyle(
                           fontSize: 14,
-                          color: const Color(0xFF6B7280),
+                          color: Color(0xFF6B7280),
                         ),
                       ),
                     ],
@@ -588,19 +597,20 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: controller.items.length,
-                separatorBuilder: (context, index) => Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  height: 1,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.transparent,
-                        const Color(0xFFE2E8F0),
-                        Colors.transparent,
-                      ],
+                separatorBuilder:
+                    (context, index) => Container(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      height: 1,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.transparent,
+                            Color(0xFFE2E8F0),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
                 itemBuilder: (context, index) {
                   final item = controller.items[index];
                   return Container(
@@ -619,11 +629,8 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                const Color(0xFF3B82F6),
-                                const Color(0xFF1E40AF),
-                              ],
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF3B82F6), Color(0xFF1E40AF)],
                             ),
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -661,9 +668,14 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
                               ),
                               const SizedBox(height: 8),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF10B981).withOpacity(0.1),
+                                  color: const Color(
+                                    0xFF10B981,
+                                  ).withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
@@ -698,28 +710,37 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
                                   controller.removeItem(index);
                                 }
                               },
-                              itemBuilder: (context) => [
-                                const PopupMenuItem(
-                                  value: 'edit',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.edit, size: 16, color: Color(0xFF3B82F6)),
-                                      SizedBox(width: 8),
-                                      Text('Edit'),
-                                    ],
-                                  ),
-                                ),
-                                const PopupMenuItem(
-                                  value: 'delete',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.delete, size: 16, color: Color(0xFFEF4444)),
-                                      SizedBox(width: 8),
-                                      Text('Hapus'),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                              itemBuilder:
+                                  (context) => [
+                                    const PopupMenuItem(
+                                      value: 'edit',
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.edit,
+                                            size: 16,
+                                            color: Color(0xFF3B82F6),
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text('Edit'),
+                                        ],
+                                      ),
+                                    ),
+                                    const PopupMenuItem(
+                                      value: 'delete',
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.delete,
+                                            size: 16,
+                                            color: Color(0xFFEF4444),
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text('Hapus'),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                               child: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
@@ -814,60 +835,68 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
               ],
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(20),
-            child: Obx(() => Column(
-              children: [
-                _buildSummaryRow('Subtotal', 'Rp ${controller.subtotal.value.toStringAsFixed(0)}'),
-                const SizedBox(height: 16),
-                _buildTextField(
-                  controller: controller.discountController,
-                  label: 'Diskon (Opsional)',
-                  icon: Icons.discount,
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) => controller.calculateTotals(),
-                ),
-                const SizedBox(height: 16),
-                _buildSummaryRow('Pajak (${controller.taxRate.value}%)', 'Rp ${controller.tax.value.toStringAsFixed(0)}'),
-                const SizedBox(height: 16),
-                Container(
-                  height: 2,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.transparent,
-                        const Color(0xFF10B981),
-                        Colors.transparent,
-                      ],
+            child: Obx(
+              () => Column(
+                children: [
+                  _buildSummaryRow(
+                    'Subtotal',
+                    'Rp ${controller.subtotal.value.toStringAsFixed(0)}',
+                  ),
+                  const SizedBox(height: 16),
+                  _buildTextField(
+                    controller: controller.discountController,
+                    label: 'Diskon (Opsional)',
+                    icon: Icons.discount,
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) => controller.calculateTotals(),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildSummaryRow(
+                    'Pajak (${controller.taxRate.value}%)',
+                    'Rp ${controller.tax.value.toStringAsFixed(0)}',
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    height: 2,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          Color(0xFF10B981),
+                          Colors.transparent,
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        const Color(0xFF10B981).withOpacity(0.1),
-                        const Color(0xFF059669).withOpacity(0.05),
-                      ],
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          const Color(0xFF10B981).withOpacity(0.1),
+                          const Color(0xFF059669).withOpacity(0.05),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: const Color(0xFF10B981).withOpacity(0.2),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: const Color(0xFF10B981).withOpacity(0.2),
+                    child: _buildSummaryRow(
+                      'TOTAL',
+                      'Rp ${controller.total.value.toStringAsFixed(0)}',
+                      isTotal: true,
                     ),
                   ),
-                  child: _buildSummaryRow(
-                    'TOTAL',
-                    'Rp ${controller.total.value.toStringAsFixed(0)}',
-                    isTotal: true,
-                  ),
-                ),
-              ],
-            )),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -938,7 +967,7 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
               ],
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(20),
             child: _buildTextField(
@@ -960,10 +989,7 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: const Color(0xFFE2E8F0),
-                width: 2,
-              ),
+              border: Border.all(color: const Color(0xFFE2E8F0), width: 2),
             ),
             child: OutlinedButton(
               onPressed: () => Get.back(),
@@ -989,11 +1015,8 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  const Color(0xFF9CA3AF),
-                  const Color(0xFF6B7280),
-                ],
+              gradient: const LinearGradient(
+                colors: [Color(0xFF9CA3AF), Color(0xFF6B7280)],
               ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
@@ -1029,11 +1052,8 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  const Color(0xFF3B82F6),
-                  const Color(0xFF1E40AF),
-                ],
+              gradient: const LinearGradient(
+                colors: [Color(0xFF3B82F6), Color(0xFF1E40AF)],
               ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
@@ -1098,9 +1118,13 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
         readOnly: readOnly,
         onTap: onTap,
         onChanged: onChanged,
-        validator: isRequired
-            ? (value) => (value == null || value.trim().isEmpty) ? '$label harus diisi' : null
-            : null,
+        validator:
+            isRequired
+                ? (value) =>
+                    (value == null || value.trim().isEmpty)
+                        ? '$label harus diisi'
+                        : null
+                : null,
         style: const TextStyle(
           fontSize: 16,
           color: Color(0xFF1F2937),
@@ -1115,11 +1139,7 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
               color: const Color(0xFF3B82F6).withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(
-              icon,
-              color: const Color(0xFF3B82F6),
-              size: 20,
-            ),
+            child: Icon(icon, color: const Color(0xFF3B82F6), size: 20),
           ),
           labelStyle: const TextStyle(
             color: Color(0xFF6B7280),
@@ -1130,38 +1150,23 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
           fillColor: const Color(0xFFF8FAFC),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(
-              color: const Color(0xFFE2E8F0),
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 2),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(
-              color: const Color(0xFFE2E8F0),
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 2),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(
-              color: Color(0xFF3B82F6),
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: Color(0xFF3B82F6), width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(
-              color: Color(0xFFEF4444),
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: Color(0xFFEF4444), width: 2),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(
-              color: Color(0xFFEF4444),
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: Color(0xFFEF4444), width: 2),
           ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 20,

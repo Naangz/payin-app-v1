@@ -6,7 +6,7 @@ import '../analytics_controller.dart';
 class SalesChart extends StatelessWidget {
   final AnalyticsController controller;
 
-  const SalesChart({Key? key, required this.controller}) : super(key: key);
+  const SalesChart({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +79,10 @@ class SalesChart extends StatelessWidget {
                         ),
                         titlesData: FlTitlesData(
                           show: true,
-                          rightTitles: AxisTitles(
+                          rightTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false),
                           ),
-                          topTitles: AxisTitles(
+                          topTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false),
                           ),
                           bottomTitles: AxisTitles(

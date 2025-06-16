@@ -4,6 +4,8 @@ import 'quotation_list_controller.dart';
 import 'widgets/quotation_card.dart';
 
 class QuotationListScreen extends GetView<QuotationListController> {
+  const QuotationListScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,18 +26,18 @@ class QuotationListScreen extends GetView<QuotationListController> {
         children: [
           // Search and Filter Section
           _buildSearchAndFilter(),
-          
+
           // Quotation List
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
                 return const Center(child: CircularProgressIndicator());
               }
-              
+
               if (controller.filteredQuotations.isEmpty) {
                 return _buildEmptyState();
               }
-              
+
               return RefreshIndicator(
                 onRefresh: controller.loadQuotations,
                 child: ListView.builder(
@@ -47,14 +49,24 @@ class QuotationListScreen extends GetView<QuotationListController> {
                       padding: const EdgeInsets.only(bottom: 12),
                       child: QuotationCard(
                         quotation: quotation,
-                        onTap: () => controller.navigateToQuotationDetail(quotation.id),
-                        onEdit: () => Get.toNamed('/edit-quotation', arguments: quotation.id),
+                        onTap:
+                            () => controller.navigateToQuotationDetail(
+                              quotation.id,
+                            ),
+                        onEdit:
+                            () => Get.toNamed(
+                              '/edit-quotation',
+                              arguments: quotation.id,
+                            ),
                         onDelete: () => _showDeleteDialog(quotation.id),
                         onDuplicate: () => _duplicateQuotation(quotation.id),
                         onGeneratePdf: () => _generatePdf(quotation.id),
                         onSendEmail: () => _sendEmail(quotation.id),
-                        onStatusChange: (newStatus) => _updateStatus(quotation.id, newStatus),
-                        onConvertToInvoice: () => _convertToInvoice(quotation.id),
+                        onStatusChange:
+                            (newStatus) =>
+                                _updateStatus(quotation.id, newStatus),
+                        onConvertToInvoice:
+                            () => _convertToInvoice(quotation.id),
                       ),
                     );
                   },
@@ -84,16 +96,19 @@ class QuotationListScreen extends GetView<QuotationListController> {
             decoration: InputDecoration(
               hintText: 'Cari quotation...',
               prefixIcon: const Icon(Icons.search),
-              suffixIcon: Obx(() => controller.searchQuery.value.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        controller.searchController.clear();
-                        controller.searchQuery.value = '';
-                        controller.filterQuotations();
-                      },
-                    )
-                  : const SizedBox.shrink()),
+              suffixIcon: Obx(
+                () =>
+                    controller.searchQuery.value.isNotEmpty
+                        ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            controller.searchController.clear();
+                            controller.searchQuery.value = '';
+                            controller.filterQuotations();
+                          },
+                        )
+                        : const SizedBox.shrink(),
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Colors.grey.shade300),
@@ -106,51 +121,57 @@ class QuotationListScreen extends GetView<QuotationListController> {
               controller.filterQuotations();
             },
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Status Filter
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Obx(() => Row(
-              children: _getStatusOptions().map((status) {
-                final isSelected = controller.selectedStatus.value == (status['value'] ?? '');
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: FilterChip(
-                    // PERBAIKAN: Menggunakan null safety operator sesuai search results
-                    label: Text(status['label'] ?? ''),
-                    selected: isSelected,
-                    onSelected: (selected) {
-                      if (selected) {
-                        // PERBAIKAN: Menggunakan null safety operator sesuai search results
-                        controller.selectedStatus.value = status['value'] ?? '';
-                        controller.filterQuotations();
-                      }
-                    },
-                    backgroundColor: Colors.grey.shade100,
-                    selectedColor: Colors.blue.shade100,
-                    checkmarkColor: Colors.blue,
-                  ),
-                );
-              }).toList(),
-            )),
+            child: Obx(
+              () => Row(
+                children:
+                    _getStatusOptions().map((status) {
+                      final isSelected =
+                          controller.selectedStatus.value ==
+                          (status['value'] ?? '');
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: FilterChip(
+                          // PERBAIKAN: Menggunakan null safety operator sesuai search results
+                          label: Text(status['label'] ?? ''),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            if (selected) {
+                              // PERBAIKAN: Menggunakan null safety operator sesuai search results
+                              controller.selectedStatus.value =
+                                  status['value'] ?? '';
+                              controller.filterQuotations();
+                            }
+                          },
+                          backgroundColor: Colors.grey.shade100,
+                          selectedColor: Colors.blue.shade100,
+                          checkmarkColor: Colors.blue,
+                        ),
+                      );
+                    }).toList(),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-List<Map<String, String>> _getStatusOptions() {
-  return [
-    {'value': 'all', 'label': 'Semua'},
-    {'value': 'draft', 'label': 'Draft'},
-    {'value': 'sent', 'label': 'Terkirim'},
-    {'value': 'accepted', 'label': 'Diterima'},
-    {'value': 'rejected', 'label': 'Ditolak'},
-    {'value': 'expired', 'label': 'Kedaluwarsa'},
-  ];
-}
+  List<Map<String, String>> _getStatusOptions() {
+    return [
+      {'value': 'all', 'label': 'Semua'},
+      {'value': 'draft', 'label': 'Draft'},
+      {'value': 'sent', 'label': 'Terkirim'},
+      {'value': 'accepted', 'label': 'Diterima'},
+      {'value': 'rejected', 'label': 'Ditolak'},
+      {'value': 'expired', 'label': 'Kedaluwarsa'},
+    ];
+  }
 
   Widget _buildEmptyState() {
     return Center(
@@ -174,10 +195,7 @@ List<Map<String, String>> _getStatusOptions() {
           const SizedBox(height: 8),
           Text(
             'Buat quotation pertama Anda untuk memulai',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade500,
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
@@ -202,10 +220,7 @@ List<Map<String, String>> _getStatusOptions() {
         title: const Text('Konfirmasi'),
         content: const Text('Apakah Anda yakin ingin menghapus quotation ini?'),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Batal'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Batal')),
           TextButton(
             onPressed: () {
               Get.back();
@@ -219,8 +234,8 @@ List<Map<String, String>> _getStatusOptions() {
   }
 
   void _deleteQuotation(String quotationId) async {
-  await controller.deleteQuotation(quotationId);
-}
+    await controller.deleteQuotation(quotationId);
+  }
 
   void _duplicateQuotation(String quotationId) {
     // Implementation will be added when repository methods are ready
@@ -246,17 +261,19 @@ List<Map<String, String>> _getStatusOptions() {
     Get.dialog(
       AlertDialog(
         title: const Text('Konversi ke Invoice'),
-        content: const Text('Apakah Anda yakin ingin mengkonversi quotation ini menjadi invoice?'),
+        content: const Text(
+          'Apakah Anda yakin ingin mengkonversi quotation ini menjadi invoice?',
+        ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Batal'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Batal')),
           ElevatedButton(
             onPressed: () {
               Get.back();
               // Implementation will be added when repository methods are ready
-              Get.snackbar('Info', 'Fitur konversi ke invoice sedang dikembangkan');
+              Get.snackbar(
+                'Info',
+                'Fitur konversi ke invoice sedang dikembangkan',
+              );
             },
             child: const Text('Konversi'),
           ),

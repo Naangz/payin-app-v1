@@ -8,13 +8,13 @@ class SettingsItem extends StatelessWidget {
   final Widget? leading;
 
   const SettingsItem({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle,
     this.trailing,
     this.onTap,
     this.leading,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +25,7 @@ class SettingsItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         child: Row(
           children: [
-            if (leading != null) ...[
-              leading!,
-              const SizedBox(width: 16),
-            ],
+            if (leading != null) ...[leading!, const SizedBox(width: 16)],
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,10 +41,7 @@ class SettingsItem extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       subtitle!,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                   ],
                 ],

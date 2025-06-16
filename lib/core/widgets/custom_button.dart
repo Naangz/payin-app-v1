@@ -3,6 +3,7 @@ import '../constants/app_colors.dart';
 import '../constants/app_sizes.dart';
 
 enum ButtonType { primary, secondary, outline, text, danger }
+
 enum ButtonSize { small, medium, large }
 
 class CustomButton extends StatelessWidget {
@@ -19,7 +20,7 @@ class CustomButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
 
   const CustomButton({
-    Key? key,
+    super.key,
     required this.text,
     this.onPressed,
     this.type = ButtonType.primary,
@@ -31,7 +32,7 @@ class CustomButton extends StatelessWidget {
     this.textColor,
     this.borderRadius,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +65,10 @@ class CustomButton extends StatelessWidget {
   Widget _buildElevatedButton() {
     return ElevatedButton.icon(
       onPressed: onPressed,
-      icon: icon != null ? Icon(icon, size: _getIconSize()) : const SizedBox.shrink(),
+      icon:
+          icon != null
+              ? Icon(icon, size: _getIconSize())
+              : const SizedBox.shrink(),
       label: Text(text),
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor ?? AppColors.primary,
@@ -85,7 +89,10 @@ class CustomButton extends StatelessWidget {
   Widget _buildSecondaryButton() {
     return ElevatedButton.icon(
       onPressed: onPressed,
-      icon: icon != null ? Icon(icon, size: _getIconSize()) : const SizedBox.shrink(),
+      icon:
+          icon != null
+              ? Icon(icon, size: _getIconSize())
+              : const SizedBox.shrink(),
       label: Text(text),
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor ?? Colors.grey.shade100,
@@ -106,7 +113,10 @@ class CustomButton extends StatelessWidget {
   Widget _buildOutlinedButton() {
     return OutlinedButton.icon(
       onPressed: onPressed,
-      icon: icon != null ? Icon(icon, size: _getIconSize()) : const SizedBox.shrink(),
+      icon:
+          icon != null
+              ? Icon(icon, size: _getIconSize())
+              : const SizedBox.shrink(),
       label: Text(text),
       style: OutlinedButton.styleFrom(
         foregroundColor: textColor ?? AppColors.primary,
@@ -129,7 +139,10 @@ class CustomButton extends StatelessWidget {
   Widget _buildTextButton() {
     return TextButton.icon(
       onPressed: onPressed,
-      icon: icon != null ? Icon(icon, size: _getIconSize()) : const SizedBox.shrink(),
+      icon:
+          icon != null
+              ? Icon(icon, size: _getIconSize())
+              : const SizedBox.shrink(),
       label: Text(text),
       style: TextButton.styleFrom(
         foregroundColor: textColor ?? AppColors.primary,
@@ -148,7 +161,10 @@ class CustomButton extends StatelessWidget {
   Widget _buildDangerButton() {
     return ElevatedButton.icon(
       onPressed: onPressed,
-      icon: icon != null ? Icon(icon, size: _getIconSize()) : const SizedBox.shrink(),
+      icon:
+          icon != null
+              ? Icon(icon, size: _getIconSize())
+              : const SizedBox.shrink(),
       label: Text(text),
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor ?? AppColors.error,
@@ -170,7 +186,9 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: null,
       style: ElevatedButton.styleFrom(
-        backgroundColor: (backgroundColor ?? AppColors.primary).withOpacity(0.6),
+        backgroundColor: (backgroundColor ?? AppColors.primary).withOpacity(
+          0.6,
+        ),
         padding: padding ?? _getButtonPadding(),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius ?? AppSizes.radiusS),
@@ -266,13 +284,13 @@ class CustomFloatingActionButton extends StatelessWidget {
   final Color? foregroundColor;
 
   const CustomFloatingActionButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.icon,
     this.tooltip,
     this.backgroundColor,
     this.foregroundColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

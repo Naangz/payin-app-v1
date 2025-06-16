@@ -5,10 +5,7 @@ import '../analytics_controller.dart';
 class InvoiceStatusChart extends StatelessWidget {
   final AnalyticsController controller;
 
-  const InvoiceStatusChart({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  const InvoiceStatusChart({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -45,28 +42,29 @@ class InvoiceStatusChart extends StatelessWidget {
                 flex: 2,
                 child: SizedBox(
                   height: 200,
-                  child: controller.statusDistribution.isEmpty
-                      ? _buildEmptyChart()
-                      : PieChart(
-                          PieChartData(
-                            sectionsSpace: 2,
-                            centerSpaceRadius: 50,
-                            sections: _getPieSections(),
-                            pieTouchData: PieTouchData(
-                              touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                                // Handle touch events if needed
-                              },
+                  child:
+                      controller.statusDistribution.isEmpty
+                          ? _buildEmptyChart()
+                          : PieChart(
+                            PieChartData(
+                              sectionsSpace: 2,
+                              centerSpaceRadius: 50,
+                              sections: _getPieSections(),
+                              pieTouchData: PieTouchData(
+                                touchCallback: (
+                                  FlTouchEvent event,
+                                  pieTouchResponse,
+                                ) {
+                                  // Handle touch events if needed
+                                },
+                              ),
                             ),
                           ),
-                        ),
                 ),
               ),
               const SizedBox(width: 20),
               // Legend
-              Expanded(
-                flex: 1,
-                child: _buildLegend(),
-              ),
+              Expanded(flex: 1, child: _buildLegend()),
             ],
           ),
           const SizedBox(height: 16),
@@ -81,18 +79,11 @@ class InvoiceStatusChart extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.pie_chart_outline,
-            size: 48,
-            color: Colors.grey.shade300,
-          ),
+          Icon(Icons.pie_chart_outline, size: 48, color: Colors.grey.shade300),
           const SizedBox(height: 16),
           Text(
             'Belum ada data',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey.shade600,
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
           ),
         ],
       ),
@@ -100,7 +91,10 @@ class InvoiceStatusChart extends StatelessWidget {
   }
 
   List<PieChartSectionData> _getPieSections() {
-    final total = controller.statusDistribution.values.fold(0, (sum, count) => sum + count);
+    final total = controller.statusDistribution.values.fold(
+      0,
+      (sum, count) => sum + count,
+    );
     if (total == 0) return [];
 
     return controller.statusDistribution.entries.map((entry) {
@@ -148,56 +142,60 @@ class InvoiceStatusChart extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: controller.statusDistribution.entries.map((entry) {
-        final status = entry.key;
-        final count = entry.value;
-        final color = controller.getStatusColor(status);
-        final statusText = _getStatusText(status);
+      children:
+          controller.statusDistribution.entries.map((entry) {
+            final status = entry.key;
+            final count = entry.value;
+            final color = controller.getStatusColor(status);
+            final statusText = _getStatusText(status);
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(
-            children: [
-              Container(
-                width: 16,
-                height: 16,
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      statusText,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  Container(
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(4),
                     ),
-                    Text(
-                      '$count invoice',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.grey.shade600,
-                      ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          statusText,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          '$count invoice',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
-      }).toList(),
+            );
+          }).toList(),
     );
   }
 
   Widget _buildStatusSummary() {
-    final total = controller.statusDistribution.values.fold(0, (sum, count) => sum + count);
-    
+    final total = controller.statusDistribution.values.fold(
+      0,
+      (sum, count) => sum + count,
+    );
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -213,22 +211,14 @@ class InvoiceStatusChart extends StatelessWidget {
             Icons.receipt_long,
             Colors.blue,
           ),
-          Container(
-            width: 1,
-            height: 30,
-            color: Colors.grey.shade300,
-          ),
+          Container(width: 1, height: 30, color: Colors.grey.shade300),
           _buildSummaryItem(
             'Lunas',
             '${controller.statusDistribution['paid'] ?? 0}',
             Icons.check_circle,
             Colors.green,
           ),
-          Container(
-            width: 1,
-            height: 30,
-            color: Colors.grey.shade300,
-          ),
+          Container(width: 1, height: 30, color: Colors.grey.shade300),
           _buildSummaryItem(
             'Pending',
             '${(controller.statusDistribution['sent'] ?? 0) + (controller.statusDistribution['draft'] ?? 0)}',
@@ -240,24 +230,23 @@ class InvoiceStatusChart extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryItem(String label, String value, IconData icon, Color color) {
+  Widget _buildSummaryItem(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Column(
       children: [
         Icon(icon, color: color, size: 20),
         const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 10,
-            color: Colors.grey.shade600,
-          ),
+          style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
         ),
       ],
     );

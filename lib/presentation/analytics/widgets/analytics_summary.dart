@@ -4,10 +4,7 @@ import '../analytics_controller.dart';
 class AnalyticsSummary extends StatelessWidget {
   final AnalyticsController controller;
 
-  const AnalyticsSummary({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  const AnalyticsSummary({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +30,8 @@ class AnalyticsSummary extends StatelessWidget {
           children: [
             _buildSummaryCard(
               'Total Penjualan',
-              controller.salesAnalytics['totalSales']?.toStringAsFixed(0) ?? '0',
+              controller.salesAnalytics['totalSales']?.toStringAsFixed(0) ??
+                  '0',
               Icons.attach_money,
               Colors.green,
               'Rp ',
@@ -102,11 +100,7 @@ class AnalyticsSummary extends StatelessWidget {
                 ),
                 child: Icon(icon, color: color, size: 20),
               ),
-              Icon(
-                Icons.trending_up,
-                color: Colors.grey.shade400,
-                size: 16,
-              ),
+              Icon(Icons.trending_up, color: Colors.grey.shade400, size: 16),
             ],
           ),
           const Spacer(),
@@ -121,10 +115,7 @@ class AnalyticsSummary extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             title,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade600,
-            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
           ),
         ],
       ),
@@ -132,13 +123,15 @@ class AnalyticsSummary extends StatelessWidget {
   }
 
   Widget _buildDetailedSummary() {
-    final averageInvoice = controller.salesAnalytics['averageInvoiceValue'] ?? 0.0;
+    final averageInvoice =
+        controller.salesAnalytics['averageInvoiceValue'] ?? 0.0;
     final totalSales = controller.salesAnalytics['totalSales'] ?? 0.0;
     final totalInvoices = controller.salesAnalytics['totalInvoices'] ?? 0;
     final paidInvoices = controller.salesAnalytics['paidInvoices'] ?? 0;
-    
-    final conversionRate = totalInvoices > 0 ? (paidInvoices / totalInvoices) * 100 : 0.0;
-    
+
+    final conversionRate =
+        totalInvoices > 0 ? (paidInvoices / totalInvoices) * 100 : 0.0;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -181,7 +174,9 @@ class AnalyticsSummary extends StatelessWidget {
           const SizedBox(height: 12),
           _buildDetailRow(
             'Revenue per Invoice',
-            totalInvoices > 0 ? 'Rp ${(totalSales / totalInvoices).toStringAsFixed(0)}' : 'Rp 0',
+            totalInvoices > 0
+                ? 'Rp ${(totalSales / totalInvoices).toStringAsFixed(0)}'
+                : 'Rp 0',
             Icons.monetization_on,
             Colors.amber,
           ),
@@ -190,7 +185,12 @@ class AnalyticsSummary extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(String label, String value, IconData icon, Color color) {
+  Widget _buildDetailRow(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Row(
       children: [
         Container(
@@ -205,10 +205,7 @@ class AnalyticsSummary extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black87,
-            ),
+            style: const TextStyle(fontSize: 14, color: Colors.black87),
           ),
         ),
         Text(

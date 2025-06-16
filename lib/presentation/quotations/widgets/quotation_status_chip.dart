@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class QuotationStatusChip extends StatelessWidget {
   final String status;
 
-  const QuotationStatusChip({
-    Key? key,
-    required this.status,
-  }) : super(key: key);
+  const QuotationStatusChip({super.key, required this.status});
 
   @override
   Widget build(BuildContext context) {

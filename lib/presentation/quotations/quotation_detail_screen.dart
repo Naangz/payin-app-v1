@@ -4,6 +4,8 @@ import 'quotation_detail_controller.dart';
 import 'widgets/quotation_status_chip.dart';
 
 class QuotationDetailScreen extends GetView<QuotationDetailController> {
+  const QuotationDetailScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,22 +15,27 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         actions: [
-          Obx(() => controller.isLoading.value
-              ? const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          Obx(
+            () =>
+                controller.isLoading.value
+                    ? const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                        ),
+                      ),
+                    )
+                    : PopupMenuButton<String>(
+                      onSelected: (value) => _handleMenuAction(value),
+                      itemBuilder: (context) => _buildMenuItems(),
                     ),
-                  ),
-                )
-              : PopupMenuButton<String>(
-                  onSelected: (value) => _handleMenuAction(value),
-                  itemBuilder: (context) => _buildMenuItems(),
-                )),
+          ),
         ],
       ),
       body: Obx(() {
@@ -37,9 +44,7 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
         }
 
         if (controller.quotation.value == null) {
-          return const Center(
-            child: Text('Quotation tidak ditemukan'),
-          );
+          return const Center(child: Text('Quotation tidak ditemukan'));
         }
 
         final quotation = controller.quotation.value!;
@@ -51,29 +56,29 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
             children: [
               // Header Section
               _buildHeaderSection(quotation),
-              
+
               const SizedBox(height: 24),
-              
+
               // Client Information Section
               _buildClientInfoSection(quotation),
-              
+
               const SizedBox(height: 24),
-              
+
               // Items Section
               _buildItemsSection(quotation),
-              
+
               const SizedBox(height: 24),
-              
+
               // Summary Section
               _buildSummarySection(quotation),
-              
+
               if (quotation.notes != null && quotation.notes!.isNotEmpty) ...[
                 const SizedBox(height: 24),
                 _buildNotesSection(quotation),
               ],
-              
+
               const SizedBox(height: 32),
-              
+
               // Action Buttons
               _buildActionButtons(),
             ],
@@ -144,15 +149,20 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
             children: [
               Icon(
                 quotation.isExpired ? Icons.error : Icons.schedule,
-                color: quotation.isExpired ? Colors.red.shade200 : Colors.white70,
+                color:
+                    quotation.isExpired ? Colors.red.shade200 : Colors.white70,
                 size: 16,
               ),
               const SizedBox(width: 8),
               Text(
                 controller.expiryStatusText,
                 style: TextStyle(
-                  color: quotation.isExpired ? Colors.red.shade200 : Colors.white70,
-                  fontWeight: quotation.isExpired ? FontWeight.w600 : FontWeight.normal,
+                  color:
+                      quotation.isExpired
+                          ? Colors.red.shade200
+                          : Colors.white70,
+                  fontWeight:
+                      quotation.isExpired ? FontWeight.w600 : FontWeight.normal,
                 ),
               ),
             ],
@@ -191,7 +201,11 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
           const SizedBox(height: 16),
           _buildInfoRow(Icons.person, 'Nama', quotation.clientName),
           if (quotation.clientCompany != null)
-            _buildInfoRow(Icons.business, 'Perusahaan', quotation.clientCompany!),
+            _buildInfoRow(
+              Icons.business,
+              'Perusahaan',
+              quotation.clientCompany!,
+            ),
           _buildInfoRow(Icons.email, 'Email', quotation.clientEmail),
           _buildInfoRow(Icons.phone, 'Telepon', quotation.clientPhone),
           _buildInfoRow(Icons.location_on, 'Alamat', quotation.clientAddress),
@@ -223,10 +237,7 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
                 const SizedBox(height: 2),
                 Text(
                   value,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
-                  ),
+                  style: const TextStyle(fontSize: 14, color: Colors.black87),
                 ),
               ],
             ),
@@ -382,9 +393,16 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
             ),
           ),
           const SizedBox(height: 16),
-          _buildSummaryRow('Subtotal', 'Rp ${quotation.subtotal.toStringAsFixed(0)}'),
+          _buildSummaryRow(
+            'Subtotal',
+            'Rp ${quotation.subtotal.toStringAsFixed(0)}',
+          ),
           if (quotation.discount > 0)
-            _buildSummaryRow('Diskon', '- Rp ${quotation.discount.toStringAsFixed(0)}', isDiscount: true),
+            _buildSummaryRow(
+              'Diskon',
+              '- Rp ${quotation.discount.toStringAsFixed(0)}',
+              isDiscount: true,
+            ),
           if (quotation.tax > 0)
             _buildSummaryRow('Pajak', 'Rp ${quotation.tax.toStringAsFixed(0)}'),
           const Divider(thickness: 2),
@@ -398,7 +416,12 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
     );
   }
 
-  Widget _buildSummaryRow(String label, String value, {bool isTotal = false, bool isDiscount = false}) {
+  Widget _buildSummaryRow(
+    String label,
+    String value, {
+    bool isTotal = false,
+    bool isDiscount = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -416,7 +439,10 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
             style: TextStyle(
               fontSize: isTotal ? 16 : 14,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-              color: isTotal ? Colors.green : (isDiscount ? Colors.red : Colors.black87),
+              color:
+                  isTotal
+                      ? Colors.green
+                      : (isDiscount ? Colors.red : Colors.black87),
             ),
           ),
         ],
@@ -467,7 +493,7 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
   Widget _buildActionButtons() {
     return Obx(() {
       final actions = controller.getAvailableActions();
-      
+
       if (actions.isEmpty) {
         return const SizedBox.shrink();
       }
@@ -521,9 +547,9 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Secondary actions
           Row(
             children: [
@@ -580,7 +606,7 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
       (a) => a['title'] == action,
       orElse: () => {},
     );
-    
+
     if (actionData.isNotEmpty) {
       actionData['action']();
     }

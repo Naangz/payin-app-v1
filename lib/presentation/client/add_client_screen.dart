@@ -5,6 +5,8 @@ import '../../presentation/client/client_list_controller.dart';
 import 'package:uuid/uuid.dart';
 
 class AddClientScreen extends StatefulWidget {
+  const AddClientScreen({super.key});
+
   @override
   _AddClientScreenState createState() => _AddClientScreenState();
 }
@@ -15,57 +17,60 @@ class _AddClientScreenState extends State<AddClientScreen> {
   String contactEmail = '';
   String address = '';
 
-
   final controller = Get.find<ClientListController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Klien'),
+        title: const Text('Tambah Klien'),
         backgroundColor: Colors.blue,
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Nama Perusahaan',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) =>
-                    value!.isEmpty ? 'Nama perusahaan wajib diisi' : null,
+                validator:
+                    (value) =>
+                        value!.isEmpty ? 'Nama perusahaan wajib diisi' : null,
                 onSaved: (value) => companyName = value!,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Email Kontak',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) =>
-                    value!.isEmpty ? 'Email wajib diisi' : null,
+                validator:
+                    (value) => value!.isEmpty ? 'Email wajib diisi' : null,
                 onSaved: (value) => contactEmail = value!,
               ),
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Alamat Perusahaan',
                   border: OutlineInputBorder(),
                 ),
                 onSaved: (value) => address = value ?? '',
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               ElevatedButton.icon(
-                icon: Icon(Icons.save),
-                label: Text('Simpan'),
+                icon: const Icon(Icons.save),
+                label: const Text('Simpan'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
                 ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -81,7 +86,10 @@ class _AddClientScreenState extends State<AddClientScreen> {
 
                     controller.addClient(newClient);
 
-                    Navigator.pop(context, true); // <- Penting: beri return true
+                    Navigator.pop(
+                      context,
+                      true,
+                    ); // <- Penting: beri return true
                   }
                 },
               ),
