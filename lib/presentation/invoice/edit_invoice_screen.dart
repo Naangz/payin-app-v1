@@ -1,71 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'edit_invoice_controller.dart';
+import '../../core/constants/app_colors.dart';
 
 class EditInvoiceScreen extends GetView<EditInvoiceController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: const Text('Edit Invoice'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        actions: [
-          Obx(() {
-            if (!controller.canEdit) {
-              return IconButton(
-                icon: const Icon(Icons.info_outline),
-                onPressed: controller.showEditRestrictedDialog,
-              );
-            }
-            
-            return controller.isLoading.value
-                ? const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    ),
-                  )
-                : PopupMenuButton<String>(
-                    onSelected: (value) {
-                      if (value == 'save_draft') {
-                        controller.updateInvoice(isDraft: true);
-                      } else if (value == 'save_update') {
-                        controller.updateInvoice(isDraft: false);
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'save_draft',
-                        child: Row(
-                          children: [
-                            Icon(Icons.save, size: 16),
-                            SizedBox(width: 8),
-                            Text('Simpan sebagai Draft'),
-                          ],
-                        ),
-                      ),
-                      const PopupMenuItem(
-                        value: 'save_update',
-                        child: Row(
-                          children: [
-                            Icon(Icons.update, size: 16),
-                            SizedBox(width: 8),
-                            Text('Perbarui Invoice'),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-          }),
-        ],
-      ),
+      backgroundColor: AppColors.background,
+      appBar: _buildModernAppBar(),
       body: Obx(() {
         if (controller.isLoading.value && controller.originalInvoice == null) {
           return const Center(child: CircularProgressIndicator());
@@ -78,47 +21,856 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
         return Form(
           key: controller.formKey,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Status Info
-                _buildStatusInfo(),
-                
-                const SizedBox(height: 16),
-                
-                // Client Information Section
-                _buildClientInfoSection(),
-                
+                _buildStatusCard(),
                 const SizedBox(height: 24),
-                
-                // Invoice Details Section
-                _buildInvoiceDetailsSection(),
-                
+                _buildModernCard(
+                  title: 'Informasi Client',
+                  icon: Icons.person_outline,
+                  color: AppColors.primary,
+                  children: _buildClientFields(),
+                ),
                 const SizedBox(height: 24),
-                
-                // Items Section
-                _buildItemsSection(),
-                
+                _buildModernCard(
+                  title: 'Detail Invoice',
+                  icon: Icons.receipt_long_outlined,
+                  color: AppColors.warning,
+                  children: _buildInvoiceDetailFields(),
+                ),
                 const SizedBox(height: 24),
-                
-                // Summary Section
-                _buildSummarySection(),
-                
+                _buildItemsCard(),
                 const SizedBox(height: 24),
-                
-                // Notes Section
-                _buildNotesSection(),
-                
+                _buildSummaryCard(),
+                const SizedBox(height: 24),
+                _buildNotesCard(),
                 const SizedBox(height: 32),
-                
-                // Action Buttons
                 _buildActionButtons(),
               ],
             ),
           ),
         );
       }),
+    );
+  }
+
+  PreferredSizeWidget _buildModernAppBar() {
+    return AppBar(
+      title: const Text(
+        'Edit Invoice',
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 18,
+        ),
+      ),
+      backgroundColor: AppColors.surface,
+      foregroundColor: AppColors.textPrimary,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
+      shadowColor: Colors.black.withOpacity(0.1),
+      actions: [
+        Obx(() {
+          if (!controller.canEdit) {
+            return IconButton(
+              icon: const Icon(Icons.info_outline),
+              onPressed: controller.showEditRestrictedDialog,
+            );
+          }
+          
+          return controller.isLoading.value
+              ? Container(
+                  margin: const EdgeInsets.all(16),
+                  width: 20,
+                  height: 20,
+                  child: const CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  ),
+                )
+              : Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  child: PopupMenuButton<String>(
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryLight,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(
+                        Icons.more_vert,
+                        color: AppColors.primary,
+                        size: 18,
+                      ),
+                    ),
+                    onSelected: (value) {
+                      if (value == 'save_draft') {
+                        controller.updateInvoice(isDraft: true);
+                      } else if (value == 'save_update') {
+                        controller.updateInvoice(isDraft: false);
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      _buildPopupMenuItem(
+                        'save_draft',
+                        Icons.save_outlined,
+                        'Simpan sebagai Draft',
+                        AppColors.warning,
+                      ),
+                      _buildPopupMenuItem(
+                        'save_update',
+                        Icons.update,
+                        'Perbarui Invoice',
+                        AppColors.success,
+                      ),
+                    ],
+                  ),
+                );
+        }),
+      ],
+    );
+  }
+
+  PopupMenuItem<String> _buildPopupMenuItem(
+    String value,
+    IconData icon,
+    String text,
+    Color color,
+  ) {
+    return PopupMenuItem(
+      value: value,
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Icon(icon, size: 16, color: color),
+          ),
+          const SizedBox(width: 12),
+          Text(text, style: AppTextStyles.bodyMedium),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusCard() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFF667EEA),
+            Color(0xFF764BA2),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF667EEA).withOpacity(0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.2),
+                width: 1,
+              ),
+            ),
+            child: const Icon(
+              Icons.receipt_long,
+              color: Colors.white,
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Invoice #${controller.originalInvoice?.invoiceNumber ?? ''}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        _getStatusText(controller.originalStatus.value),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Dapat diedit',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildModernCard({
+    required String title,
+    required List<Widget> children,
+    required IconData icon,
+    required Color color,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  color.withOpacity(0.05),
+                  Colors.transparent,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    icon,
+                    size: 18,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(title, style: AppTextStyles.h3),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: children,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildClientFields() {
+    return [
+      const SizedBox(height: 8),
+      _buildModernTextField(
+        label: 'Nama Client',
+        controller: controller.clientNameController,
+        icon: Icons.person_outline,
+        hint: 'Masukkan nama lengkap client',
+        isRequired: true,
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Nama client harus diisi';
+          }
+          return null;
+        },
+      ),
+      const SizedBox(height: 20),
+      _buildModernTextField(
+        label: 'Email Client',
+        controller: controller.clientEmailController,
+        icon: Icons.email_outlined,
+        hint: 'contoh@email.com',
+        isRequired: true,
+        keyboardType: TextInputType.emailAddress,
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Email client harus diisi';
+          }
+          if (!GetUtils.isEmail(value)) {
+            return 'Format email tidak valid';
+          }
+          return null;
+        },
+      ),
+      const SizedBox(height: 20),
+      _buildModernTextField(
+        label: 'Nomor Telepon',
+        controller: controller.clientPhoneController,
+        icon: Icons.phone_outlined,
+        hint: '+62 xxx-xxxx-xxxx',
+        isRequired: true,
+        keyboardType: TextInputType.phone,
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Nomor telepon harus diisi';
+          }
+          return null;
+        },
+      ),
+      const SizedBox(height: 20),
+      _buildModernTextField(
+        label: 'Nama Perusahaan',
+        controller: controller.clientCompanyController,
+        icon: Icons.business_outlined,
+        hint: 'Nama perusahaan (opsional)',
+      ),
+      const SizedBox(height: 20),
+      _buildModernTextField(
+        label: 'Alamat',
+        controller: controller.clientAddressController,
+        icon: Icons.location_on_outlined,
+        hint: 'Alamat lengkap client',
+        maxLines: 3,
+        isRequired: true,
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Alamat harus diisi';
+          }
+          return null;
+        },
+      ),
+    ];
+  }
+
+  List<Widget> _buildInvoiceDetailFields() {
+    return [
+      const SizedBox(height: 8),
+      _buildModernTextField(
+        label: 'Tanggal Jatuh Tempo',
+        controller: controller.dueDateController,
+        icon: Icons.calendar_today_outlined,
+        hint: 'DD/MM/YYYY',
+        isRequired: true,
+        readOnly: true,
+        onTap: () async {
+          final date = await showDatePicker(
+            context: Get.context!,
+            initialDate: controller.originalInvoice?.dueDate ?? 
+                DateTime.now().add(const Duration(days: 30)),
+            firstDate: DateTime.now(),
+            lastDate: DateTime.now().add(const Duration(days: 365)),
+          );
+          if (date != null) {
+            controller.dueDateController.text = 
+                '${date.day}/${date.month}/${date.year}';
+          }
+        },
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Tanggal jatuh tempo harus diisi';
+          }
+          return null;
+        },
+      ),
+    ];
+  }
+
+  Widget _buildModernTextField({
+    required String label,
+    required TextEditingController controller,
+    required IconData icon,
+    String? hint,
+    bool isRequired = false,
+    bool readOnly = false,
+    TextInputType keyboardType = TextInputType.text,
+    int maxLines = 1,
+    String? Function(String?)? validator,
+    VoidCallback? onTap,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            text: label,
+            style: AppTextStyles.labelMedium,
+            children: [
+              if (isRequired)
+                const TextSpan(
+                  text: ' *',
+                  style: TextStyle(color: AppColors.error),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          maxLines: maxLines,
+          readOnly: readOnly,
+          validator: validator,
+          onTap: onTap,
+          style: AppTextStyles.bodyLarge,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textTertiary,
+            ),
+            prefixIcon: Container(
+              margin: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.primaryLight,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                size: 18,
+                color: AppColors.primary,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: AppColors.border,
+                width: 1.5,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: AppColors.borderFocus,
+                width: 2,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: AppColors.error,
+                width: 1.5,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: AppColors.error,
+                width: 2,
+              ),
+            ),
+            filled: true,
+            fillColor: AppColors.surface,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildItemsCard() {
+    return _buildModernCard(
+      title: 'Item Invoice',
+      icon: Icons.inventory_2_outlined,
+      color: AppColors.success,
+      children: [
+        const SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerRight,
+          child: ElevatedButton.icon(
+            onPressed: controller.addItem,
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('Tambah Item'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.success,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 12,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.items.isEmpty) {
+            return _buildEmptyState();
+          }
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: controller.items.length,
+            separatorBuilder: (context, index) => Container(
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              height: 1,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.transparent,
+                    AppColors.border,
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+            itemBuilder: (context, index) => _buildItemTile(index),
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.primaryLight,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(
+              Icons.inventory_2_outlined,
+              size: 48,
+              color: AppColors.primary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Belum ada item',
+            style: AppTextStyles.h3.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Tambahkan item untuk invoice Anda',
+            style: AppTextStyles.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItemTile(int index) {
+    final item = controller.items[index];
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceVariant,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.border.withOpacity(0.5),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  item.name,
+                  style: AppTextStyles.bodyLarge.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              PopupMenuButton<String>(
+                icon: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: AppColors.border.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: const Icon(
+                    Icons.more_vert,
+                    size: 16,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                onSelected: (value) {
+                  if (value == 'edit') {
+                    controller.editItem(index);
+                  } else if (value == 'delete') {
+                    controller.removeItem(index);
+                  }
+                },
+                itemBuilder: (context) => [
+                  _buildPopupMenuItem(
+                    'edit',
+                    Icons.edit_outlined,
+                    'Edit',
+                    AppColors.primary,
+                  ),
+                  _buildPopupMenuItem(
+                    'delete',
+                    Icons.delete_outline,
+                    'Hapus',
+                    AppColors.error,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            item.description,
+            style: AppTextStyles.bodyMedium,
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryLight,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  '${item.quantity} x Rp ${item.price.toStringAsFixed(0)}',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              Text(
+                'Rp ${item.total.toStringAsFixed(0)}',
+                style: AppTextStyles.bodyLarge.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.success,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSummaryCard() {
+    return _buildModernCard(
+      title: 'Ringkasan Pembayaran',
+      icon: Icons.calculate_outlined,
+      color: AppColors.success,
+      children: [
+        const SizedBox(height: 8),
+        Obx(() => Column(
+          children: [
+            _buildSummaryRow('Subtotal', controller.subtotal.value),
+            const SizedBox(height: 16),
+            _buildModernTextField(
+              label: 'Diskon',
+              controller: controller.discountController,
+              icon: Icons.local_offer_outlined,
+              hint: 'Masukkan nominal diskon',
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 16),
+            _buildSummaryRow('Pajak (${controller.taxRate.value}%)', controller.tax.value),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              height: 1,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.transparent,
+                    AppColors.border,
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.successLight,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppColors.success.withOpacity(0.2),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'TOTAL',
+                    style: AppTextStyles.h3.copyWith(
+                      color: AppColors.success,
+                    ),
+                  ),
+                  Text(
+                    'Rp ${controller.total.value.toStringAsFixed(0)}',
+                    style: AppTextStyles.h2.copyWith(
+                      color: AppColors.success,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )),
+      ],
+    );
+  }
+
+  Widget _buildSummaryRow(String label, double value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: AppTextStyles.bodyLarge),
+        Text(
+          'Rp ${value.toStringAsFixed(0)}',
+          style: AppTextStyles.bodyLarge.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNotesCard() {
+    return _buildModernCard(
+      title: 'Catatan (Opsional)',
+      icon: Icons.note_outlined,
+      color: AppColors.warning,
+      children: [
+        const SizedBox(height: 8),
+        _buildModernTextField(
+          label: 'Catatan tambahan',
+          controller: controller.notesController,
+          icon: Icons.edit_note_outlined,
+          hint: 'Tambahkan catatan untuk invoice ini...',
+          maxLines: 3,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButtons() {
+    return Row(
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            onPressed: () => Get.back(),
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              side: const BorderSide(color: AppColors.border, width: 1.5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Text(
+              'Batal',
+              style: AppTextStyles.bodyLarge.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () => controller.updateInvoice(isDraft: true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.warning,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              'Simpan Draft',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () => controller.updateInvoice(isDraft: false),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              'Perbarui',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -129,28 +881,29 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.lock_outline,
-              size: 64,
-              color: Colors.grey.shade400,
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppColors.errorLight,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(
+                Icons.lock_outline,
+                size: 64,
+                color: AppColors.error,
+              ),
             ),
             const SizedBox(height: 24),
             Text(
               'Invoice Tidak Dapat Diedit',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade700,
-              ),
+              style: AppTextStyles.h2,
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             Text(
               'Invoice yang sudah lunas tidak dapat diedit untuk menjaga integritas data.',
+              style: AppTextStyles.bodyLarge,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey.shade600,
-              ),
             ),
             const SizedBox(height: 32),
             ElevatedButton.icon(
@@ -158,52 +911,19 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
               icon: const Icon(Icons.arrow_back),
               label: const Text('Kembali'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 16,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildStatusInfo() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.blue.shade50,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.blue.shade200),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.info_outline, color: Colors.blue.shade700),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Status Saat Ini: ${_getStatusText(controller.originalStatus.value)}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blue.shade700,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Invoice Number: ${controller.originalInvoice?.invoiceNumber ?? ''}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.blue.shade600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -221,486 +941,5 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
       default:
         return status;
     }
-  }
-
-  Widget _buildClientInfoSection() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Informasi Client',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: controller.clientNameController,
-            decoration: const InputDecoration(
-              labelText: 'Nama Client *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.person),
-            ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Nama client harus diisi';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: controller.clientEmailController,
-            decoration: const InputDecoration(
-              labelText: 'Email Client *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.email),
-            ),
-            keyboardType: TextInputType.emailAddress,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Email client harus diisi';
-              }
-              if (!GetUtils.isEmail(value)) {
-                return 'Format email tidak valid';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: controller.clientPhoneController,
-            decoration: const InputDecoration(
-              labelText: 'Nomor Telepon *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.phone),
-            ),
-            keyboardType: TextInputType.phone,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Nomor telepon harus diisi';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: controller.clientCompanyController,
-            decoration: const InputDecoration(
-              labelText: 'Nama Perusahaan (Opsional)',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.business),
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: controller.clientAddressController,
-            decoration: const InputDecoration(
-              labelText: 'Alamat *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.location_on),
-            ),
-            maxLines: 3,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Alamat harus diisi';
-              }
-              return null;
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInvoiceDetailsSection() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Detail Invoice',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: controller.dueDateController,
-            decoration: const InputDecoration(
-              labelText: 'Tanggal Jatuh Tempo *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.calendar_today),
-              hintText: 'DD/MM/YYYY',
-            ),
-            readOnly: true,
-            onTap: () async {
-              final date = await showDatePicker(
-                context: Get.context!,
-                initialDate: controller.originalInvoice?.dueDate ?? DateTime.now().add(const Duration(days: 30)),
-                firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(const Duration(days: 365)),
-              );
-              if (date != null) {
-                controller.dueDateController.text = '${date.day}/${date.month}/${date.year}';
-              }
-            },
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Tanggal jatuh tempo harus diisi';
-              }
-              return null;
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildItemsSection() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Item Invoice',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              ElevatedButton.icon(
-                onPressed: controller.addItem,
-                icon: const Icon(Icons.add, size: 16),
-                label: const Text('Tambah Item'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.items.isEmpty) {
-              return Container(
-                padding: const EdgeInsets.all(32),
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.inventory_2_outlined,
-                      size: 48,
-                      color: Colors.grey.shade400,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Belum ada item',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Tambahkan item untuk invoice Anda',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            return ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.items.length,
-              separatorBuilder: (context, index) => const Divider(),
-              itemBuilder: (context, index) {
-                final item = controller.items[index];
-                return ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    item.name,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(item.description),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${item.quantity} x Rp ${item.price.toStringAsFixed(0)}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Rp ${item.total.toStringAsFixed(0)}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                        ),
-                      ),
-                      PopupMenuButton<String>(
-                        onSelected: (value) {
-                          if (value == 'edit') {
-                            controller.editItem(index);
-                          } else if (value == 'delete') {
-                            controller.removeItem(index);
-                          }
-                        },
-                        itemBuilder: (context) => [
-                          const PopupMenuItem(
-                            value: 'edit',
-                            child: Row(
-                              children: [
-                                Icon(Icons.edit, size: 16),
-                                SizedBox(width: 8),
-                                Text('Edit'),
-                              ],
-                            ),
-                          ),
-                          const PopupMenuItem(
-                            value: 'delete',
-                            child: Row(
-                              children: [
-                                Icon(Icons.delete, size: 16, color: Colors.red),
-                                SizedBox(width: 8),
-                                Text('Hapus'),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          }),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummarySection() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Ringkasan',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Obx(() => Column(
-            children: [
-              _buildSummaryRow('Subtotal', 'Rp ${controller.subtotal.value.toStringAsFixed(0)}'),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: controller.discountController,
-                      decoration: const InputDecoration(
-                        labelText: 'Diskon',
-                        border: OutlineInputBorder(),
-                        prefixText: 'Rp ',
-                      ),
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) => controller.calculateTotals(),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              _buildSummaryRow('Pajak (${controller.taxRate.value}%)', 'Rp ${controller.tax.value.toStringAsFixed(0)}'),
-              const SizedBox(height: 8),
-              const Divider(thickness: 2),
-              const SizedBox(height: 8),
-              _buildSummaryRow(
-                'TOTAL',
-                'Rp ${controller.total.value.toStringAsFixed(0)}',
-                isTotal: true,
-              ),
-            ],
-          )),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummaryRow(String label, String value, {bool isTotal = false}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: isTotal ? 16 : 14,
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: isTotal ? 16 : 14,
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            color: isTotal ? Colors.green : Colors.black87,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildNotesSection() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Catatan (Opsional)',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: controller.notesController,
-            decoration: const InputDecoration(
-              labelText: 'Catatan tambahan untuk invoice',
-              border: OutlineInputBorder(),
-              alignLabelWithHint: true,
-            ),
-            maxLines: 3,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionButtons() {
-    return Row(
-      children: [
-        Expanded(
-          child: OutlinedButton(
-            onPressed: () => Get.back(),
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              side: const BorderSide(color: Colors.grey),
-            ),
-            child: const Text('Batal'),
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () => controller.updateInvoice(isDraft: true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-            ),
-            child: const Text('Simpan Draft'),
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () => controller.updateInvoice(isDraft: false),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-            ),
-            child: const Text('Perbarui'),
-          ),
-        ),
-      ],
-    );
   }
 }

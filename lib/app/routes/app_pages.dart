@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart'; // IMPORT INI YANG HILANG
 import 'package:get/get.dart';
+import 'package:pay_in/presentation/invoice/create_invoice_screen.dart';
+import 'package:pay_in/presentation/invoice/edit_invoice_screen.dart';
+import 'package:pay_in/presentation/invoice/invoice_detail_screen.dart';
+import 'package:pay_in/presentation/invoice/invoice_list_screen.dart';
 import 'package:pay_in/presentation/quotations/edit_quotation_screen.dart';
 import 'package:pay_in/presentation/quotations/quotation_detail_screen.dart';
 import 'app_routes.dart';
@@ -32,25 +36,25 @@ class AppPages {
     // Invoice routes
     GetPage(
       name: AppRoutes.INVOICE_LIST,
-      page: () => const InvoiceListPlaceholder(),
+      page: () => InvoiceListScreen(),
       binding: InvoiceBinding(),
     ),
     
     GetPage(
       name: AppRoutes.CREATE_INVOICE,
-      page: () => const CreateInvoicePlaceholder(),
+      page: () => CreateInvoiceScreen(),
       binding: InvoiceBinding(),
     ),
     
     GetPage(
       name: AppRoutes.INVOICE_DETAIL,
-      page: () => const InvoiceDetailPlaceholder(),
+      page: () => InvoiceDetailScreen(),
       binding: InvoiceBinding(),
     ),
     
     GetPage(
       name: AppRoutes.EDIT_INVOICE,
-      page: () => const EditInvoicePlaceholder(),
+      page: () => EditInvoiceScreen(),
       binding: InvoiceBinding(),
     ),
     

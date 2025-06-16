@@ -125,8 +125,10 @@ class InvoiceDetailController extends GetxController {
   }
 
   void editInvoice() {
-    if (invoiceId != null) {
+    if (invoiceId != null && canEdit) {
       Get.toNamed('/edit-invoice', arguments: invoiceId);
+    } else {
+      showEditRestrictedDialog();
     }
   }
 
@@ -171,6 +173,32 @@ class InvoiceDetailController extends GetxController {
     }
   }
 
+  Future<void> duplicateInvoice() async {
+    try {
+      if (invoiceId == null) return;
+      
+      isLoading.value = true;
+      
+      final newInvoiceId = await _invoiceRepository.duplicateInvoice(invoiceId!);
+      
+      Get.snackbar(
+        'Berhasil',
+        'Invoice berhasil diduplikasi',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      
+      // Navigate to edit the duplicated invoice
+      Get.toNamed('/edit-invoice', arguments: newInvoiceId);
+    } catch (e) {
+      print('❌ Error duplicating invoice: $e');
+      Get.snackbar('Error', 'Gagal menduplikasi invoice');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Helper methods
   Color getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'paid':
@@ -198,6 +226,154 @@ class InvoiceDetailController extends GetxController {
         return 'Draft';
       default:
         return status;
+    }
+  }
+
+  bool get canEdit {
+    if (invoice.value == null) return false;
+    // Can edit if status is draft or sent (not paid/overdue)
+    final status = invoice.value!.status.toLowerCase();
+    return status == 'draft' || status == 'sent';
+  }
+
+  bool get isOverdue {
+    if (invoice.value == null) return false;
+    return invoice.value!.isOverdue;
+  }
+
+  void showEditRestrictedDialog() {
+    String message = 'Invoice ini tidak dapat diedit.';
+    
+    if (invoice.value != null) {
+      final status = invoice.value!.status.toLowerCase();
+      if (status == 'paid') {
+        message = 'Invoice yang sudah lunas tidak dapat diedit.';
+      } else if (status == 'overdue') {
+        message = 'Invoice yang sudah jatuh tempo tidak dapat diedit.';
+      }
+    }
+    
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Tidak Dapat Mengedit'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Quick actions for different statuses
+  void markAsPaid() {
+    updateStatus('paid');
+  }
+
+  void markAsSent() {
+    updateStatus('sent');
+  }
+
+  void markAsOverdue() {
+    updateStatus('overdue');
+  }
+
+  // Get available actions based on current status
+  List<Map<String, dynamic>> getAvailableActions() {
+    if (invoice.value == null) return [];
+    
+    final status = invoice.value!.status.toLowerCase();
+    final actions = <Map<String, dynamic>>[];
+    
+    // Edit action
+    if (canEdit) {
+      actions.add({
+        'title': 'Edit',
+        'icon': Icons.edit,
+        'color': Colors.blue,
+        'action': editInvoice,
+      });
+    }
+    
+    // Send action
+    if (status == 'draft') {
+      actions.add({
+        'title': 'Kirim',
+        'icon': Icons.send,
+        'color': Colors.green,
+        'action': sendEmail,
+      });
+    }
+    
+    // PDF action
+    actions.add({
+      'title': 'PDF',
+      'icon': Icons.picture_as_pdf,
+      'color': Colors.red,
+      'action': generatePdf,
+    });
+    
+    // Duplicate action
+    actions.add({
+      'title': 'Duplikasi',
+      'icon': Icons.copy,
+      'color': Colors.orange,
+      'action': duplicateInvoice,
+    });
+    
+    // Status actions
+    if (status != 'paid') {
+      actions.add({
+        'title': 'Tandai Lunas',
+        'icon': Icons.check_circle,
+        'color': Colors.green,
+        'action': markAsPaid,
+      });
+    }
+    
+    if (status == 'draft') {
+      actions.add({
+        'title': 'Tandai Terkirim',
+        'icon': Icons.send,
+        'color': Colors.blue,
+        'action': markAsSent,
+      });
+    }
+    
+    // Delete action (only for draft)
+    if (status == 'draft') {
+      actions.add({
+        'title': 'Hapus',
+        'icon': Icons.delete,
+        'color': Colors.red,
+        'action': deleteInvoice,
+      });
+    }
+    
+    return actions;
+  }
+
+  // Get days until due date
+  int get daysUntilDue {
+    if (invoice.value == null) return 0;
+    return invoice.value!.dueDate.difference(DateTime.now()).inDays;
+  }
+
+  // Get due status text
+  String get dueStatusText {
+    if (invoice.value == null) return '';
+    
+    final days = daysUntilDue;
+    if (days < 0) {
+      return 'Jatuh tempo ${days.abs()} hari yang lalu';
+    } else if (days == 0) {
+      return 'Jatuh tempo hari ini';
+    } else if (days == 1) {
+      return 'Jatuh tempo besok';
+    } else {
+      return 'Jatuh tempo dalam $days hari';
     }
   }
 }
