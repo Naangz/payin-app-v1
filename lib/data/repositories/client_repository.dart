@@ -53,4 +53,27 @@ class ClientRepository {
     );
     await addClient(newClient);
   }
+
+  Future<void> saveClientIfNotExists({
+    required String name,
+    required String email,
+    required String phone,
+    required String address,
+    String? company,
+  }) async {
+    final existingClient = await findByEmail(email);
+
+    if (existingClient != null) {
+      // Client sudah ada, tidak perlu disimpan ulang
+      return;
+    }
+
+    await createClient(
+      name: name,
+      email: email,
+      phone: phone,
+      address: address,
+      company: company,
+    );
+  }
 }
