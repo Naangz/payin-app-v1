@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart'; // IMPORT INI YANG HILANG
 import 'package:get/get.dart';
+import 'package:pay_in/presentation/analytics/analytics_screen.dart';
 import 'package:pay_in/presentation/invoice/create_invoice_screen.dart';
 import 'package:pay_in/presentation/invoice/edit_invoice_screen.dart';
 import 'package:pay_in/presentation/invoice/invoice_detail_screen.dart';
@@ -82,7 +83,7 @@ class AppPages {
     // Analytics
     GetPage(
       name: AppRoutes.ANALYTICS,
-      page: () => const AnalyticsPlaceholder(),
+      page: () => AnalyticsScreen(),
       binding: AnalyticsBinding(),
     ),
     

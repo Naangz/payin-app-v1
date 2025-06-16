@@ -192,4 +192,5 @@ class QuotationRepository extends GetxService {
       return 'QUO-${DateTime.now().millisecondsSinceEpoch}';
     }
   }
+  LocalStorageService? get localStorage => _localStorage;
 }
