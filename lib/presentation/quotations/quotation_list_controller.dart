@@ -86,4 +86,29 @@ class QuotationListController extends GetxController {
       Get.snackbar('Gagal', 'Gagal menghapus quotation');
     }
   }
+
+  Future<void> updateQuotationStatus(String quotationId, String status) async {
+    try {
+      // Update status di database/API
+      // Contoh implementasi:
+      final index = quotations.indexWhere((q) => q.id == quotationId);
+      if (index != -1) {
+        quotations[index].status = status;
+        quotations.refresh();
+        filterQuotations();
+      }
+      
+      // Jika menggunakan API:
+      // await quotationService.updateStatus(quotationId, status);
+      // await loadQuotations();
+      
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Gagal mengubah status quotation: $e',
+        backgroundColor: const Color(0xFFEF4444),
+        colorText: Colors.white,
+      );
+    }
+  }
 }

@@ -15,7 +15,7 @@ class Quotation {
   final double tax;
   final double discount;
   final double total;
-  final String status; // draft, sent, accepted, rejected, expired
+  String status; // draft, sent, accepted, rejected, expired
   final String? notes;
 
   Quotation({

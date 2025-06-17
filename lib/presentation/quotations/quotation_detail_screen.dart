@@ -270,7 +270,7 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Color(0xFF1F2937), // Hitam gelap untuk kontras maksimal
             ),
           ),
           const SizedBox(height: 16),
@@ -278,11 +278,14 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: quotation.items.length,
-            separatorBuilder: (context, index) => const Divider(),
+            separatorBuilder: (context, index) => const Divider(
+              color: Color(0xFFE5E7EB), // Abu-abu terang untuk divider
+              thickness: 1,
+            ),
             itemBuilder: (context, index) {
               final item = quotation.items[index];
               return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -290,7 +293,7 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
+                        color: const Color(0xFF3B82F6), // Biru solid
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Center(
@@ -298,7 +301,8 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
                           '${index + 1}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.blue,
+                            color: Colors.white, // Putih untuk kontras dengan biru
+                            fontSize: 14,
                           ),
                         ),
                       ),
@@ -313,14 +317,16 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
+                              color: Color(0xFF111827), // Hitam gelap untuk nama item
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             item.description,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
-                              color: Colors.grey[600],
+                              color: Color(0xFF4B5563), // Abu-abu gelap untuk deskripsi
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -328,9 +334,10 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
                             children: [
                               Text(
                                 '${item.quantity} x Rp ${item.price.toStringAsFixed(0)}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 12,
-                                  color: Colors.grey[600],
+                                  color: Color(0xFF6B7280), // Abu-abu sedang untuk detail
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                               if (item.discount > 0) ...[
@@ -339,7 +346,8 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
                                   '- Rp ${item.discount.toStringAsFixed(0)}',
                                   style: const TextStyle(
                                     fontSize: 12,
-                                    color: Colors.red,
+                                    color: Color(0xFFDC2626), // Merah gelap untuk diskon
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ],
@@ -353,7 +361,7 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                        color: Color(0xFF059669), // Hijau gelap untuk total
                       ),
                     ),
                   ],
@@ -389,7 +397,7 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Color(0xFF1F2937), // Hitam gelap untuk kontras maksimal
             ),
           ),
           const SizedBox(height: 16),
@@ -405,7 +413,10 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
             ),
           if (quotation.tax > 0)
             _buildSummaryRow('Pajak', 'Rp ${quotation.tax.toStringAsFixed(0)}'),
-          const Divider(thickness: 2),
+          const Divider(
+            thickness: 2,
+            color: Color(0xFFE5E7EB), // Abu-abu terang untuk divider
+          ),
           _buildSummaryRow(
             'TOTAL',
             'Rp ${quotation.total.toStringAsFixed(0)}',
@@ -423,7 +434,7 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
     bool isDiscount = false,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -431,18 +442,22 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
             label,
             style: TextStyle(
               fontSize: isTotal ? 16 : 14,
-              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+              fontWeight: isTotal ? FontWeight.bold : FontWeight.w500,
+              color: isTotal 
+                  ? const Color(0xFF111827) // Hitam gelap untuk total label
+                  : const Color(0xFF374151), // Abu-abu gelap untuk label biasa
             ),
           ),
           Text(
             value,
             style: TextStyle(
               fontSize: isTotal ? 16 : 14,
-              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-              color:
-                  isTotal
-                      ? Colors.green
-                      : (isDiscount ? Colors.red : Colors.black87),
+              fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
+              color: isTotal
+                  ? const Color(0xFF059669) // Hijau gelap untuk total value
+                  : (isDiscount 
+                      ? const Color(0xFFDC2626) // Merah gelap untuk diskon
+                      : const Color(0xFF111827)), // Hitam gelap untuk value biasa
             ),
           ),
         ],

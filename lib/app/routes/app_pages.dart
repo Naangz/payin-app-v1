@@ -60,7 +60,7 @@ class AppPages {
 
     GetPage(
       name: AppRoutes.QUOTATION_LIST,
-      page: () => QuotationListScreen(),
+      page: () => const QuotationListScreen(),
       binding: QuotationBinding(),
     ),
     GetPage(

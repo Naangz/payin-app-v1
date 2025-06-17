@@ -10,7 +10,13 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('Edit Quotation'),
+        title: const Text(
+          'Edit Quotation',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         actions: [
@@ -24,54 +30,52 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
 
             return controller.isLoading.value
                 ? const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    padding: EdgeInsets.all(16),
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                      ),
                     ),
-                  ),
-                )
-                : PopupMenuButton<String>(
-                  onSelected: (value) {
-                    if (value == 'save_draft') {
-                      controller.updateQuotation(isDraft: true);
-                    } else if (value == 'save_update') {
-                      controller.updateQuotation(isDraft: false);
-                    }
-                  },
-                  itemBuilder:
-                      (context) => [
-                        const PopupMenuItem(
-                          value: 'save_draft',
-                          child: Row(
-                            children: [
-                              Icon(Icons.save, size: 16),
-                              SizedBox(width: 8),
-                              Text('Simpan sebagai Draft'),
-                            ],
-                          ),
+                  )
+                : PopupMenuButton(
+                    onSelected: (value) {
+                      if (value == 'save_draft') {
+                        controller.updateQuotation(isDraft: true);
+                      } else if (value == 'save_update') {
+                        controller.updateQuotation(isDraft: false);
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 'save_draft',
+                        child: Row(
+                          children: [
+                            Icon(Icons.save, size: 16),
+                            SizedBox(width: 8),
+                            Text('Simpan sebagai Draft'),
+                          ],
                         ),
-                        const PopupMenuItem(
-                          value: 'save_update',
-                          child: Row(
-                            children: [
-                              Icon(Icons.update, size: 16),
-                              SizedBox(width: 8),
-                              Text('Perbarui Quotation'),
-                            ],
-                          ),
+                      ),
+                      const PopupMenuItem(
+                        value: 'save_update',
+                        child: Row(
+                          children: [
+                            Icon(Icons.update, size: 16),
+                            SizedBox(width: 8),
+                            Text('Perbarui Quotation'),
+                          ],
                         ),
-                      ],
-                );
+                      ),
+                    ],
+                  );
           }),
         ],
       ),
       body: Obx(() {
-        if (controller.isLoading.value &&
-            controller.originalQuotation == null) {
+        if (controller.isLoading.value && controller.originalQuotation == null) {
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -86,37 +90,18 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Status Info
                 _buildStatusInfo(),
-
                 const SizedBox(height: 16),
-
-                // Client Information Section
                 _buildClientInfoSection(),
-
                 const SizedBox(height: 24),
-
-                // Quotation Details Section
                 _buildQuotationDetailsSection(),
-
                 const SizedBox(height: 24),
-
-                // Items Section
                 _buildItemsSection(),
-
                 const SizedBox(height: 24),
-
-                // Summary Section
                 _buildSummarySection(),
-
                 const SizedBox(height: 24),
-
-                // Notes Section
                 _buildNotesSection(),
-
                 const SizedBox(height: 32),
-
-                // Action Buttons
                 _buildActionButtons(),
               ],
             ),
@@ -190,12 +175,16 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: Colors.blue.shade700,
+                    fontSize: 14,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'Quotation Number: ${controller.originalQuotation?.quotationNumber ?? ''}',
-                  style: TextStyle(fontSize: 12, color: Colors.blue.shade600),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.blue.shade600,
+                  ),
                 ),
               ],
             ),
@@ -223,6 +212,45 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
   }
 
   Widget _buildClientInfoSection() {
+    const borderRadius = BorderRadius.all(Radius.circular(12));
+    const borderSide = BorderSide(color: Color(0xFFD1D5DB));
+
+    InputDecoration _inputDecoration({
+      required String label,
+      required IconData icon,
+    }) =>
+        InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(
+            color: Color(0xFF374151), // Abu-abu gelap untuk label
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          prefixIcon: Icon(icon, color: const Color(0xFF6B7280)),
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: borderSide,
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: Colors.blue, width: 2),
+          ),
+          errorBorder: const OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: Colors.redAccent),
+          ),
+          focusedErrorBorder: const OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: Colors.redAccent),
+          ),
+        );
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -230,8 +258,7 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -242,82 +269,90 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
         children: [
           const Text(
             'Informasi Client',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF111827), // Hitam gelap untuk judul
+            ),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: controller.clientNameController,
-            decoration: const InputDecoration(
-              labelText: 'Nama Client *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.person),
+            style: const TextStyle(
+              color: Color(0xFF111827), // Teks input hitam gelap
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Nama client harus diisi';
-              }
-              return null;
-            },
+            decoration: _inputDecoration(
+              label: 'Nama Client *',
+              icon: Icons.person_rounded,
+            ),
+            validator: (v) =>
+                (v == null || v.trim().isEmpty) ? 'Nama client harus diisi' : null,
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: controller.clientEmailController,
-            decoration: const InputDecoration(
-              labelText: 'Email Client *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.email),
-            ),
             keyboardType: TextInputType.emailAddress,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Email client harus diisi';
-              }
-              if (!GetUtils.isEmail(value)) {
-                return 'Format email tidak valid';
-              }
+            style: const TextStyle(
+              color: Color(0xFF111827),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            decoration: _inputDecoration(
+              label: 'Email Client *',
+              icon: Icons.email_rounded,
+            ),
+            validator: (v) {
+              if (v == null || v.trim().isEmpty) return 'Email client harus diisi';
+              if (!GetUtils.isEmail(v)) return 'Format email tidak valid';
               return null;
             },
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: controller.clientPhoneController,
-            decoration: const InputDecoration(
-              labelText: 'Nomor Telepon *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.phone),
-            ),
             keyboardType: TextInputType.phone,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Nomor telepon harus diisi';
-              }
-              return null;
-            },
+            style: const TextStyle(
+              color: Color(0xFF111827),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            decoration: _inputDecoration(
+              label: 'Nomor Telepon *',
+              icon: Icons.phone_rounded,
+            ),
+            validator: (v) =>
+                (v == null || v.trim().isEmpty) ? 'Nomor telepon harus diisi' : null,
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: controller.clientCompanyController,
-            decoration: const InputDecoration(
-              labelText: 'Nama Perusahaan (Opsional)',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.business),
+            style: const TextStyle(
+              color: Color(0xFF111827),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            decoration: _inputDecoration(
+              label: 'Nama Perusahaan (Opsional)',
+              icon: Icons.apartment_rounded,
             ),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: controller.clientAddressController,
-            decoration: const InputDecoration(
-              labelText: 'Alamat *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.location_on),
-            ),
             maxLines: 3,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Alamat harus diisi';
-              }
-              return null;
-            },
+            style: const TextStyle(
+              color: Color(0xFF111827),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            decoration: _inputDecoration(
+              label: 'Alamat *',
+              icon: Icons.location_on_rounded,
+            ),
+            validator: (v) =>
+                (v == null || v.trim().isEmpty) ? 'Alamat harus diisi' : null,
           ),
         ],
       ),
@@ -325,6 +360,51 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
   }
 
   Widget _buildQuotationDetailsSection() {
+    const borderRadius = BorderRadius.all(Radius.circular(12));
+    const borderSide = BorderSide(color: Color(0xFFD1D5DB));
+
+    InputDecoration _inputDecoration({
+      required String label,
+      required IconData icon,
+      required String hint,
+    }) =>
+        InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(
+            color: Color(0xFF374151),
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          prefixIcon: Icon(icon, color: const Color(0xFF6B7280)),
+          hintText: hint,
+          hintStyle: const TextStyle(
+            color: Color(0xFF9CA3AF), // Hint text abu-abu sedang
+            fontSize: 16,
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: borderSide,
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: Colors.blue, width: 2),
+          ),
+          errorBorder: const OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: Colors.redAccent),
+          ),
+          focusedErrorBorder: const OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: Colors.redAccent),
+          ),
+        );
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -332,8 +412,7 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -344,23 +423,30 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
         children: [
           const Text(
             'Detail Quotation',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF111827),
+            ),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: controller.validUntilController,
-            decoration: const InputDecoration(
-              labelText: 'Berlaku Sampai *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.calendar_today),
-              hintText: 'DD/MM/YYYY',
-            ),
             readOnly: true,
+            style: const TextStyle(
+              color: Color(0xFF111827),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            decoration: _inputDecoration(
+              label: 'Berlaku Sampai *',
+              icon: Icons.calendar_today_rounded,
+              hint: 'DD/MM/YYYY',
+            ),
             onTap: () async {
               final date = await showDatePicker(
                 context: Get.context!,
-                initialDate:
-                    controller.originalQuotation?.validUntil ??
+                initialDate: controller.originalQuotation?.validUntil ??
                     DateTime.now().add(const Duration(days: 14)),
                 firstDate: DateTime.now(),
                 lastDate: DateTime.now().add(const Duration(days: 365)),
@@ -370,12 +456,9 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
                     '${date.day}/${date.month}/${date.year}';
               }
             },
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Tanggal berlaku sampai harus diisi';
-              }
-              return null;
-            },
+            validator: (v) => (v == null || v.trim().isEmpty)
+                ? 'Tanggal berlaku sampai harus diisi'
+                : null,
           ),
         ],
       ),
@@ -390,8 +473,7 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -405,15 +487,26 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
             children: [
               const Text(
                 'Item Quotation',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF111827),
+                ),
               ),
               ElevatedButton.icon(
                 onPressed: controller.addItem,
-                icon: const Icon(Icons.add, size: 16),
-                label: const Text('Tambah Item'),
+                icon: const Icon(Icons.add_rounded, size: 18),
+                label: const Text(
+                  'Tambah Item',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               ),
             ],
@@ -421,21 +514,19 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
           const SizedBox(height: 16),
           Obx(() {
             if (controller.items.isEmpty) {
-              return Container(
+              return Padding(
                 padding: const EdgeInsets.all(32),
                 child: Column(
                   children: [
-                    Icon(
-                      Icons.inventory_2_outlined,
-                      size: 48,
-                      color: Colors.grey.shade400,
-                    ),
+                    Icon(Icons.inventory_2_outlined,
+                        size: 48, color: Colors.grey.shade400),
                     const SizedBox(height: 16),
                     Text(
                       'Belum ada item',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey.shade600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -455,23 +546,39 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: controller.items.length,
-              separatorBuilder: (context, index) => const Divider(),
+              separatorBuilder: (context, index) =>
+                  const Divider(color: Color(0xFFE5E7EB)),
               itemBuilder: (context, index) {
                 final item = controller.items[index];
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(
                     item.name,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF111827),
+                      fontSize: 16,
+                    ),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(item.description),
+                      if (item.description.trim().isNotEmpty)
+                        Text(
+                          item.description,
+                          style: const TextStyle(
+                            color: Color(0xFF6B7280),
+                            fontSize: 14,
+                          ),
+                        ),
                       const SizedBox(height: 4),
                       Text(
                         '${item.quantity} x Rp ${item.price.toStringAsFixed(0)}',
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF6B7280),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
@@ -482,10 +589,11 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
                         'Rp ${item.total.toStringAsFixed(0)}',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.green,
+                          color: Color(0xFF059669),
+                          fontSize: 14,
                         ),
                       ),
-                      PopupMenuButton<String>(
+                      PopupMenuButton(
                         onSelected: (value) {
                           if (value == 'edit') {
                             controller.editItem(index);
@@ -493,33 +601,29 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
                             controller.removeItem(index);
                           }
                         },
-                        itemBuilder:
-                            (context) => [
-                              const PopupMenuItem(
-                                value: 'edit',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.edit, size: 16),
-                                    SizedBox(width: 8),
-                                    Text('Edit'),
-                                  ],
-                                ),
-                              ),
-                              const PopupMenuItem(
-                                value: 'delete',
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.delete,
-                                      size: 16,
-                                      color: Colors.red,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text('Hapus'),
-                                  ],
-                                ),
-                              ),
-                            ],
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: 'edit',
+                            child: Row(
+                              children: [
+                                Icon(Icons.edit_rounded, size: 16),
+                                SizedBox(width: 8),
+                                Text('Edit'),
+                              ],
+                            ),
+                          ),
+                          const PopupMenuItem(
+                            value: 'delete',
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete_rounded,
+                                    size: 16, color: Colors.red),
+                                SizedBox(width: 8),
+                                Text('Hapus'),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -533,6 +637,37 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
   }
 
   Widget _buildSummarySection() {
+    const borderRadius = BorderRadius.all(Radius.circular(12));
+    const borderSide = BorderSide(color: Color(0xFFD1D5DB));
+
+    InputDecoration _discountDecoration() => const InputDecoration(
+          labelText: 'Diskon',
+          labelStyle: TextStyle(
+            color: Color(0xFF374151),
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          prefixText: 'Rp ',
+          prefixStyle: TextStyle(
+            color: Color(0xFF111827),
+            fontWeight: FontWeight.w600,
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: borderSide,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: Colors.blue, width: 2),
+          ),
+        );
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -540,8 +675,7 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -552,55 +686,59 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
         children: [
           const Text(
             'Ringkasan',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          Obx(
-            () => Column(
-              children: [
-                _buildSummaryRow(
-                  'Subtotal',
-                  'Rp ${controller.subtotal.value.toStringAsFixed(0)}',
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: controller.discountController,
-                        decoration: const InputDecoration(
-                          labelText: 'Diskon',
-                          border: OutlineInputBorder(),
-                          prefixText: 'Rp ',
-                        ),
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) => controller.calculateTotals(),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                _buildSummaryRow(
-                  'Pajak (${controller.taxRate.value}%)',
-                  'Rp ${controller.tax.value.toStringAsFixed(0)}',
-                ),
-                const SizedBox(height: 8),
-                const Divider(thickness: 2),
-                const SizedBox(height: 8),
-                _buildSummaryRow(
-                  'TOTAL',
-                  'Rp ${controller.total.value.toStringAsFixed(0)}',
-                  isTotal: true,
-                ),
-              ],
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF111827),
             ),
           ),
+          const SizedBox(height: 16),
+          Obx(() => Column(
+                children: [
+                  _buildSummaryRow(
+                    'Subtotal',
+                    'Rp ${controller.subtotal.value.toStringAsFixed(0)}',
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: controller.discountController,
+                    keyboardType: TextInputType.number,
+                    style: const TextStyle(
+                      color: Color(0xFF111827),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    decoration: _discountDecoration(),
+                    onChanged: (_) => controller.calculateTotals(),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildSummaryRow(
+                    'Pajak (${controller.taxRate.value}%)',
+                    'Rp ${controller.tax.value.toStringAsFixed(0)}',
+                  ),
+                  const SizedBox(height: 8),
+                  const Divider(
+                    thickness: 2,
+                    color: Color(0xFFE5E7EB),
+                  ),
+                  const SizedBox(height: 8),
+                  _buildSummaryRow(
+                    'TOTAL',
+                    'Rp ${controller.total.value.toStringAsFixed(0)}',
+                    isTotal: true,
+                  ),
+                ],
+              )),
         ],
       ),
     );
   }
 
-  Widget _buildSummaryRow(String label, String value, {bool isTotal = false}) {
+  Widget _buildSummaryRow(
+    String label,
+    String value, {
+    bool isTotal = false,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -608,15 +746,16 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
           label,
           style: TextStyle(
             fontSize: isTotal ? 16 : 14,
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+            fontWeight: isTotal ? FontWeight.bold : FontWeight.w500,
+            color: isTotal ? const Color(0xFF111827) : const Color(0xFF374151),
           ),
         ),
         Text(
           value,
           style: TextStyle(
             fontSize: isTotal ? 16 : 14,
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            color: isTotal ? Colors.green : Colors.black87,
+            fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
+            color: isTotal ? const Color(0xFF059669) : const Color(0xFF111827),
           ),
         ),
       ],
@@ -624,6 +763,9 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
   }
 
   Widget _buildNotesSection() {
+    const borderRadius = BorderRadius.all(Radius.circular(12));
+    const borderSide = BorderSide(color: Color(0xFFD1D5DB));
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -631,8 +773,7 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -643,17 +784,44 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
         children: [
           const Text(
             'Catatan (Opsional)',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF111827),
+            ),
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: controller.notesController,
+            maxLines: 3,
+            style: const TextStyle(
+              color: Color(0xFF111827),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
             decoration: const InputDecoration(
               labelText: 'Catatan tambahan untuk quotation',
-              border: OutlineInputBorder(),
+              labelStyle: TextStyle(
+                color: Color(0xFF374151),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+              filled: true,
+              fillColor: Colors.white,
               alignLabelWithHint: true,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: borderSide,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: BorderSide(color: Colors.blue, width: 2),
+              ),
             ),
-            maxLines: 3,
           ),
         ],
       ),
@@ -668,9 +836,18 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
             onPressed: () => Get.back(),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              side: const BorderSide(color: Colors.grey),
+              side: const BorderSide(color: Color(0xFF6B7280)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text('Batal'),
+            child: const Text(
+              'Batal',
+              style: TextStyle(
+                color: Color(0xFF374151),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 16),
@@ -681,20 +858,32 @@ class EditQuotationScreen extends GetView<EditQuotationController> {
               backgroundColor: Colors.orange,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text('Simpan Draft'),
+            child: const Text(
+              'Simpan Draft',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: ElevatedButton(
-            onPressed: () => controller.updateQuotation(isDraft: false),
+            onPressed: () => controller.updateQuotation(),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text('Perbarui'),
+            child: const Text(
+              'Perbarui',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
           ),
         ),
       ],
