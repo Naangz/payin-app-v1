@@ -5,11 +5,12 @@ import '../../../data/repositories/client_repository.dart'; // ✅ Tambahan
 import '../../../data/models/quotation_model.dart';
 import '../../../data/models/quotation_item_model.dart';
 import '../../../data/services/local_storage_service.dart';
-import '../../../data/repositories/client_repository.dart';
 
 class CreateQuotationController extends GetxController {
-  final QuotationRepository _quotationRepository = Get.find<QuotationRepository>();
-  final ClientRepository _clientRepository = Get.find<ClientRepository>(); // ✅ Tambahan
+  final QuotationRepository _quotationRepository =
+      Get.find<QuotationRepository>();
+  final ClientRepository _clientRepository =
+      Get.find<ClientRepository>(); // ✅ Tambahan
   LocalStorageService? _localStorage;
 
   final RxBool isLoading = false.obs;
@@ -62,7 +63,8 @@ class CreateQuotationController extends GetxController {
 
   void _setDefaultValidUntil() {
     final defaultValidUntil = DateTime.now().add(const Duration(days: 14));
-    validUntilController.text = '${defaultValidUntil.day}/${defaultValidUntil.month}/${defaultValidUntil.year}';
+    validUntilController.text =
+        '${defaultValidUntil.day}/${defaultValidUntil.month}/${defaultValidUntil.year}';
   }
 
   void _loadTaxRate() {
@@ -88,10 +90,10 @@ class CreateQuotationController extends GetxController {
   void calculateTotals() {
     subtotal.value = items.fold(0.0, (sum, item) => sum + item.total);
     tax.value = (subtotal.value * taxRate.value) / 100;
-    
+
     final discountValue = double.tryParse(discountController.text) ?? 0.0;
     discount.value = discountValue;
-    
+
     total.value = subtotal.value + tax.value - discount.value;
   }
 
@@ -132,25 +134,29 @@ class CreateQuotationController extends GetxController {
         clientEmail: clientEmailController.text.trim(),
         clientPhone: clientPhoneController.text.trim(),
         clientAddress: clientAddressController.text.trim(),
-        clientCompany: clientCompanyController.text.trim().isEmpty 
-            ? null 
-            : clientCompanyController.text.trim(),
+        clientCompany:
+            clientCompanyController.text.trim().isEmpty
+                ? null
+                : clientCompanyController.text.trim(),
         items: items.toList(),
         subtotal: subtotal.value,
         tax: tax.value,
         discount: discount.value,
         total: total.value,
         status: isDraft ? 'draft' : 'sent',
-        notes: notesController.text.trim().isEmpty 
-            ? null 
-            : notesController.text.trim(),
+        notes:
+            notesController.text.trim().isEmpty
+                ? null
+                : notesController.text.trim(),
       );
 
       final quotationId = await _quotationRepository.createQuotation(quotation);
 
       Get.snackbar(
         'Berhasil',
-        isDraft ? 'Quotation berhasil disimpan sebagai draft' : 'Quotation berhasil dibuat dan dikirim',
+        isDraft
+            ? 'Quotation berhasil disimpan sebagai draft'
+            : 'Quotation berhasil dibuat dan dikirim',
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
@@ -181,10 +187,18 @@ class CreateQuotationController extends GetxController {
 
   Widget _buildAddItemDialog({QuotationItem? item, int? index}) {
     final nameController = TextEditingController(text: item?.name ?? '');
-    final descriptionController = TextEditingController(text: item?.description ?? '');
-    final quantityController = TextEditingController(text: item?.quantity.toString() ?? '1');
-    final priceController = TextEditingController(text: item?.price.toString() ?? '');
-    final itemDiscountController = TextEditingController(text: item?.discount.toString() ?? '0');
+    final descriptionController = TextEditingController(
+      text: item?.description ?? '',
+    );
+    final quantityController = TextEditingController(
+      text: item?.quantity.toString() ?? '1',
+    );
+    final priceController = TextEditingController(
+      text: item?.price.toString() ?? '',
+    );
+    final itemDiscountController = TextEditingController(
+      text: item?.discount.toString() ?? '0',
+    );
 
     return AlertDialog(
       title: Text(item == null ? 'Tambah Item' : 'Edit Item'),
@@ -250,17 +264,15 @@ class CreateQuotationController extends GetxController {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Get.back(),
-          child: const Text('Batal'),
-        ),
+        TextButton(onPressed: () => Get.back(), child: const Text('Batal')),
         ElevatedButton(
           onPressed: () {
             final name = nameController.text.trim();
             final description = descriptionController.text.trim();
             final quantity = int.tryParse(quantityController.text) ?? 1;
             final price = double.tryParse(priceController.text) ?? 0.0;
-            final itemDiscount = double.tryParse(itemDiscountController.text) ?? 0.0;
+            final itemDiscount =
+                double.tryParse(itemDiscountController.text) ?? 0.0;
 
             if (name.isEmpty || description.isEmpty || price <= 0) {
               Get.snackbar('Error', 'Lengkapi semua field dengan benar');

@@ -9,6 +9,8 @@ import 'widgets/monthly_trend_chart.dart';
 import 'widgets/analytics_summary.dart';
 
 class AnalyticsScreen extends GetView<AnalyticsController> {
+  const AnalyticsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +30,7 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-        
+
         return RefreshIndicator(
           onRefresh: controller.loadAnalyticsData,
           child: SingleChildScrollView(
@@ -38,14 +40,14 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
               children: [
                 // Period Selector
                 _buildPeriodSelector(),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Analytics Summary Cards
                 AnalyticsSummary(controller: controller),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Revenue Cards
                 Row(
                   children: [
@@ -68,24 +70,24 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Sales Chart
                 SalesChart(controller: controller),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Invoice Status Chart
                 InvoiceStatusChart(controller: controller),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Monthly Trend Chart
                 MonthlyTrendChart(controller: controller),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Top Clients List
                 TopClientsList(controller: controller),
               ],
@@ -116,30 +118,31 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
         children: [
           const Text(
             'Periode Analisis',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
-          Obx(() => Wrap(
-            spacing: 8,
-            children: controller.periodOptions.map((period) {
-              final isSelected = controller.selectedPeriod.value == period;
-              return FilterChip(
-                label: Text(controller.getPeriodText(period)),
-                selected: isSelected,
-                onSelected: (selected) {
-                  if (selected) {
-                    controller.changePeriod(period);
-                  }
-                },
-                backgroundColor: Colors.grey.shade100,
-                selectedColor: Colors.blue.shade100,
-                checkmarkColor: Colors.blue,
-              );
-            }).toList(),
-          )),
+          Obx(
+            () => Wrap(
+              spacing: 8,
+              children:
+                  controller.periodOptions.map((period) {
+                    final isSelected =
+                        controller.selectedPeriod.value == period;
+                    return FilterChip(
+                      label: Text(controller.getPeriodText(period)),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        if (selected) {
+                          controller.changePeriod(period);
+                        }
+                      },
+                      backgroundColor: Colors.grey.shade100,
+                      selectedColor: Colors.blue.shade100,
+                      checkmarkColor: Colors.blue,
+                    );
+                  }).toList(),
+            ),
+          ),
         ],
       ),
     );

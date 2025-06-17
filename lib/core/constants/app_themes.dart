@@ -22,20 +22,17 @@ class AppThemes {
       scaffoldBackgroundColor: AppColors.background,
 
       // App Bar Theme
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         elevation: AppSizes.elevationNone,
         centerTitle: false,
-        titleTextStyle: const TextStyle(
+        titleTextStyle: TextStyle(
           fontSize: AppSizes.fontXL,
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-          size: AppSizes.iconL,
-        ),
+        iconTheme: IconThemeData(color: Colors.white, size: AppSizes.iconL),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
 
@@ -146,11 +143,11 @@ class AppThemes {
           horizontal: AppSizes.paddingM,
           vertical: AppSizes.paddingM,
         ),
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: AppColors.textHint,
           fontSize: AppSizes.fontM,
         ),
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           color: AppColors.textSecondary,
           fontSize: AppSizes.fontM,
         ),
@@ -281,7 +278,7 @@ class AppThemes {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.radiusM),
         ),
-        titleTextStyle: TextStyle(
+        titleTextStyle: const TextStyle(
           fontSize: AppSizes.fontXL,
           fontWeight: FontWeight.bold,
           color: AppColors.textPrimary,

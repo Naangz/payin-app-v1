@@ -14,7 +14,7 @@ class QuotationCard extends StatelessWidget {
   final VoidCallback? onConvertToInvoice;
 
   const QuotationCard({
-    Key? key,
+    super.key,
     required this.quotation,
     this.onTap,
     this.onEdit,
@@ -24,15 +24,13 @@ class QuotationCard extends StatelessWidget {
     this.onSendEmail,
     this.onStatusChange,
     this.onConvertToInvoice,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -71,9 +69,9 @@ class QuotationCard extends StatelessWidget {
                   QuotationStatusChip(status: quotation.status),
                 ],
               ),
-              
+
               const SizedBox(height: 12),
-              
+
               // Amount and Date Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,10 +81,7 @@ class QuotationCard extends StatelessWidget {
                     children: [
                       Text(
                         'Total',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                       Text(
                         quotation.formattedTotal,
@@ -103,31 +98,35 @@ class QuotationCard extends StatelessWidget {
                     children: [
                       Text(
                         'Berlaku Sampai',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                       Text(
                         '${quotation.validUntil.day}/${quotation.validUntil.month}/${quotation.validUntil.year}',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: quotation.isExpired ? Colors.red : Colors.black87,
+                          color:
+                              quotation.isExpired ? Colors.red : Colors.black87,
                         ),
                       ),
                     ],
                   ),
                 ],
               ),
-              
+
               // Expiry warning
               if (quotation.isExpired || _isExpiringSoon()) ...[
                 const SizedBox(height: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: quotation.isExpired ? Colors.red.shade50 : Colors.orange.shade50,
+                    color:
+                        quotation.isExpired
+                            ? Colors.red.shade50
+                            : Colors.orange.shade50,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Row(
@@ -140,20 +139,23 @@ class QuotationCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        quotation.isExpired ? 'Kedaluwarsa' : 'Akan kedaluwarsa',
+                        quotation.isExpired
+                            ? 'Kedaluwarsa'
+                            : 'Akan kedaluwarsa',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: quotation.isExpired ? Colors.red : Colors.orange,
+                          color:
+                              quotation.isExpired ? Colors.red : Colors.orange,
                         ),
                       ),
                     ],
                   ),
                 ),
               ],
-              
+
               const SizedBox(height: 12),
-              
+
               // Action Buttons
               Row(
                 children: [
@@ -240,7 +242,7 @@ class QuotationCard extends StatelessWidget {
 
   List<PopupMenuEntry<String>> _buildMenuItems() {
     final items = <PopupMenuEntry<String>>[];
-    
+
     // Convert to Invoice (only for sent status and not expired)
     if (quotation.status.toLowerCase() == 'sent' && !quotation.isExpired) {
       items.add(
@@ -256,7 +258,7 @@ class QuotationCard extends StatelessWidget {
         ),
       );
     }
-    
+
     // Duplicate
     items.add(
       const PopupMenuItem(
@@ -270,7 +272,7 @@ class QuotationCard extends StatelessWidget {
         ),
       ),
     );
-    
+
     // Status actions
     if (quotation.status.toLowerCase() == 'sent' && !quotation.isExpired) {
       items.add(
@@ -285,7 +287,7 @@ class QuotationCard extends StatelessWidget {
           ),
         ),
       );
-      
+
       items.add(
         const PopupMenuItem(
           value: 'mark_rejected',
@@ -299,23 +301,22 @@ class QuotationCard extends StatelessWidget {
         ),
       );
     }
-    
+
     // Delete (only for draft)
     // Tampilkan tombol hapus untuk semua status
-items.add(
-  const PopupMenuItem(
-    value: 'delete',
-    child: Row(
-      children: [
-        Icon(Icons.delete, size: 16, color: Colors.red),
-        SizedBox(width: 8),
-        Text('Hapus'),
-      ],
-    ),
-  ),
-);
+    items.add(
+      const PopupMenuItem(
+        value: 'delete',
+        child: Row(
+          children: [
+            Icon(Icons.delete, size: 16, color: Colors.red),
+            SizedBox(width: 8),
+            Text('Hapus'),
+          ],
+        ),
+      ),
+    );
 
-    
     return items;
   }
 
@@ -340,7 +341,8 @@ items.add(
   }
 
   bool _isExpiringSoon() {
-    final daysUntilExpiry = quotation.validUntil.difference(DateTime.now()).inDays;
+    final daysUntilExpiry =
+        quotation.validUntil.difference(DateTime.now()).inDays;
     return daysUntilExpiry <= 3 && daysUntilExpiry >= 0;
   }
 }

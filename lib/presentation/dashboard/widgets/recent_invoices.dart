@@ -7,10 +7,7 @@ import '../../quotations/widgets/quotation_status_chip.dart'; // TAMBAHAN
 class RecentInvoices extends StatelessWidget {
   final DashboardController controller;
 
-  const RecentInvoices({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  const RecentInvoices({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +16,9 @@ class RecentInvoices extends StatelessWidget {
       children: [
         // Recent Invoices Section
         _buildRecentInvoicesSection(),
-        
+
         const SizedBox(height: 24),
-        
+
         // TAMBAHAN: Recent Quotations Section sesuai memory entries[2]
         _buildRecentQuotationsSection(),
       ],
@@ -47,9 +44,7 @@ class RecentInvoices extends StatelessWidget {
               onPressed: controller.navigateToInvoiceList,
               icon: const Icon(Icons.arrow_forward, size: 16),
               label: const Text('Lihat Semua'),
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.blue,
-              ),
+              style: TextButton.styleFrom(foregroundColor: Colors.blue),
             ),
           ],
         ),
@@ -82,12 +77,13 @@ class RecentInvoices extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: controller.recentInvoices.length,
-              separatorBuilder: (context, index) => Divider(
-                height: 1,
-                color: Colors.grey.shade200,
-                indent: 16,
-                endIndent: 16,
-              ),
+              separatorBuilder:
+                  (context, index) => Divider(
+                    height: 1,
+                    color: Colors.grey.shade200,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
               itemBuilder: (context, index) {
                 final invoice = controller.recentInvoices[index];
                 return _buildInvoiceItem(invoice);
@@ -119,9 +115,7 @@ class RecentInvoices extends StatelessWidget {
               onPressed: controller.navigateToQuotationList,
               icon: const Icon(Icons.arrow_forward, size: 16),
               label: const Text('Lihat Semua'),
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.purple,
-              ),
+              style: TextButton.styleFrom(foregroundColor: Colors.purple),
             ),
           ],
         ),
@@ -154,12 +148,13 @@ class RecentInvoices extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: controller.recentQuotations.length,
-              separatorBuilder: (context, index) => Divider(
-                height: 1,
-                color: Colors.grey.shade200,
-                indent: 16,
-                endIndent: 16,
-              ),
+              separatorBuilder:
+                  (context, index) => Divider(
+                    height: 1,
+                    color: Colors.grey.shade200,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
               itemBuilder: (context, index) {
                 final quotation = controller.recentQuotations[index];
                 return _buildQuotationItem(quotation);
@@ -184,7 +179,9 @@ class RecentInvoices extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: controller.getStatusColor(invoice.status).withOpacity(0.1),
+                color: controller
+                    .getStatusColor(invoice.status)
+                    .withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -193,9 +190,9 @@ class RecentInvoices extends StatelessWidget {
                 size: 24,
               ),
             ),
-            
+
             const SizedBox(width: 16),
-            
+
             // Invoice Info
             Expanded(
               child: Column(
@@ -218,10 +215,7 @@ class RecentInvoices extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     invoice.clientName,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -239,8 +233,12 @@ class RecentInvoices extends StatelessWidget {
                         '${invoice.dueDate.day}/${invoice.dueDate.month}/${invoice.dueDate.year}',
                         style: TextStyle(
                           fontSize: 12,
-                          color: invoice.isOverdue ? Colors.red : Colors.grey[600],
-                          fontWeight: invoice.isOverdue ? FontWeight.w600 : FontWeight.normal,
+                          color:
+                              invoice.isOverdue ? Colors.red : Colors.grey[600],
+                          fontWeight:
+                              invoice.isOverdue
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
                         ),
                       ),
                     ],
@@ -248,44 +246,49 @@ class RecentInvoices extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Action Menu
             PopupMenuButton<String>(
               onSelected: (value) => _handleInvoiceAction(value, invoice.id),
-              itemBuilder: (context) => [
-                const PopupMenuItem(
-                  value: 'view',
-                  child: Row(
-                    children: [
-                      Icon(Icons.visibility, size: 16),
-                      SizedBox(width: 8),
-                      Text('Lihat Detail'),
-                    ],
-                  ),
-                ),
-                if (invoice.status.toLowerCase() != 'paid')
-                  const PopupMenuItem(
-                    value: 'mark_paid',
-                    child: Row(
-                      children: [
-                        Icon(Icons.check_circle, size: 16, color: Colors.green),
-                        SizedBox(width: 8),
-                        Text('Tandai Lunas'),
-                      ],
+              itemBuilder:
+                  (context) => [
+                    const PopupMenuItem(
+                      value: 'view',
+                      child: Row(
+                        children: [
+                          Icon(Icons.visibility, size: 16),
+                          SizedBox(width: 8),
+                          Text('Lihat Detail'),
+                        ],
+                      ),
                     ),
-                  ),
-                if (invoice.status.toLowerCase() == 'draft')
-                  const PopupMenuItem(
-                    value: 'send',
-                    child: Row(
-                      children: [
-                        Icon(Icons.send, size: 16, color: Colors.blue),
-                        SizedBox(width: 8),
-                        Text('Kirim Invoice'),
-                      ],
-                    ),
-                  ),
-              ],
+                    if (invoice.status.toLowerCase() != 'paid')
+                      const PopupMenuItem(
+                        value: 'mark_paid',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              size: 16,
+                              color: Colors.green,
+                            ),
+                            SizedBox(width: 8),
+                            Text('Tandai Lunas'),
+                          ],
+                        ),
+                      ),
+                    if (invoice.status.toLowerCase() == 'draft')
+                      const PopupMenuItem(
+                        value: 'send',
+                        child: Row(
+                          children: [
+                            Icon(Icons.send, size: 16, color: Colors.blue),
+                            SizedBox(width: 8),
+                            Text('Kirim Invoice'),
+                          ],
+                        ),
+                      ),
+                  ],
               child: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -319,7 +322,9 @@ class RecentInvoices extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: controller.getStatusColor(quotation.status).withOpacity(0.1),
+                color: controller
+                    .getStatusColor(quotation.status)
+                    .withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -328,9 +333,9 @@ class RecentInvoices extends StatelessWidget {
                 size: 24,
               ),
             ),
-            
+
             const SizedBox(width: 16),
-            
+
             // Quotation Info
             Expanded(
               child: Column(
@@ -353,10 +358,7 @@ class RecentInvoices extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     quotation.clientName,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -374,8 +376,14 @@ class RecentInvoices extends StatelessWidget {
                         'Berlaku: ${quotation.validUntil.day}/${quotation.validUntil.month}/${quotation.validUntil.year}',
                         style: TextStyle(
                           fontSize: 12,
-                          color: quotation.isExpired ? Colors.red : Colors.grey[600],
-                          fontWeight: quotation.isExpired ? FontWeight.w600 : FontWeight.normal,
+                          color:
+                              quotation.isExpired
+                                  ? Colors.red
+                                  : Colors.grey[600],
+                          fontWeight:
+                              quotation.isExpired
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
                         ),
                       ),
                     ],
@@ -383,55 +391,66 @@ class RecentInvoices extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Action Menu untuk Quotation
             PopupMenuButton<String>(
-              onSelected: (value) => _handleQuotationAction(value, quotation.id),
-              itemBuilder: (context) => [
-                const PopupMenuItem(
-                  value: 'view',
-                  child: Row(
-                    children: [
-                      Icon(Icons.visibility, size: 16),
-                      SizedBox(width: 8),
-                      Text('Lihat Detail'),
-                    ],
-                  ),
-                ),
-                if (quotation.status.toLowerCase() == 'sent' && !quotation.isExpired)
-                  const PopupMenuItem(
-                    value: 'mark_accepted',
-                    child: Row(
-                      children: [
-                        Icon(Icons.check_circle, size: 16, color: Colors.green),
-                        SizedBox(width: 8),
-                        Text('Tandai Diterima'),
-                      ],
+              onSelected:
+                  (value) => _handleQuotationAction(value, quotation.id),
+              itemBuilder:
+                  (context) => [
+                    const PopupMenuItem(
+                      value: 'view',
+                      child: Row(
+                        children: [
+                          Icon(Icons.visibility, size: 16),
+                          SizedBox(width: 8),
+                          Text('Lihat Detail'),
+                        ],
+                      ),
                     ),
-                  ),
-                if (quotation.status.toLowerCase() == 'draft')
-                  const PopupMenuItem(
-                    value: 'send',
-                    child: Row(
-                      children: [
-                        Icon(Icons.send, size: 16, color: Colors.blue),
-                        SizedBox(width: 8),
-                        Text('Kirim Quotation'),
-                      ],
-                    ),
-                  ),
-                if (quotation.status.toLowerCase() == 'accepted')
-                  const PopupMenuItem(
-                    value: 'convert_to_invoice',
-                    child: Row(
-                      children: [
-                        Icon(Icons.receipt_long, size: 16, color: Colors.purple),
-                        SizedBox(width: 8),
-                        Text('Buat Invoice'),
-                      ],
-                    ),
-                  ),
-              ],
+                    if (quotation.status.toLowerCase() == 'sent' &&
+                        !quotation.isExpired)
+                      const PopupMenuItem(
+                        value: 'mark_accepted',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              size: 16,
+                              color: Colors.green,
+                            ),
+                            SizedBox(width: 8),
+                            Text('Tandai Diterima'),
+                          ],
+                        ),
+                      ),
+                    if (quotation.status.toLowerCase() == 'draft')
+                      const PopupMenuItem(
+                        value: 'send',
+                        child: Row(
+                          children: [
+                            Icon(Icons.send, size: 16, color: Colors.blue),
+                            SizedBox(width: 8),
+                            Text('Kirim Quotation'),
+                          ],
+                        ),
+                      ),
+                    if (quotation.status.toLowerCase() == 'accepted')
+                      const PopupMenuItem(
+                        value: 'convert_to_invoice',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.receipt_long,
+                              size: 16,
+                              color: Colors.purple,
+                            ),
+                            SizedBox(width: 8),
+                            Text('Buat Invoice'),
+                          ],
+                        ),
+                      ),
+                  ],
               child: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -462,11 +481,7 @@ class RecentInvoices extends StatelessWidget {
       padding: const EdgeInsets.all(48),
       child: Column(
         children: [
-          Icon(
-            icon,
-            size: 64,
-            color: Colors.grey.shade300,
-          ),
+          Icon(icon, size: 64, color: Colors.grey.shade300),
           const SizedBox(height: 16),
           Text(
             title,
@@ -479,10 +494,7 @@ class RecentInvoices extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             subtitle,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade500,
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),

@@ -4,6 +4,8 @@ import 'invoice_list_controller.dart';
 import 'widgets/invoice_card.dart';
 
 class InvoiceListScreen extends GetView<InvoiceListController> {
+  const InvoiceListScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,15 +157,15 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
                 fillColor: const Color(0xFFF8FAFC),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(
-                    color: const Color(0xFFE2E8F0),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFE2E8F0),
                     width: 2,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(
-                    color: const Color(0xFFE2E8F0),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFE2E8F0),
                     width: 2,
                   ),
                 ),
@@ -336,20 +338,20 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
               ),
             ),
             const SizedBox(height: 12),
-            Text(
+            const Text(
               'Buat invoice pertama Anda untuk memulai\nmengelola tagihan dengan mudah',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
-                color: const Color(0xFF6B7280),
+                color: Color(0xFF6B7280),
                 height: 1.5,
               ),
             ),
             const SizedBox(height: 32),
             Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [const Color(0xFF3B82F6), const Color(0xFF1E40AF)],
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF3B82F6), Color(0xFF1E40AF)],
                 ),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
@@ -631,8 +633,8 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
   Widget _buildFloatingActionButton() {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [const Color(0xFF3B82F6), const Color(0xFF1E40AF)],
+        gradient: const LinearGradient(
+          colors: [Color(0xFF3B82F6), Color(0xFF1E40AF)],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [

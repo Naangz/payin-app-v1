@@ -4,10 +4,7 @@ import '../analytics_controller.dart';
 class TopClientsList extends StatelessWidget {
   final AnalyticsController controller;
 
-  const TopClientsList({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  const TopClientsList({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +42,7 @@ class TopClientsList extends StatelessWidget {
                 },
                 icon: const Icon(Icons.arrow_forward, size: 16),
                 label: const Text('Lihat Semua'),
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.blue,
-                ),
+                style: TextButton.styleFrom(foregroundColor: Colors.blue),
               ),
             ],
           ),
@@ -55,19 +50,18 @@ class TopClientsList extends StatelessWidget {
           controller.topClients.isEmpty
               ? _buildEmptyState()
               : ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.topClients.length,
-                  separatorBuilder: (context, index) => Divider(
-                    height: 1,
-                    color: Colors.grey.shade200,
-                  ),
-                  itemBuilder: (context, index) {
-                    final client = controller.topClients[index];
-                    final rank = index + 1;
-                    return _buildClientItem(client, rank);
-                  },
-                ),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: controller.topClients.length,
+                separatorBuilder:
+                    (context, index) =>
+                        Divider(height: 1, color: Colors.grey.shade200),
+                itemBuilder: (context, index) {
+                  final client = controller.topClients[index];
+                  final rank = index + 1;
+                  return _buildClientItem(client, rank);
+                },
+              ),
         ],
       ),
     );
@@ -78,26 +72,16 @@ class TopClientsList extends StatelessWidget {
       padding: const EdgeInsets.all(32),
       child: Column(
         children: [
-          Icon(
-            Icons.people_outline,
-            size: 48,
-            color: Colors.grey.shade300,
-          ),
+          Icon(Icons.people_outline, size: 48, color: Colors.grey.shade300),
           const SizedBox(height: 16),
           Text(
             'Belum ada data client',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey.shade600,
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
           ),
           const SizedBox(height: 8),
           Text(
             'Data akan muncul setelah ada invoice yang lunas',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade500,
-            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
             textAlign: TextAlign.center,
           ),
         ],
@@ -134,9 +118,9 @@ class TopClientsList extends StatelessWidget {
               ),
             ),
           ),
-          
+
           const SizedBox(width: 16),
-          
+
           // Client Avatar
           Container(
             width: 48,
@@ -156,9 +140,9 @@ class TopClientsList extends StatelessWidget {
               ),
             ),
           ),
-          
+
           const SizedBox(width: 16),
-          
+
           // Client Info
           Expanded(
             child: Column(
@@ -177,10 +161,7 @@ class TopClientsList extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   clientEmail,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -188,7 +169,10 @@ class TopClientsList extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.green.shade50,
                         borderRadius: BorderRadius.circular(12),
@@ -207,7 +191,7 @@ class TopClientsList extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Revenue
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -223,10 +207,7 @@ class TopClientsList extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 'Total Revenue',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
               ),
             ],
           ),

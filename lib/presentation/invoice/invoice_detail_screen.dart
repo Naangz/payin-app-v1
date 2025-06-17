@@ -4,6 +4,8 @@ import 'invoice_detail_controller.dart';
 import 'widgets/invoice_status_chip.dart';
 
 class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
+  const InvoiceDetailScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,41 +20,46 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF1E40AF),
-                Color(0xFF3B82F6),
-              ],
+              colors: [Color(0xFF1E40AF), Color(0xFF3B82F6)],
             ),
           ),
         ),
         actions: [
-          Obx(() => controller.isLoading.value
-              ? const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ),
-                )
-              : Container(
-                  margin: const EdgeInsets.only(right: 16),
-                  child: PopupMenuButton<String>(
-                    icon: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(8),
+          Obx(
+            () =>
+                controller.isLoading.value
+                    ? const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                        ),
                       ),
-                      child: const Icon(Icons.more_vert, color: Colors.white),
+                    )
+                    : Container(
+                      margin: const EdgeInsets.only(right: 16),
+                      child: PopupMenuButton<String>(
+                        icon: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.more_vert,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onSelected: (value) => _handleMenuAction(value),
+                        itemBuilder: (context) => _buildMenuItems(),
+                      ),
                     ),
-                    onSelected: (value) => _handleMenuAction(value),
-                    itemBuilder: (context) => _buildMenuItems(),
-                  ),
-                )),
+          ),
         ],
       ),
       body: Obx(() {
@@ -61,9 +68,7 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
         }
 
         if (controller.invoice.value == null) {
-          return const Center(
-            child: Text('Invoice tidak ditemukan'),
-          );
+          return const Center(child: Text('Invoice tidak ditemukan'));
         }
 
         final invoice = controller.invoice.value!;
@@ -75,29 +80,29 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
             children: [
               // Header Section
               _buildHeaderSection(invoice),
-              
+
               const SizedBox(height: 24),
-              
+
               // Client Information Section
               _buildClientInfoSection(invoice),
-              
+
               const SizedBox(height: 24),
-              
+
               // Items Section
               _buildItemsSection(invoice),
-              
+
               const SizedBox(height: 24),
-              
+
               // Summary Section
               _buildSummarySection(invoice),
-              
+
               if (invoice.notes != null && invoice.notes!.isNotEmpty) ...[
                 const SizedBox(height: 24),
                 _buildNotesSection(invoice),
               ],
-              
+
               const SizedBox(height: 32),
-              
+
               // Action Buttons
               _buildActionButtons(),
             ],
@@ -111,13 +116,10 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            const Color(0xFF1E40AF),
-            const Color(0xFF3B82F6),
-          ],
+          colors: [Color(0xFF1E40AF), Color(0xFF3B82F6)],
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
@@ -170,15 +172,22 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
             children: [
               Icon(
                 controller.isOverdue ? Icons.error : Icons.schedule,
-                color: controller.isOverdue ? Colors.red.shade200 : Colors.white70,
+                color:
+                    controller.isOverdue ? Colors.red.shade200 : Colors.white70,
                 size: 18,
               ),
               const SizedBox(width: 8),
               Text(
                 controller.dueStatusText,
                 style: TextStyle(
-                  color: controller.isOverdue ? Colors.red.shade200 : Colors.white70,
-                  fontWeight: controller.isOverdue ? FontWeight.w600 : FontWeight.normal,
+                  color:
+                      controller.isOverdue
+                          ? Colors.red.shade200
+                          : Colors.white70,
+                  fontWeight:
+                      controller.isOverdue
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                   fontSize: 14,
                 ),
               ),
@@ -246,17 +255,25 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
               ],
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
                 _buildInfoRow(Icons.person, 'Nama', invoice.clientName),
                 if (invoice.clientCompany != null)
-                  _buildInfoRow(Icons.business, 'Perusahaan', invoice.clientCompany!),
+                  _buildInfoRow(
+                    Icons.business,
+                    'Perusahaan',
+                    invoice.clientCompany!,
+                  ),
                 _buildInfoRow(Icons.email, 'Email', invoice.clientEmail),
                 _buildInfoRow(Icons.phone, 'Telepon', invoice.clientPhone),
-                _buildInfoRow(Icons.location_on, 'Alamat', invoice.clientAddress),
+                _buildInfoRow(
+                  Icons.location_on,
+                  'Alamat',
+                  invoice.clientAddress,
+                ),
               ],
             ),
           ),
@@ -366,26 +383,27 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
               ],
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(20),
             child: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: invoice.items.length,
-              separatorBuilder: (context, index) => Container(
-                margin: const EdgeInsets.symmetric(vertical: 12),
-                height: 1,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.transparent,
-                      const Color(0xFFE2E8F0),
-                      Colors.transparent,
-                    ],
+              separatorBuilder:
+                  (context, index) => Container(
+                    margin: const EdgeInsets.symmetric(vertical: 12),
+                    height: 1,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          Color(0xFFE2E8F0),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
               itemBuilder: (context, index) {
                 final item = invoice.items[index];
                 return Container(
@@ -405,11 +423,8 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              const Color(0xFF3B82F6),
-                              const Color(0xFF1E40AF),
-                            ],
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF3B82F6), Color(0xFF1E40AF)],
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -447,7 +462,10 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
                             ),
                             const SizedBox(height: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: const Color(0xFF10B981).withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(6),
@@ -540,28 +558,38 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
               ],
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                _buildSummaryRow('Subtotal', 'Rp ${invoice.subtotal.toStringAsFixed(0)}'),
+                _buildSummaryRow(
+                  'Subtotal',
+                  'Rp ${invoice.subtotal.toStringAsFixed(0)}',
+                ),
                 if (invoice.discount > 0) ...[
                   const SizedBox(height: 12),
-                  _buildSummaryRow('Diskon', '- Rp ${invoice.discount.toStringAsFixed(0)}', isDiscount: true),
+                  _buildSummaryRow(
+                    'Diskon',
+                    '- Rp ${invoice.discount.toStringAsFixed(0)}',
+                    isDiscount: true,
+                  ),
                 ],
                 if (invoice.tax > 0) ...[
                   const SizedBox(height: 12),
-                  _buildSummaryRow('Pajak', 'Rp ${invoice.tax.toStringAsFixed(0)}'),
+                  _buildSummaryRow(
+                    'Pajak',
+                    'Rp ${invoice.tax.toStringAsFixed(0)}',
+                  ),
                 ],
                 const SizedBox(height: 16),
                 Container(
                   height: 2,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
                         Colors.transparent,
-                        const Color(0xFF10B981),
+                        Color(0xFF10B981),
                         Colors.transparent,
                       ],
                     ),
@@ -598,7 +626,12 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
     );
   }
 
-  Widget _buildSummaryRow(String label, String value, {bool isTotal = false, bool isDiscount = false}) {
+  Widget _buildSummaryRow(
+    String label,
+    String value, {
+    bool isTotal = false,
+    bool isDiscount = false,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -615,7 +648,12 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
           style: TextStyle(
             fontSize: isTotal ? 20 : 16,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
-            color: isTotal ? const Color(0xFF10B981) : (isDiscount ? const Color(0xFFEF4444) : const Color(0xFF1F2937)),
+            color:
+                isTotal
+                    ? const Color(0xFF10B981)
+                    : (isDiscount
+                        ? const Color(0xFFEF4444)
+                        : const Color(0xFF1F2937)),
           ),
         ),
       ],
@@ -670,9 +708,7 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
             decoration: BoxDecoration(
               color: const Color(0xFFF8FAFC),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: const Color(0xFFE2E8F0),
-              ),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
             ),
             child: Text(
               invoice.notes!,
@@ -691,7 +727,7 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
   Widget _buildActionButtons() {
     return Obx(() {
       final actions = controller.getAvailableActions();
-      
+
       if (actions.isEmpty) {
         return const SizedBox.shrink();
       }
@@ -705,11 +741,8 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          const Color(0xFF3B82F6),
-                          const Color(0xFF1E40AF),
-                        ],
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF3B82F6), Color(0xFF1E40AF)],
                       ),
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
@@ -740,11 +773,8 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color(0xFFEF4444),
-                        const Color(0xFFDC2626),
-                      ],
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
                     ),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
@@ -774,11 +804,8 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color(0xFF10B981),
-                        const Color(0xFF059669),
-                      ],
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF10B981), Color(0xFF059669)],
                     ),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
@@ -806,9 +833,9 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Secondary actions
           Row(
             children: [
@@ -871,7 +898,7 @@ class InvoiceDetailScreen extends GetView<InvoiceDetailController> {
       (a) => a['title'] == action,
       orElse: () => {},
     );
-    
+
     if (actionData.isNotEmpty) {
       actionData['action']();
     }

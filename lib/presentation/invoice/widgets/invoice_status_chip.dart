@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class InvoiceStatusChip extends StatelessWidget {
   final String status;
 
-  const InvoiceStatusChip({
-    Key? key,
-    required this.status,
-  }) : super(key: key);
+  const InvoiceStatusChip({super.key, required this.status});
 
   @override
   Widget build(BuildContext context) {

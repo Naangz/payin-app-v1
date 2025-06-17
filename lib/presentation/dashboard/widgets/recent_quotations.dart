@@ -7,8 +7,7 @@ import '../../quotations/create_quotation_screen.dart';
 class RecentQuotations extends StatelessWidget {
   final DashboardController controller;
 
-  const RecentQuotations({Key? key, required this.controller})
-    : super(key: key);
+  const RecentQuotations({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +36,11 @@ class RecentQuotations extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           quotations.isEmpty
-              ? Card(
+              ? const Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
                   child: Column(
-                    children: const [
+                    children: [
                       Icon(Icons.description, size: 48, color: Colors.grey),
                       SizedBox(height: 12),
                       Text('Belum ada quotation'),

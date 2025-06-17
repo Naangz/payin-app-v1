@@ -3,59 +3,79 @@ import 'package:get/get.dart';
 import 'create_quotation_controller.dart';
 
 class CreateQuotationScreen extends GetView<CreateQuotationController> {
+  const CreateQuotationScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB), // Soft neutral background sesuai search results[3]
+      backgroundColor: const Color(
+        0xFFF8FAFB,
+      ), // Soft neutral background sesuai search results[3]
       appBar: AppBar(
         title: const Text('Buat Quotation'),
-        backgroundColor: const Color(0xFF0C92D2), // Professional blue sesuai search results[4]
+        backgroundColor: const Color(
+          0xFF0C92D2,
+        ), // Professional blue sesuai search results[4]
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
-          Obx(() => controller.isLoading.value
-              ? const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ),
-                )
-              : PopupMenuButton<String>(
-                  onSelected: (value) {
-                    if (value == 'save_draft') {
-                      controller.saveQuotation(isDraft: true);
-                    } else if (value == 'save_send') {
-                      controller.saveQuotation(isDraft: false);
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'save_draft',
-                      child: Row(
-                        children: [
-                          Icon(Icons.save, size: 16, color: Color(0xFF046CA4)),
-                          SizedBox(width: 8),
-                          Text('Simpan sebagai Draft'),
-                        ],
+          Obx(
+            () =>
+                controller.isLoading.value
+                    ? const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                        ),
                       ),
+                    )
+                    : PopupMenuButton<String>(
+                      onSelected: (value) {
+                        if (value == 'save_draft') {
+                          controller.saveQuotation(isDraft: true);
+                        } else if (value == 'save_send') {
+                          controller.saveQuotation(isDraft: false);
+                        }
+                      },
+                      itemBuilder:
+                          (context) => [
+                            const PopupMenuItem(
+                              value: 'save_draft',
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.save,
+                                    size: 16,
+                                    color: Color(0xFF046CA4),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text('Simpan sebagai Draft'),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem(
+                              value: 'save_send',
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.send,
+                                    size: 16,
+                                    color: Color(0xFF0C92D2),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text('Simpan & Kirim'),
+                                ],
+                              ),
+                            ),
+                          ],
                     ),
-                    const PopupMenuItem(
-                      value: 'save_send',
-                      child: Row(
-                        children: [
-                          Icon(Icons.send, size: 16, color: Color(0xFF0C92D2)),
-                          SizedBox(width: 8),
-                          Text('Simpan & Kirim'),
-                        ],
-                      ),
-                    ),
-                  ],
-                )),
+          ),
         ],
       ),
       body: Form(
@@ -67,29 +87,29 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
             children: [
               // Client Information Section
               _buildClientInfoSection(),
-              
+
               const SizedBox(height: 20),
-              
+
               // Quotation Details Section
               _buildQuotationDetailsSection(),
-              
+
               const SizedBox(height: 20),
-              
+
               // Items Section
               _buildItemsSection(),
-              
+
               const SizedBox(height: 20),
-              
+
               // Summary Section
               _buildSummarySection(),
-              
+
               const SizedBox(height: 20),
-              
+
               // Notes Section
               _buildNotesSection(),
-              
+
               const SizedBox(height: 32),
-              
+
               // Action Buttons
               _buildActionButtons(),
             ],
@@ -107,7 +127,9 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF84CCEC).withOpacity(0.1), // Soft blue shadow sesuai search results[4]
+            color: const Color(
+              0xFF84CCEC,
+            ).withOpacity(0.1), // Soft blue shadow sesuai search results[4]
             spreadRadius: 0,
             blurRadius: 10,
             offset: const Offset(0, 4),
@@ -122,7 +144,9 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF84CCEC).withOpacity(0.2), // Light blue accent
+                  color: const Color(
+                    0xFF84CCEC,
+                  ).withOpacity(0.2), // Light blue accent
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -137,7 +161,9 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1F2937), // Dark gray sesuai search results[2]
+                  color: Color(
+                    0xFF1F2937,
+                  ), // Dark gray sesuai search results[2]
                 ),
               ),
             ],
@@ -234,7 +260,9 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF9D9FA3).withOpacity(0.2), // Neutral accent sesuai search results[4]
+                  color: const Color(
+                    0xFF9D9FA3,
+                  ).withOpacity(0.2), // Neutral accent sesuai search results[4]
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -271,7 +299,9 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
                   return Theme(
                     data: Theme.of(context).copyWith(
                       colorScheme: const ColorScheme.light(
-                        primary: Color(0xFF0C92D2), // Blue theme untuk date picker
+                        primary: Color(
+                          0xFF0C92D2,
+                        ), // Blue theme untuk date picker
                         onPrimary: Colors.white,
                         surface: Colors.white,
                         onSurface: Color(0xFF1F2937),
@@ -282,7 +312,8 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
                 },
               );
               if (date != null) {
-                controller.validUntilController.text = '${date.day}/${date.month}/${date.year}';
+                controller.validUntilController.text =
+                    '${date.day}/${date.month}/${date.year}';
               }
             },
             validator: (value) {
@@ -368,7 +399,9 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
                   color: const Color(0xFFF8FAFB), // Soft background
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: const Color(0xFFBFC0C2).withOpacity(0.3), // Subtle border
+                    color: const Color(
+                      0xFFBFC0C2,
+                    ).withOpacity(0.3), // Subtle border
                     width: 1,
                   ),
                 ),
@@ -389,12 +422,9 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(
+                    const Text(
                       'Tambahkan item untuk quotation Anda',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: const Color(0xFF9D9FA3),
-                      ),
+                      style: TextStyle(fontSize: 14, color: Color(0xFF9D9FA3)),
                     ),
                   ],
                 ),
@@ -405,10 +435,11 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: controller.items.length,
-              separatorBuilder: (context, index) => Divider(
-                color: const Color(0xFFBFC0C2).withOpacity(0.3),
-                height: 1,
-              ),
+              separatorBuilder:
+                  (context, index) => Divider(
+                    color: const Color(0xFFBFC0C2).withOpacity(0.3),
+                    height: 1,
+                  ),
               itemBuilder: (context, index) {
                 final item = controller.items[index];
                 return Container(
@@ -472,7 +503,9 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
-                              color: Color(0xFF059669), // Green for money sesuai search results[5]
+                              color: Color(
+                                0xFF059669,
+                              ), // Green for money sesuai search results[5]
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -484,35 +517,46 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
                                 controller.removeItem(index);
                               }
                             },
-                            itemBuilder: (context) => [
-                              const PopupMenuItem(
-                                value: 'edit',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.edit, size: 16, color: Color(0xFF0C92D2)),
-                                    SizedBox(width: 8),
-                                    Text('Edit'),
-                                  ],
-                                ),
-                              ),
-                              const PopupMenuItem(
-                                value: 'delete',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.delete, size: 16, color: Color(0xFFEF4444)),
-                                    SizedBox(width: 8),
-                                    Text('Hapus'),
-                                  ],
-                                ),
-                              ),
-                            ],
+                            itemBuilder:
+                                (context) => [
+                                  const PopupMenuItem(
+                                    value: 'edit',
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.edit,
+                                          size: 16,
+                                          color: Color(0xFF0C92D2),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text('Edit'),
+                                      ],
+                                    ),
+                                  ),
+                                  const PopupMenuItem(
+                                    value: 'delete',
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.delete,
+                                          size: 16,
+                                          color: Color(0xFFEF4444),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text('Hapus'),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: const Color(0xFFF8FAFB),
                                 borderRadius: BorderRadius.circular(6),
                                 border: Border.all(
-                                  color: const Color(0xFFBFC0C2).withOpacity(0.3),
+                                  color: const Color(
+                                    0xFFBFC0C2,
+                                  ).withOpacity(0.3),
                                 ),
                               ),
                               child: const Icon(
@@ -558,7 +602,9 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF059669).withOpacity(0.1), // Green accent untuk summary
+                  color: const Color(
+                    0xFF059669,
+                  ).withOpacity(0.1), // Green accent untuk summary
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -579,51 +625,59 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
             ],
           ),
           const SizedBox(height: 20),
-          Obx(() => Column(
-            children: [
-              _buildSummaryRow('Subtotal', 'Rp ${controller.subtotal.value.toStringAsFixed(0)}'),
-              const SizedBox(height: 12),
-              _buildTextField(
-                controller: controller.discountController,
-                label: 'Diskon (Opsional)',
-                icon: Icons.discount,
-                keyboardType: TextInputType.number,
-                onChanged: (value) => controller.calculateTotals(),
-              ),
-              const SizedBox(height: 16),
-              _buildSummaryRow('Pajak (${controller.taxRate.value}%)', 'Rp ${controller.tax.value.toStringAsFixed(0)}'),
-              const SizedBox(height: 12),
-              Container(
-                height: 2,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      const Color(0xFF84CCEC).withOpacity(0.3),
-                      const Color(0xFF0C92D2).withOpacity(0.3),
-                    ],
+          Obx(
+            () => Column(
+              children: [
+                _buildSummaryRow(
+                  'Subtotal',
+                  'Rp ${controller.subtotal.value.toStringAsFixed(0)}',
+                ),
+                const SizedBox(height: 12),
+                _buildTextField(
+                  controller: controller.discountController,
+                  label: 'Diskon (Opsional)',
+                  icon: Icons.discount,
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) => controller.calculateTotals(),
+                ),
+                const SizedBox(height: 16),
+                _buildSummaryRow(
+                  'Pajak (${controller.taxRate.value}%)',
+                  'Rp ${controller.tax.value.toStringAsFixed(0)}',
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  height: 2,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xFF84CCEC).withOpacity(0.3),
+                        const Color(0xFF0C92D2).withOpacity(0.3),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      const Color(0xFF059669).withOpacity(0.1),
-                      const Color(0xFF059669).withOpacity(0.05),
-                    ],
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xFF059669).withOpacity(0.1),
+                        const Color(0xFF059669).withOpacity(0.05),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  borderRadius: BorderRadius.circular(12),
+                  child: _buildSummaryRow(
+                    'TOTAL',
+                    'Rp ${controller.total.value.toStringAsFixed(0)}',
+                    isTotal: true,
+                  ),
                 ),
-                child: _buildSummaryRow(
-                  'TOTAL',
-                  'Rp ${controller.total.value.toStringAsFixed(0)}',
-                  isTotal: true,
-                ),
-              ),
-            ],
-          )),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -770,21 +824,11 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
       onTap: onTap,
       validator: validator,
       onChanged: onChanged,
-      style: const TextStyle(
-        fontSize: 16,
-        color: Color(0xFF1F2937),
-      ),
+      style: const TextStyle(fontSize: 16, color: Color(0xFF1F2937)),
       decoration: InputDecoration(
         labelText: isRequired ? '$label *' : label,
-        prefixIcon: Icon(
-          icon,
-          color: const Color(0xFF046CA4),
-          size: 20,
-        ),
-        labelStyle: const TextStyle(
-          color: Color(0xFF6B7280),
-          fontSize: 14,
-        ),
+        prefixIcon: Icon(icon, color: const Color(0xFF046CA4), size: 20),
+        labelStyle: const TextStyle(color: Color(0xFF6B7280), fontSize: 14),
         filled: true,
         fillColor: const Color(0xFFF8FAFB),
         border: OutlineInputBorder(
@@ -803,24 +847,15 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Color(0xFF0C92D2),
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: Color(0xFF0C92D2), width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Color(0xFFEF4444),
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Color(0xFFEF4444),
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: Color(0xFFEF4444), width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,

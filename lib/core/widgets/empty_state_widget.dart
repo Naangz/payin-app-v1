@@ -3,14 +3,14 @@ import '../constants/app_colors.dart';
 import '../constants/app_sizes.dart';
 import 'custom_button.dart';
 
-enum EmptyStateType { 
-  noInvoices, 
-  noClients, 
-  noData, 
-  noResults, 
-  noConnection, 
+enum EmptyStateType {
+  noInvoices,
+  noClients,
+  noData,
+  noResults,
+  noConnection,
   error,
-  maintenance 
+  maintenance,
 }
 
 class EmptyStateWidget extends StatelessWidget {
@@ -25,7 +25,7 @@ class EmptyStateWidget extends StatelessWidget {
   final double? iconSize;
 
   const EmptyStateWidget({
-    Key? key,
+    super.key,
     required this.type,
     this.title,
     this.description,
@@ -35,7 +35,7 @@ class EmptyStateWidget extends StatelessWidget {
     this.customIcon,
     this.iconColor,
     this.iconSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +47,9 @@ class EmptyStateWidget extends StatelessWidget {
           children: [
             // Icon
             _buildIcon(),
-            
+
             const SizedBox(height: AppSizes.spaceL),
-            
+
             // Title
             Text(
               title ?? _getDefaultTitle(),
@@ -60,22 +60,22 @@ class EmptyStateWidget extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: AppSizes.spaceM),
-            
+
             // Description
             Text(
               description ?? _getDefaultDescription(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: AppSizes.fontM,
                 color: AppColors.textSecondary,
                 height: 1.5,
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: AppSizes.spaceXL),
-            
+
             // Action Button
             if (actionText != null && onActionPressed != null)
               CustomButton(
@@ -204,10 +204,7 @@ class EmptyStateWidget extends StatelessWidget {
 class NoInvoicesWidget extends StatelessWidget {
   final VoidCallback? onCreateInvoice;
 
-  const NoInvoicesWidget({
-    Key? key,
-    this.onCreateInvoice,
-  }) : super(key: key);
+  const NoInvoicesWidget({super.key, this.onCreateInvoice});
 
   @override
   Widget build(BuildContext context) {
@@ -224,17 +221,18 @@ class NoSearchResultsWidget extends StatelessWidget {
   final VoidCallback? onClearSearch;
 
   const NoSearchResultsWidget({
-    Key? key,
+    super.key,
     required this.searchQuery,
     this.onClearSearch,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return EmptyStateWidget(
       type: EmptyStateType.noResults,
       title: 'Tidak Ditemukan',
-      description: 'Tidak ada hasil untuk "$searchQuery". Coba kata kunci lain.',
+      description:
+          'Tidak ada hasil untuk "$searchQuery". Coba kata kunci lain.',
       actionText: 'Hapus Pencarian',
       onActionPressed: onClearSearch,
     );
@@ -245,17 +243,15 @@ class ErrorStateWidget extends StatelessWidget {
   final String? errorMessage;
   final VoidCallback? onRetry;
 
-  const ErrorStateWidget({
-    Key? key,
-    this.errorMessage,
-    this.onRetry,
-  }) : super(key: key);
+  const ErrorStateWidget({super.key, this.errorMessage, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
     return EmptyStateWidget(
       type: EmptyStateType.error,
-      description: errorMessage ?? 'Terjadi kesalahan saat memuat data. Silakan coba lagi.',
+      description:
+          errorMessage ??
+          'Terjadi kesalahan saat memuat data. Silakan coba lagi.',
       actionText: 'Coba Lagi',
       onActionPressed: onRetry,
     );

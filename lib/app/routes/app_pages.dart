@@ -22,7 +22,6 @@ import 'package:pay_in/presentation/client/client_list_screen.dart';
 import 'package:pay_in/app/bindings/client_binding.dart';
 import 'package:pay_in/presentation/client/add_client_screen.dart';
 
-
 class AppPages {
   static const INITIAL = AppRoutes.DASHBOARD;
 
@@ -33,40 +32,42 @@ class AppPages {
       page: () => DashboardScreen(),
       binding: DashboardBinding(),
     ),
-    
+
     // Invoice routes
     GetPage(
       name: AppRoutes.INVOICE_LIST,
       page: () => InvoiceListScreen(),
       binding: InvoiceBinding(),
     ),
-    
+
     GetPage(
       name: AppRoutes.CREATE_INVOICE,
       page: () => CreateInvoiceScreen(),
       binding: InvoiceBinding(),
     ),
-    
+
     GetPage(
       name: AppRoutes.INVOICE_DETAIL,
       page: () => InvoiceDetailScreen(),
       binding: InvoiceBinding(),
     ),
-    
+
     GetPage(
       name: AppRoutes.EDIT_INVOICE,
       page: () => EditInvoiceScreen(),
       binding: InvoiceBinding(),
     ),
-    
+
     GetPage(
       name: AppRoutes.QUOTATION_LIST,
-      page: () => QuotationListScreen(),
+      page: () => const QuotationListScreen(),
       binding: QuotationBinding(),
     ),
     GetPage(
       name: AppRoutes.CREATE_QUOTATION,
-      page: () => CreateQuotationScreen(), // Ganti dengan screen yang sudah dibuat
+      page:
+          () =>
+              CreateQuotationScreen(), // Ganti dengan screen yang sudah dibuat
       binding: QuotationBinding(),
     ),
     GetPage(
@@ -86,7 +87,7 @@ class AppPages {
       page: () => AnalyticsScreen(),
       binding: AnalyticsBinding(),
     ),
-    
+
     // Settings
     GetPage(
       name: AppRoutes.SETTINGS,
@@ -96,21 +97,20 @@ class AppPages {
 
     //Client
     GetPage(
-    name: AppRoutes.CLIENT_LIST,
-    page: () => ClientListScreen(),
-    binding: ClientBinding(),
+      name: AppRoutes.CLIENT_LIST,
+      page: () => ClientListScreen(),
+      binding: ClientBinding(),
     ),
     GetPage(
-    name: AppRoutes.ADD_CLIENT,
-    page: () => AddClientScreen(), // <- ganti dengan nama class screen kamu
+      name: AppRoutes.ADD_CLIENT,
+      page: () => AddClientScreen(), // <- ganti dengan nama class screen kamu
     ),
-
   ];
 }
 
 // Placeholder Widgets untuk halaman yang belum dibuat
 class InvoiceListPlaceholder extends StatelessWidget {
-  const InvoiceListPlaceholder({Key? key}) : super(key: key);
+  const InvoiceListPlaceholder({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -124,26 +124,16 @@ class InvoiceListPlaceholder extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.receipt_long,
-              size: 64,
-              color: Colors.blue,
-            ),
+            Icon(Icons.receipt_long, size: 64, color: Colors.blue),
             SizedBox(height: 16),
             Text(
               'Daftar Invoice',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
               'Halaman ini sedang dalam pengembangan',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),
@@ -153,7 +143,7 @@ class InvoiceListPlaceholder extends StatelessWidget {
 }
 
 class CreateInvoicePlaceholder extends StatelessWidget {
-  const CreateInvoicePlaceholder({Key? key}) : super(key: key);
+  const CreateInvoicePlaceholder({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -167,26 +157,16 @@ class CreateInvoicePlaceholder extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.add_circle_outline,
-              size: 64,
-              color: Colors.green,
-            ),
+            Icon(Icons.add_circle_outline, size: 64, color: Colors.green),
             SizedBox(height: 16),
             Text(
               'Buat Invoice Baru',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
               'Halaman ini sedang dalam pengembangan',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),
@@ -196,7 +176,7 @@ class CreateInvoicePlaceholder extends StatelessWidget {
 }
 
 class InvoiceDetailPlaceholder extends StatelessWidget {
-  const InvoiceDetailPlaceholder({Key? key}) : super(key: key);
+  const InvoiceDetailPlaceholder({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -210,26 +190,16 @@ class InvoiceDetailPlaceholder extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.description,
-              size: 64,
-              color: Colors.orange,
-            ),
+            Icon(Icons.description, size: 64, color: Colors.orange),
             SizedBox(height: 16),
             Text(
               'Detail Invoice',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
               'Halaman ini sedang dalam pengembangan',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),
@@ -239,7 +209,7 @@ class InvoiceDetailPlaceholder extends StatelessWidget {
 }
 
 class EditInvoicePlaceholder extends StatelessWidget {
-  const EditInvoicePlaceholder({Key? key}) : super(key: key);
+  const EditInvoicePlaceholder({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -253,26 +223,16 @@ class EditInvoicePlaceholder extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.edit,
-              size: 64,
-              color: Colors.purple,
-            ),
+            Icon(Icons.edit, size: 64, color: Colors.purple),
             SizedBox(height: 16),
             Text(
               'Edit Invoice',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
               'Halaman ini sedang dalam pengembangan',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),
@@ -282,7 +242,7 @@ class EditInvoicePlaceholder extends StatelessWidget {
 }
 
 class AnalyticsPlaceholder extends StatelessWidget {
-  const AnalyticsPlaceholder({Key? key}) : super(key: key);
+  const AnalyticsPlaceholder({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -296,26 +256,16 @@ class AnalyticsPlaceholder extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.analytics,
-              size: 64,
-              color: Colors.teal,
-            ),
+            Icon(Icons.analytics, size: 64, color: Colors.teal),
             SizedBox(height: 16),
             Text(
               'Analytics & Laporan',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
               'Halaman ini sedang dalam pengembangan',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),
@@ -325,7 +275,7 @@ class AnalyticsPlaceholder extends StatelessWidget {
 }
 
 class SettingsPlaceholder extends StatelessWidget {
-  const SettingsPlaceholder({Key? key}) : super(key: key);
+  const SettingsPlaceholder({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -339,26 +289,16 @@ class SettingsPlaceholder extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.settings,
-              size: 64,
-              color: Colors.grey,
-            ),
+            Icon(Icons.settings, size: 64, color: Colors.grey),
             SizedBox(height: 16),
             Text(
               'Pengaturan Aplikasi',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
               'Halaman ini sedang dalam pengembangan',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),

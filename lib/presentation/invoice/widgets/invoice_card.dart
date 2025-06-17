@@ -13,7 +13,7 @@ class InvoiceCard extends StatelessWidget {
   final Function(String)? onStatusChange;
 
   const InvoiceCard({
-    Key? key,
+    super.key,
     required this.invoice,
     this.onTap,
     this.onEdit,
@@ -22,15 +22,13 @@ class InvoiceCard extends StatelessWidget {
     this.onGeneratePdf,
     this.onSendEmail,
     this.onStatusChange,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -69,9 +67,9 @@ class InvoiceCard extends StatelessWidget {
                   InvoiceStatusChip(status: invoice.status),
                 ],
               ),
-              
+
               const SizedBox(height: 12),
-              
+
               // Amount and Date Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,10 +79,7 @@ class InvoiceCard extends StatelessWidget {
                     children: [
                       Text(
                         'Total',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                       Text(
                         invoice.formattedTotal,
@@ -101,26 +96,24 @@ class InvoiceCard extends StatelessWidget {
                     children: [
                       Text(
                         'Jatuh Tempo',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                       Text(
                         '${invoice.dueDate.day}/${invoice.dueDate.month}/${invoice.dueDate.year}',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: invoice.isOverdue ? Colors.red : Colors.black87,
+                          color:
+                              invoice.isOverdue ? Colors.red : Colors.black87,
                         ),
                       ),
                     ],
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 12),
-              
+
               // Action Buttons
               Row(
                 children: [
@@ -168,50 +161,59 @@ class InvoiceCard extends StatelessWidget {
                           break;
                       }
                     },
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'duplicate',
-                        child: Row(
-                          children: [
-                            Icon(Icons.copy, size: 16),
-                            SizedBox(width: 8),
-                            Text('Duplikasi'),
-                          ],
-                        ),
-                      ),
-                      if (invoice.status.toLowerCase() != 'paid')
-                        const PopupMenuItem(
-                          value: 'mark_paid',
-                          child: Row(
-                            children: [
-                              Icon(Icons.check_circle, size: 16, color: Colors.green),
-                              SizedBox(width: 8),
-                              Text('Tandai Lunas'),
-                            ],
+                    itemBuilder:
+                        (context) => [
+                          const PopupMenuItem(
+                            value: 'duplicate',
+                            child: Row(
+                              children: [
+                                Icon(Icons.copy, size: 16),
+                                SizedBox(width: 8),
+                                Text('Duplikasi'),
+                              ],
+                            ),
                           ),
-                        ),
-                      if (invoice.status.toLowerCase() == 'draft')
-                        const PopupMenuItem(
-                          value: 'mark_sent',
-                          child: Row(
-                            children: [
-                              Icon(Icons.send, size: 16, color: Colors.blue),
-                              SizedBox(width: 8),
-                              Text('Tandai Terkirim'),
-                            ],
+                          if (invoice.status.toLowerCase() != 'paid')
+                            const PopupMenuItem(
+                              value: 'mark_paid',
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.check_circle,
+                                    size: 16,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text('Tandai Lunas'),
+                                ],
+                              ),
+                            ),
+                          if (invoice.status.toLowerCase() == 'draft')
+                            const PopupMenuItem(
+                              value: 'mark_sent',
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.send,
+                                    size: 16,
+                                    color: Colors.blue,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text('Tandai Terkirim'),
+                                ],
+                              ),
+                            ),
+                          const PopupMenuItem(
+                            value: 'delete',
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete, size: 16, color: Colors.red),
+                                SizedBox(width: 8),
+                                Text('Hapus'),
+                              ],
+                            ),
                           ),
-                        ),
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: Row(
-                          children: [
-                            Icon(Icons.delete, size: 16, color: Colors.red),
-                            SizedBox(width: 8),
-                            Text('Hapus'),
-                          ],
-                        ),
-                      ),
-                    ],
+                        ],
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(

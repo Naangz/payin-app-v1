@@ -159,37 +159,40 @@ class EditQuotationController extends GetxController {
         return;
       }
 
-      // Determine new status
-      String newStatus;
-      if (isDraft) {
-        newStatus = 'draft';
-      } else {
-        // Keep original status if not saving as draft, unless it was draft
-        newStatus = originalStatus.value == 'draft' ? 'sent' : originalStatus.value;
+      /* ------------------------------------------------------------------
+      * PENENTUAN STATUS BARU
+      * ------------------------------------------------------------------
+      *  - Default: pertahankan status yang lama.
+      *  - Jika fungsi dipanggil untuk KIRIM (isDraft == false) dan status 
+      *    sebelumnya masih draft, baru ubah ke 'sent'.
+      */
+      String newStatus = originalStatus.value;            // default: tetap
+      if (!isDraft && originalStatus.value == 'draft') {
+        newStatus = 'sent';
       }
 
       final updatedQuotation = originalQuotation!.copyWith(
-        clientName: clientNameController.text.trim(),
-        clientEmail: clientEmailController.text.trim(),
-        clientPhone: clientPhoneController.text.trim(),
-        clientAddress: clientAddressController.text.trim(),
-        clientCompany: clientCompanyController.text.trim().isEmpty 
-            ? null 
-            : clientCompanyController.text.trim(),
+        clientName:     clientNameController.text.trim(),
+        clientEmail:    clientEmailController.text.trim(),
+        clientPhone:    clientPhoneController.text.trim(),
+        clientAddress:  clientAddressController.text.trim(),
+        clientCompany:  clientCompanyController.text.trim().isEmpty
+                          ? null
+                          : clientCompanyController.text.trim(),
         validUntil: validUntil,
-        items: items.toList(),
-        subtotal: subtotal.value,
-        tax: tax.value,
-        discount: discount.value,
-        total: total.value,
-        status: newStatus,
-        notes: notesController.text.trim().isEmpty 
-            ? null 
-            : notesController.text.trim(),
+        items:      items.toList(),
+        subtotal:   subtotal.value,
+        tax:        tax.value,
+        discount:   discount.value,
+        total:      total.value,
+        status:     newStatus,                           // ← pakai status baru
+        notes:      notesController.text.trim().isEmpty
+                          ? null
+                          : notesController.text.trim(),
       );
 
       final success = await _quotationRepository.updateQuotation(updatedQuotation);
-      
+
       if (success) {
         Get.snackbar(
           'Berhasil',
@@ -198,7 +201,7 @@ class EditQuotationController extends GetxController {
           colorText: Colors.white,
         );
 
-        // Navigate back to quotation detail
+        // Kembali ke detail quotation
         Get.offNamed('/quotation-detail', arguments: quotationId);
       } else {
         Get.snackbar('Error', 'Gagal memperbarui quotation');

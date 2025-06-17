@@ -4,6 +4,8 @@ import 'edit_invoice_controller.dart';
 import '../../core/constants/app_colors.dart';
 
 class EditInvoiceScreen extends GetView<EditInvoiceController> {
+  const EditInvoiceScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,10 +62,7 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
     return AppBar(
       title: const Text(
         'Edit Invoice',
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 18,
-        ),
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
       ),
       backgroundColor: AppColors.surface,
       foregroundColor: AppColors.textPrimary,
@@ -78,55 +77,56 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
               onPressed: controller.showEditRestrictedDialog,
             );
           }
-          
+
           return controller.isLoading.value
               ? Container(
-                  margin: const EdgeInsets.all(16),
-                  width: 20,
-                  height: 20,
-                  child: const CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                  ),
-                )
+                margin: const EdgeInsets.all(16),
+                width: 20,
+                height: 20,
+                child: const CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
+              )
               : Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  child: PopupMenuButton<String>(
-                    icon: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryLight,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(
-                        Icons.more_vert,
-                        color: AppColors.primary,
-                        size: 18,
-                      ),
+                margin: const EdgeInsets.only(right: 8),
+                child: PopupMenuButton<String>(
+                  icon: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryLight,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    onSelected: (value) {
-                      if (value == 'save_draft') {
-                        controller.updateInvoice(isDraft: true);
-                      } else if (value == 'save_update') {
-                        controller.updateInvoice(isDraft: false);
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      _buildPopupMenuItem(
-                        'save_draft',
-                        Icons.save_outlined,
-                        'Simpan sebagai Draft',
-                        AppColors.warning,
-                      ),
-                      _buildPopupMenuItem(
-                        'save_update',
-                        Icons.update,
-                        'Perbarui Invoice',
-                        AppColors.success,
-                      ),
-                    ],
+                    child: const Icon(
+                      Icons.more_vert,
+                      color: AppColors.primary,
+                      size: 18,
+                    ),
                   ),
-                );
+                  onSelected: (value) {
+                    if (value == 'save_draft') {
+                      controller.updateInvoice(isDraft: true);
+                    } else if (value == 'save_update') {
+                      controller.updateInvoice(isDraft: false);
+                    }
+                  },
+                  itemBuilder:
+                      (context) => [
+                        _buildPopupMenuItem(
+                          'save_draft',
+                          Icons.save_outlined,
+                          'Simpan sebagai Draft',
+                          AppColors.warning,
+                        ),
+                        _buildPopupMenuItem(
+                          'save_update',
+                          Icons.update,
+                          'Perbarui Invoice',
+                          AppColors.success,
+                        ),
+                      ],
+                ),
+              );
         }),
       ],
     );
@@ -162,10 +162,7 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            Color(0xFF667EEA),
-            Color(0xFF764BA2),
-          ],
+          colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -273,10 +270,7 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  color.withOpacity(0.05),
-                  Colors.transparent,
-                ],
+                colors: [color.withOpacity(0.05), Colors.transparent],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -293,11 +287,7 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
                     color: color,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(
-                    icon,
-                    size: 18,
-                    color: Colors.white,
-                  ),
+                  child: Icon(icon, size: 18, color: Colors.white),
                 ),
                 const SizedBox(width: 12),
                 Text(title, style: AppTextStyles.h3),
@@ -403,13 +393,14 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
         onTap: () async {
           final date = await showDatePicker(
             context: Get.context!,
-            initialDate: controller.originalInvoice?.dueDate ?? 
+            initialDate:
+                controller.originalInvoice?.dueDate ??
                 DateTime.now().add(const Duration(days: 30)),
             firstDate: DateTime.now(),
             lastDate: DateTime.now().add(const Duration(days: 365)),
           );
           if (date != null) {
-            controller.dueDateController.text = 
+            controller.dueDateController.text =
                 '${date.day}/${date.month}/${date.year}';
           }
         },
@@ -472,18 +463,11 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
                 color: AppColors.primaryLight,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
-                icon,
-                size: 18,
-                color: AppColors.primary,
-              ),
+              child: Icon(icon, size: 18, color: AppColors.primary),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.border,
-                width: 1.5,
-              ),
+              borderSide: const BorderSide(color: AppColors.border, width: 1.5),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -494,17 +478,11 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 1.5,
-              ),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.5),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 2,
-              ),
+              borderSide: const BorderSide(color: AppColors.error, width: 2),
             ),
             filled: true,
             fillColor: AppColors.surface,
@@ -535,10 +513,7 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
               backgroundColor: AppColors.success,
               foregroundColor: Colors.white,
               elevation: 0,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -554,19 +529,20 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: controller.items.length,
-            separatorBuilder: (context, index) => Container(
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              height: 1,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.transparent,
-                    AppColors.border,
-                    Colors.transparent,
-                  ],
+            separatorBuilder:
+                (context, index) => Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  height: 1,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.transparent,
+                        AppColors.border,
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
             itemBuilder: (context, index) => _buildItemTile(index),
           );
         }),
@@ -585,7 +561,7 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
               color: AppColors.primaryLight,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.inventory_2_outlined,
               size: 48,
               color: AppColors.primary,
@@ -594,12 +570,10 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
           const SizedBox(height: 16),
           Text(
             'Belum ada item',
-            style: AppTextStyles.h3.copyWith(
-              color: AppColors.textSecondary,
-            ),
+            style: AppTextStyles.h3.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 8),
-          Text(
+          const Text(
             'Tambahkan item untuk invoice Anda',
             style: AppTextStyles.bodyMedium,
             textAlign: TextAlign.center,
@@ -616,9 +590,7 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
       decoration: BoxDecoration(
         color: AppColors.surfaceVariant,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.border.withOpacity(0.5),
-        ),
+        border: Border.all(color: AppColors.border.withOpacity(0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -654,37 +626,32 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
                     controller.removeItem(index);
                   }
                 },
-                itemBuilder: (context) => [
-                  _buildPopupMenuItem(
-                    'edit',
-                    Icons.edit_outlined,
-                    'Edit',
-                    AppColors.primary,
-                  ),
-                  _buildPopupMenuItem(
-                    'delete',
-                    Icons.delete_outline,
-                    'Hapus',
-                    AppColors.error,
-                  ),
-                ],
+                itemBuilder:
+                    (context) => [
+                      _buildPopupMenuItem(
+                        'edit',
+                        Icons.edit_outlined,
+                        'Edit',
+                        AppColors.primary,
+                      ),
+                      _buildPopupMenuItem(
+                        'delete',
+                        Icons.delete_outline,
+                        'Hapus',
+                        AppColors.error,
+                      ),
+                    ],
               ),
             ],
           ),
           const SizedBox(height: 8),
-          Text(
-            item.description,
-            style: AppTextStyles.bodyMedium,
-          ),
+          Text(item.description, style: AppTextStyles.bodyMedium),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 4,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(6),
@@ -718,62 +685,65 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
       color: AppColors.success,
       children: [
         const SizedBox(height: 8),
-        Obx(() => Column(
-          children: [
-            _buildSummaryRow('Subtotal', controller.subtotal.value),
-            const SizedBox(height: 16),
-            _buildModernTextField(
-              label: 'Diskon',
-              controller: controller.discountController,
-              icon: Icons.local_offer_outlined,
-              hint: 'Masukkan nominal diskon',
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 16),
-            _buildSummaryRow('Pajak (${controller.taxRate.value}%)', controller.tax.value),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 20),
-              height: 1,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.transparent,
-                    AppColors.border,
-                    Colors.transparent,
+        Obx(
+          () => Column(
+            children: [
+              _buildSummaryRow('Subtotal', controller.subtotal.value),
+              const SizedBox(height: 16),
+              _buildModernTextField(
+                label: 'Diskon',
+                controller: controller.discountController,
+                icon: Icons.local_offer_outlined,
+                hint: 'Masukkan nominal diskon',
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 16),
+              _buildSummaryRow(
+                'Pajak (${controller.taxRate.value}%)',
+                controller.tax.value,
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                height: 1,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.transparent,
+                      AppColors.border,
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.successLight,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.success.withOpacity(0.2)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'TOTAL',
+                      style: AppTextStyles.h3.copyWith(
+                        color: AppColors.success,
+                      ),
+                    ),
+                    Text(
+                      'Rp ${controller.total.value.toStringAsFixed(0)}',
+                      style: AppTextStyles.h2.copyWith(
+                        color: AppColors.success,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.successLight,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppColors.success.withOpacity(0.2),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'TOTAL',
-                    style: AppTextStyles.h3.copyWith(
-                      color: AppColors.success,
-                    ),
-                  ),
-                  Text(
-                    'Rp ${controller.total.value.toStringAsFixed(0)}',
-                    style: AppTextStyles.h2.copyWith(
-                      color: AppColors.success,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        )),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -785,9 +755,7 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
         Text(label, style: AppTextStyles.bodyLarge),
         Text(
           'Rp ${value.toStringAsFixed(0)}',
-          style: AppTextStyles.bodyLarge.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w600),
         ),
       ],
     );
@@ -887,20 +855,20 @@ class EditInvoiceScreen extends GetView<EditInvoiceController> {
                 color: AppColors.errorLight,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.lock_outline,
                 size: 64,
                 color: AppColors.error,
               ),
             ),
             const SizedBox(height: 24),
-            Text(
+            const Text(
               'Invoice Tidak Dapat Diedit',
               style: AppTextStyles.h2,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            Text(
+            const Text(
               'Invoice yang sudah lunas tidak dapat diedit untuk menjaga integritas data.',
               style: AppTextStyles.bodyLarge,
               textAlign: TextAlign.center,

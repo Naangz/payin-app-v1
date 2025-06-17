@@ -3,14 +3,14 @@ import 'dart:math'; // IMPORT INI YANG HILANG
 import '../constants/app_colors.dart';
 import '../constants/app_sizes.dart';
 
-enum LoadingType { 
-  circular, 
-  linear, 
-  dots, 
-  shimmer, 
+enum LoadingType {
+  circular,
+  linear,
+  dots,
+  shimmer,
   skeleton,
   fullscreen,
-  overlay 
+  overlay,
 }
 
 class LoadingWidget extends StatelessWidget {
@@ -21,13 +21,13 @@ class LoadingWidget extends StatelessWidget {
   final bool showMessage;
 
   const LoadingWidget({
-    Key? key,
+    super.key,
     this.type = LoadingType.circular,
     this.message,
     this.color,
     this.size,
     this.showMessage = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class LoadingWidget extends StatelessWidget {
             const SizedBox(height: AppSizes.spaceM),
             Text(
               message!,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: AppSizes.fontM,
                 color: AppColors.textSecondary,
               ),
@@ -85,16 +85,14 @@ class LoadingWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         LinearProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(
-            color ?? AppColors.primary,
-          ),
+          valueColor: AlwaysStoppedAnimation<Color>(color ?? AppColors.primary),
           backgroundColor: (color ?? AppColors.primary).withOpacity(0.2),
         ),
         if (showMessage && message != null) ...[
           const SizedBox(height: AppSizes.spaceM),
           Text(
             message!,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: AppSizes.fontM,
               color: AppColors.textSecondary,
             ),
@@ -118,7 +116,7 @@ class LoadingWidget extends StatelessWidget {
             const SizedBox(height: AppSizes.spaceM),
             Text(
               message!,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: AppSizes.fontM,
                 color: AppColors.textSecondary,
               ),
@@ -133,8 +131,9 @@ class LoadingWidget extends StatelessWidget {
   Widget _buildShimmerLoading() {
     return _ShimmerLoading(
       child: Column(
-        children: List.generate(3, (index) => 
-          Container(
+        children: List.generate(
+          3,
+          (index) => Container(
             margin: const EdgeInsets.only(bottom: AppSizes.spaceM),
             child: Row(
               children: [
@@ -254,10 +253,7 @@ class _DotsLoadingAnimation extends StatefulWidget {
   final Color color;
   final double size;
 
-  const _DotsLoadingAnimation({
-    required this.color,
-    required this.size,
-  });
+  const _DotsLoadingAnimation({required this.color, required this.size});
 
   @override
   State<_DotsLoadingAnimation> createState() => _DotsLoadingAnimationState();
@@ -294,7 +290,7 @@ class _DotsLoadingAnimationState extends State<_DotsLoadingAnimation>
             final animationValue = (_controller.value - delay).clamp(0.0, 1.0);
             // PERBAIKAN: Menggunakan sin dan pi dari dart:math
             final scale = (sin(animationValue * pi) * 0.5) + 0.5;
-            
+
             return Container(
               margin: EdgeInsets.symmetric(horizontal: widget.size * 0.2),
               child: Transform.scale(
@@ -338,10 +334,11 @@ class _ShimmerLoadingState extends State<_ShimmerLoading>
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     )..repeat();
-    
-    _animation = Tween<double>(begin: -1.0, end: 2.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+
+    _animation = Tween<double>(
+      begin: -1.0,
+      end: 2.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -360,16 +357,13 @@ class _ShimmerLoadingState extends State<_ShimmerLoading>
             return LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: const [
-                Colors.grey,
-                Colors.white,
-                Colors.grey,
-              ],
-              stops: [
-                _animation.value - 0.3,
-                _animation.value,
-                _animation.value + 0.3,
-              ].map((stop) => stop.clamp(0.0, 1.0)).toList(),
+              colors: const [Colors.grey, Colors.white, Colors.grey],
+              stops:
+                  [
+                    _animation.value - 0.3,
+                    _animation.value,
+                    _animation.value + 0.3,
+                  ].map((stop) => stop.clamp(0.0, 1.0)).toList(),
             ).createShader(bounds);
           },
           child: widget.child,
@@ -381,7 +375,7 @@ class _ShimmerLoadingState extends State<_ShimmerLoading>
 
 // Specific Loading Widgets
 class InvoiceLoadingWidget extends StatelessWidget {
-  const InvoiceLoadingWidget({Key? key}) : super(key: key);
+  const InvoiceLoadingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -393,7 +387,7 @@ class InvoiceLoadingWidget extends StatelessWidget {
 }
 
 class AnalyticsLoadingWidget extends StatelessWidget {
-  const AnalyticsLoadingWidget({Key? key}) : super(key: key);
+  const AnalyticsLoadingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -405,7 +399,7 @@ class AnalyticsLoadingWidget extends StatelessWidget {
 }
 
 class PdfGeneratingWidget extends StatelessWidget {
-  const PdfGeneratingWidget({Key? key}) : super(key: key);
+  const PdfGeneratingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

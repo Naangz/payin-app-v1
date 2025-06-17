@@ -4,10 +4,7 @@ import '../dashboard_controller.dart';
 class QuickActions extends StatelessWidget {
   final DashboardController controller;
 
-  const QuickActions({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  const QuickActions({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +92,9 @@ class QuickActions extends StatelessWidget {
         padding: const EdgeInsets.all(8), // Reduced padding untuk 3 kolom
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12), // Smaller radius untuk compact design
+          borderRadius: BorderRadius.circular(
+            12,
+          ), // Smaller radius untuk compact design
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.1),
