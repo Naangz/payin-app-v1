@@ -73,6 +73,21 @@ class QuickActions extends StatelessWidget {
               controller.navigateToSettings,
               'Atur aplikasi',
             ),
+            // --- TOMBOL BARU UNTUK KLIEN --
+            _buildQuickActionCard(
+              'Daftar Klien', 
+              Icons.people_alt_outlined,
+              Colors.green.shade700, 
+              controller.navigateToClientList, 
+              'Kelola daftar klien',
+            ),
+            _buildQuickActionCard(
+              'Tambah Klien', 
+              Icons.person_add_alt_1_outlined,
+              Colors.cyan.shade700, 
+              controller.navigateToCreateClient, 
+              'Client baru',
+            ),
           ],
         ),
       ],

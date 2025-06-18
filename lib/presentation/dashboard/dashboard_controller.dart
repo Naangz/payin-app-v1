@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pay_in/app/routes/app_routes.dart';
 import '../../data/repositories/invoice_repository.dart';
 import '../../data/repositories/analytics_repository.dart';
 import '../../data/models/invoice_model.dart';
@@ -151,7 +152,15 @@ class DashboardController extends GetxController {
   void navigateToQuotationDetail(String quotationId) {
     Get.toNamed('/quotation-detail', arguments: quotationId);
   }
-
+  
+  void navigateToClientList() {
+    Get.toNamed(AppRoutes.CLIENT_LIST);
+  }
+  
+  void navigateToCreateClient() {
+    Get.toNamed(AppRoutes.ADD_CLIENT);
+  }  
+  
   // Helper methods untuk UI
   String get totalRevenueFormatted {
     final revenue = statistics['totalRevenue'] ?? 0.0;
