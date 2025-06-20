@@ -8,6 +8,8 @@ import 'data/services/hive_service.dart';
 import 'data/repositories/client_repository.dart';
 import 'data/repositories/invoice_repository.dart';
 import 'data/repositories/quotation_repository.dart';
+import 'presentation/client/client_list_controller.dart';
+
 
 void main() async {
   // Pastikan Flutter binding sudah diinisialisasi
@@ -49,6 +51,7 @@ Future<void> _initializeServices() async {
     Get.put(ClientRepository());
     Get.put(InvoiceRepository());
     Get.put(QuotationRepository()); // <<< TAMBAHKAN BARIS INI
+    Get.put(ClientListController());
 
     
     print('✅ Services initialized successfully (using SharedPreferences)');
