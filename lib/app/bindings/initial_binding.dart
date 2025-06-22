@@ -4,6 +4,10 @@ import '../../data/repositories/analytics_repository.dart';
 import '../../data/services/local_storage_service.dart';
 import '../../data/services/pdf_service.dart';
 import '../../data/services/email_api_service.dart';
+import '../../data/repositories/client_repository.dart';
+import '../../data/repositories/quotation_repository.dart';
+import '../../presentation/client/client_list_controller.dart';
+
 //import '../../data/services/hive_service.dart';
 
 class InitialBinding extends Bindings {
@@ -34,6 +38,12 @@ class InitialBinding extends Bindings {
       () => AnalyticsRepository(),
       fenix: true,
     );
+
+    //client
+    Get.lazyPut<ClientRepository>(() => ClientRepository(), fenix: true);
+    Get.lazyPut<QuotationRepository>(() => QuotationRepository(), fenix: true);
+    Get.lazyPut<ClientListController>(() => ClientListController(), fenix: true);
+
     
     print('✅ Initial bindings registered successfully');
   }

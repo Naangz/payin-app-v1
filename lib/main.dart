@@ -10,24 +10,22 @@ import 'data/repositories/invoice_repository.dart';
 import 'data/repositories/quotation_repository.dart';
 import 'presentation/client/client_list_controller.dart';
 
-
 void main() async {
-  // Pastikan Flutter binding sudah diinisialisasi
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Set orientasi portrait only
+
+  // Set orientasi hanya portrait
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  
-  // Inisialisasi services tanpa Hive adapters
+
+  // Inisialisasi layanan dan dependency
   await _initializeServices();
-  
+
   // Inisialisasi format tanggal Indonesia
   await initializeDateFormatting('id_ID', null);
-  
-  // Set status bar style
+
+  // Styling status bar
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -35,28 +33,24 @@ void main() async {
       statusBarBrightness: Brightness.light,
     ),
   );
-  
+
+  // Jalankan aplikasi (PayInApp sudah mengandung GetMaterialApp)
   runApp(const PayInApp());
 }
 
-/// Initialize services tanpa menggunakan Hive adapters
 Future<void> _initializeServices() async {
   try {
-    // Buat instance HiveService (yang sebenarnya menggunakan SharedPreferences)
     final hiveService = HiveService();
     await hiveService.init();
-    
-    // Register ke GetX dependency injection
+
     Get.put<HiveService>(hiveService, permanent: true);
     Get.put(ClientRepository());
     Get.put(InvoiceRepository());
-    Get.put(QuotationRepository()); // <<< TAMBAHKAN BARIS INI
+    Get.put(QuotationRepository());
     Get.put(ClientListController());
 
-    
-    print('✅ Services initialized successfully (using SharedPreferences)');
+    print('✅ Services initialized successfully');
   } catch (e) {
     print('❌ Error initializing services: $e');
-    // Aplikasi tetap bisa jalan meski ada error
   }
 }
