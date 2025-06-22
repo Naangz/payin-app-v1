@@ -32,6 +32,8 @@ dependencies:
   # Email & Sharing
   share_plus: ^7.2.2
   mailer: ^6.0.1
+  dio: ^5.4.0            # HTTP client
+  flutter_secure_storage: ^9.0.0   # menyimpan token terenkripsi
   
   # UI Components
   cupertino_icons: ^1.0.8

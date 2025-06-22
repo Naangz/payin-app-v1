@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import '../../../data/repositories/invoice_repository.dart';
 import '../../../data/models/invoice_model.dart';
 import '../../../data/services/pdf_service.dart';
-import '../../../data/services/email_service.dart';
+import '../../../data/services/email_api_service.dart';
 
 class InvoiceDetailController extends GetxController {
-  final InvoiceRepository _invoiceRepository = Get.find<InvoiceRepository>();
-  final PdfService _pdfService = Get.find<PdfService>();
-  final EmailService _emailService = Get.find<EmailService>();
+  final InvoiceRepository _invoiceRepository = Get.find();
+  final PdfService _pdfService = Get.find();
+  
   
   // Observable variables
   final RxBool isLoading = false.obs;
@@ -99,23 +99,21 @@ class InvoiceDetailController extends GetxController {
       
       isLoading.value = true;
       
-      final pdfBytes = await _pdfService.generateInvoicePdf(invoice.value!);
-      final success = await _emailService.sendInvoiceEmail(
-        invoice: invoice.value!,
-        pdfBytes: pdfBytes,
+      // 1) Kirim lewat repository (akan generate PDF & panggil Worker)
+      await _invoiceRepository.emailInvoice(
+        invoice.value!,
+        to: invoice.value!.clientEmail,
       );
+
+      // 2) Tandai status terkirim
+      await updateStatus('sent');
       
-      if (success) {
-        await updateStatus('sent');
-        Get.snackbar(
-          'Berhasil',
-          'Invoice berhasil dikirim via email',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-      } else {
-        Get.snackbar('Error', 'Gagal mengirim email invoice');
-      }
+      Get.snackbar(
+        'Berhasil',
+        'Invoice berhasil dikirim via email',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
     } catch (e) {
       print('❌ Error sending email: $e');
       Get.snackbar('Error', 'Gagal mengirim email invoice');

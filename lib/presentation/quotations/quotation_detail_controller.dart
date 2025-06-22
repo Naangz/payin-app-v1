@@ -6,15 +6,12 @@ import '../../../data/services/pdf_service.dart';
 import '../../../data/services/email_service.dart';
 
 class QuotationDetailController extends GetxController {
-  final QuotationRepository _quotationRepository = Get.find<QuotationRepository>();
+  final QuotationRepository _quotationRepository = Get.find();
+  final Rx<Quotation?> quotation = Rx<Quotation?>(null);
+    final RxBool isLoading = false.obs;
+  String? quotationId;
   final PdfService _pdfService = Get.find<PdfService>();
   final EmailService _emailService = Get.find<EmailService>();
-  
-  // Observable variables
-  final RxBool isLoading = false.obs;
-  final Rx<Quotation?> quotation = Rx<Quotation?>(null);
-  
-  String? quotationId;
 
   @override
   void onInit() {
@@ -99,25 +96,15 @@ class QuotationDetailController extends GetxController {
       
       isLoading.value = true;
       
-      final pdfBytes = await _pdfService.generateQuotationPdf(quotation.value!);
-      final success = await _emailService.sendQuotationEmail(
-        quotation: quotation.value!,
-        pdfBytes: pdfBytes,
+      await _quotationRepository.emailQuotation(
+        quotation.value!,
+        to: quotation.value!.clientEmail,
       );
       
-      if (success) {
-        await updateStatus('sent');
-        Get.snackbar(
-          'Berhasil',
-          'Quotation berhasil dikirim via email',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-      } else {
-        Get.snackbar('Error', 'Gagal mengirim email quotation');
-      }
+      await updateStatus('sent');
+      Get.snackbar('Berhasil', 'Quotation berhasil dikirim via email',
+          backgroundColor: Colors.green, colorText: Colors.white);
     } catch (e) {
-      print('❌ Error sending email: $e');
       Get.snackbar('Error', 'Gagal mengirim email quotation');
     } finally {
       isLoading.value = false;

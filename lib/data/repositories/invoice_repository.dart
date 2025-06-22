@@ -1,11 +1,16 @@
 import 'package:get/get.dart';
+import 'package:pay_in/data/services/pdf_service.dart';
 import '../models/invoice_model.dart';
 import '../services/hive_service.dart';
 import '../services/local_storage_service.dart';
+import '../services/email_api_service.dart';
+//import '../services/pdf_service.dart';
 
 class InvoiceRepository extends GetxService {
   HiveService? _hiveService;
   LocalStorageService? _localStorage;
+  final EmailApiService _email = Get.find();
+  final PdfService _pdfService = PdfService();
 
   @override
   Future<void> onInit() async {
@@ -273,5 +278,22 @@ class InvoiceRepository extends GetxService {
       print('Error clearing all invoices: $e');
       return false;
     }
+  }
+
+  Future<void> emailInvoice(Invoice inv, {required String to}) async {
+    final pdfBytes = await _pdfService.generateInvoicePdf(inv);
+
+    final html = '''
+      <p>Hai ${inv.clientName},</p>
+      <p>Berikut tagihan <b>#${inv.invoiceNumber}</b> sebesar
+      <b>${inv.formattedTotal}</b>. PDF terlampir.</p>
+    ''';
+
+    await _email.sendInvoice(
+      to: to,
+      subject: 'Invoice #${inv.invoiceNumber}',
+      html: html,
+      pdfBytes: pdfBytes,
+    );
   }
 }

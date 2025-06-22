@@ -3,10 +3,14 @@ import 'dart:convert'; // IMPORT INI YANG HILANG untuk jsonDecode dan jsonEncode
 import '../models/quotation_model.dart';
 import '../services/hive_service.dart';
 import '../services/local_storage_service.dart';
+import '../services/pdf_service.dart';
+import '../services/email_api_service.dart';
 
 class QuotationRepository extends GetxService {
   HiveService? _hiveService;
   LocalStorageService? _localStorage;
+  final EmailApiService _email = Get.find();
+  final PdfService _pdfService = PdfService();
 
   static const String _quotationKey = 'quotations_data';
 
@@ -201,6 +205,23 @@ class QuotationRepository extends GetxService {
     } catch (e) {
       return 'QUO-${DateTime.now().millisecondsSinceEpoch}';
     }
+  }
+
+    Future<void> emailQuotation(Quotation quo, {required String to}) async {
+    final pdfBytes = await _pdfService.generateQuotationPdf(quo);   // fileciteturn3file3
+
+    final html = '''
+      <p>Hai ${quo.clientName},</p>
+      <p>Berikut penawaran <b>#${quo.quotationNumber}</b> sebesar
+      <b>${quo.formattedTotal}</b>. PDF terlampir.</p>
+    ''';   // formattedTotal ada di model  fileciteturn3file0
+
+    await _email.sendInvoice(          // fungsi sama; nama tetap generic
+      to: to,
+      subject: 'Quotation #${quo.quotationNumber}',
+      html: html,
+      pdfBytes: pdfBytes,
+    );
   }
 
   LocalStorageService? get localStorage => _localStorage;

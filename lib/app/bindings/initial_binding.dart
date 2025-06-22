@@ -3,7 +3,7 @@ import '../../data/repositories/invoice_repository.dart';
 import '../../data/repositories/analytics_repository.dart';
 import '../../data/services/local_storage_service.dart';
 import '../../data/services/pdf_service.dart';
-import '../../data/services/email_service.dart';
+import '../../data/services/email_api_service.dart';
 //import '../../data/services/hive_service.dart';
 
 class InitialBinding extends Bindings {
@@ -17,8 +17,8 @@ class InitialBinding extends Bindings {
       fenix: true,
     );
     
-    Get.lazyPut<EmailService>(
-      () => EmailService(),
+    Get.lazyPut<EmailApiService>(
+      () => EmailApiService(),
       fenix: true,
     );
     
