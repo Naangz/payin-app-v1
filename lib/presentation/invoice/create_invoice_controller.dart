@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../data/models/client_info_model.dart';
+import '../client/client_list_controller.dart';
 import '../../../data/repositories/invoice_repository.dart';
 import '../../../data/models/invoice_model.dart';
 import '../../../data/models/invoice_item_model.dart';
@@ -9,7 +11,9 @@ import '../../../data/repositories/client_repository.dart';
 class CreateInvoiceController extends GetxController {
   final InvoiceRepository _invoiceRepository = Get.find<InvoiceRepository>();
   LocalStorageService? _localStorage;
-  
+  final ClientListController _clientListController = Get.find();
+  final Rxn<ClientInfo> selectedClient = Rxn<ClientInfo>();
+
   // Observable variables
   final RxBool isLoading = false.obs;
   final RxList<InvoiceItem> items = <InvoiceItem>[].obs;
@@ -28,6 +32,13 @@ class CreateInvoiceController extends GetxController {
   final dueDateController = TextEditingController();
   final notesController = TextEditingController();
   final discountController = TextEditingController();
+
+  final TextEditingController emailC = TextEditingController();
+  final TextEditingController phoneC = TextEditingController();
+  final TextEditingController companyC = TextEditingController();
+  final TextEditingController addressC = TextEditingController();
+
+  List<ClientInfo> get clients => _clientListController.clients;
 
   // Form key
   final formKey = GlobalKey<FormState>();
@@ -53,6 +64,10 @@ class CreateInvoiceController extends GetxController {
     dueDateController.dispose();
     notesController.dispose();
     discountController.dispose();
+    emailC.dispose();
+    phoneC.dispose();
+    companyC.dispose();
+    addressC.dispose();
     super.onClose();
   }
 
@@ -64,9 +79,26 @@ class CreateInvoiceController extends GetxController {
     }
   }
 
+  void onSelectClient(ClientInfo? client) {
+    selectedClient.value = client;
+
+    if (client != null) {
+      emailC.text = client.email;
+      phoneC.text = client.phone;
+      companyC.text = client.company!;
+      addressC.text = client.address;
+    } else {
+      emailC.clear();
+      phoneC.clear();
+      companyC.clear();
+      addressC.clear();
+    }
+  }
+
   void _setDefaultDueDate() {
     final defaultDueDate = DateTime.now().add(const Duration(days: 30));
-    dueDateController.text = '${defaultDueDate.day}/${defaultDueDate.month}/${defaultDueDate.year}';
+    dueDateController.text =
+        '${defaultDueDate.day}/${defaultDueDate.month}/${defaultDueDate.year}';
   }
 
   void _loadTaxRate() {
@@ -76,16 +108,12 @@ class CreateInvoiceController extends GetxController {
   }
 
   void addItem() {
-    Get.dialog(
-      _buildAddItemDialog(),
-    );
+    Get.dialog(_buildAddItemDialog());
   }
 
   void editItem(int index) {
     final item = items[index];
-    Get.dialog(
-      _buildAddItemDialog(item: item, index: index),
-    );
+    Get.dialog(_buildAddItemDialog(item: item, index: index));
   }
 
   void removeItem(int index) {
@@ -96,10 +124,10 @@ class CreateInvoiceController extends GetxController {
   void calculateTotals() {
     subtotal.value = items.fold(0.0, (sum, item) => sum + item.total);
     tax.value = (subtotal.value * taxRate.value) / 100;
-    
+
     final discountValue = double.tryParse(discountController.text) ?? 0.0;
     discount.value = discountValue;
-    
+
     total.value = subtotal.value + tax.value - discount.value;
   }
 
@@ -129,25 +157,26 @@ class CreateInvoiceController extends GetxController {
         clientEmail: clientEmailController.text.trim(),
         clientPhone: clientPhoneController.text.trim(),
         clientAddress: clientAddressController.text.trim(),
-        clientCompany: clientCompanyController.text.trim().isEmpty 
-            ? null 
-            : clientCompanyController.text.trim(),
+        clientCompany:
+            clientCompanyController.text.trim().isEmpty
+                ? null
+                : clientCompanyController.text.trim(),
         items: items.toList(),
         taxRate: taxRate.value,
         discount: discount.value,
-        notes: notesController.text.trim().isEmpty 
-            ? null 
-            : notesController.text.trim(),
-      ).copyWith(
-        dueDate: dueDate,
-        status: isDraft ? 'draft' : 'sent',
-      );
+        notes:
+            notesController.text.trim().isEmpty
+                ? null
+                : notesController.text.trim(),
+      ).copyWith(dueDate: dueDate, status: isDraft ? 'draft' : 'sent');
 
       final invoiceId = await _invoiceRepository.createInvoice(invoice);
 
       Get.snackbar(
         'Berhasil',
-        isDraft ? 'Invoice berhasil disimpan sebagai draft' : 'Invoice berhasil dibuat dan dikirim',
+        isDraft
+            ? 'Invoice berhasil disimpan sebagai draft'
+            : 'Invoice berhasil dibuat dan dikirim',
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
@@ -178,10 +207,18 @@ class CreateInvoiceController extends GetxController {
 
   Widget _buildAddItemDialog({InvoiceItem? item, int? index}) {
     final nameController = TextEditingController(text: item?.name ?? '');
-    final descriptionController = TextEditingController(text: item?.description ?? '');
-    final quantityController = TextEditingController(text: item?.quantity.toString() ?? '1');
-    final priceController = TextEditingController(text: item?.price.toString() ?? '');
-    final itemDiscountController = TextEditingController(text: item?.discount.toString() ?? '0');
+    final descriptionController = TextEditingController(
+      text: item?.description ?? '',
+    );
+    final quantityController = TextEditingController(
+      text: item?.quantity.toString() ?? '1',
+    );
+    final priceController = TextEditingController(
+      text: item?.price.toString() ?? '',
+    );
+    final itemDiscountController = TextEditingController(
+      text: item?.discount.toString() ?? '0',
+    );
 
     return AlertDialog(
       title: Text(item == null ? 'Tambah Item' : 'Edit Item'),
@@ -247,17 +284,15 @@ class CreateInvoiceController extends GetxController {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Get.back(),
-          child: const Text('Batal'),
-        ),
+        TextButton(onPressed: () => Get.back(), child: const Text('Batal')),
         ElevatedButton(
           onPressed: () {
             final name = nameController.text.trim();
             final description = descriptionController.text.trim();
             final quantity = int.tryParse(quantityController.text) ?? 1;
             final price = double.tryParse(priceController.text) ?? 0.0;
-            final itemDiscount = double.tryParse(itemDiscountController.text) ?? 0.0;
+            final itemDiscount =
+                double.tryParse(itemDiscountController.text) ?? 0.0;
 
             if (name.isEmpty || description.isEmpty || price <= 0) {
               Get.snackbar('Error', 'Lengkapi semua field dengan benar');
@@ -288,28 +323,27 @@ class CreateInvoiceController extends GetxController {
   }
 
   Future<void> saveClientIfNotExists() async {
-  final name = clientNameController.text.trim();
-  final email = clientEmailController.text.trim();
-  final phone = clientPhoneController.text.trim();
-  final address = clientAddressController.text.trim();
-  final company = clientCompanyController.text.trim().isEmpty
-      ? null
-      : clientCompanyController.text.trim();
+    final name = clientNameController.text.trim();
+    final email = clientEmailController.text.trim();
+    final phone = clientPhoneController.text.trim();
+    final address = clientAddressController.text.trim();
+    final company =
+        clientCompanyController.text.trim().isEmpty
+            ? null
+            : clientCompanyController.text.trim();
 
-  if (email.isEmpty) return;
+    if (email.isEmpty) return;
 
-  final existingClient = await _clientRepository.findByEmail(email);
+    final existingClient = await _clientRepository.findByEmail(email);
 
-  if (existingClient == null) {
-    await _clientRepository.createClient(
-      name: name,
-      email: email,
-      phone: phone,
-      address: address,
-      company: company,
-    );
+    if (existingClient == null) {
+      await _clientRepository.createClient(
+        name: name,
+        email: email,
+        phone: phone,
+        address: address,
+        company: company,
+      );
+    }
   }
-}
-
-
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../data/models/client_info_model.dart';
 import 'create_quotation_controller.dart';
 
 class CreateQuotationScreen extends GetView<CreateQuotationController> {
@@ -169,18 +170,36 @@ class CreateQuotationScreen extends GetView<CreateQuotationController> {
             ],
           ),
           const SizedBox(height: 20),
-          _buildTextField(
-            controller: controller.clientNameController,
-            label: 'Nama Client',
-            icon: Icons.person,
-            isRequired: true,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Nama client harus diisi';
-              }
-              return null;
-            },
+          Obx(
+            () => DropdownButtonFormField<ClientInfo>(
+              decoration: InputDecoration(
+                labelText: 'Nama Client',
+                prefixIcon: const Icon(Icons.person),
+                border: const OutlineInputBorder(),
+              ),
+              isExpanded: true,
+              value: controller.selectedClient.value,
+              items:
+                  controller.clients
+                      .map(
+                        (client) => DropdownMenuItem<ClientInfo>(
+                          value: client,
+                          child: Text(client.name),
+                        ),
+                      )
+                      .toList(),
+              onChanged: (ClientInfo? newClient) {
+                controller.onSelectClient(newClient);
+              },
+              validator: (value) {
+                if (value == null) {
+                  return 'Nama client harus dipilih';
+                }
+                return null;
+              },
+            ),
           ),
+
           const SizedBox(height: 16),
           _buildTextField(
             controller: controller.clientEmailController,

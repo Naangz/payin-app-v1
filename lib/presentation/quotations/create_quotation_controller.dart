@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../data/models/client_info_model.dart';
+import '../client/client_list_controller.dart';
 import '../../../data/repositories/quotation_repository.dart';
 import '../../../data/repositories/client_repository.dart'; // ✅ Tambahan
 import '../../../data/models/quotation_model.dart';
@@ -12,6 +14,8 @@ class CreateQuotationController extends GetxController {
   final ClientRepository _clientRepository =
       Get.find<ClientRepository>(); // ✅ Tambahan
   LocalStorageService? _localStorage;
+  final ClientListController _clientListController = Get.find();
+  final Rxn<ClientInfo> selectedClient = Rxn<ClientInfo>();
 
   final RxBool isLoading = false.obs;
   final RxList<QuotationItem> items = <QuotationItem>[].obs;
@@ -29,6 +33,12 @@ class CreateQuotationController extends GetxController {
   final validUntilController = TextEditingController();
   final notesController = TextEditingController();
   final discountController = TextEditingController();
+  final TextEditingController emailC = TextEditingController();
+  final TextEditingController phoneC = TextEditingController();
+  final TextEditingController companyC = TextEditingController();
+  final TextEditingController addressC = TextEditingController();
+
+  List<ClientInfo> get clients => _clientListController.clients;
 
   final formKey = GlobalKey<FormState>();
 
@@ -50,6 +60,10 @@ class CreateQuotationController extends GetxController {
     validUntilController.dispose();
     notesController.dispose();
     discountController.dispose();
+    emailC.dispose();
+    phoneC.dispose();
+    companyC.dispose();
+    addressC.dispose();
     super.onClose();
   }
 
@@ -58,6 +72,22 @@ class CreateQuotationController extends GetxController {
       _localStorage = await LocalStorageService.getInstance();
     } catch (e) {
       print('Error initializing LocalStorage: $e');
+    }
+  }
+
+  void onSelectClient(ClientInfo? client) {
+    selectedClient.value = client;
+
+    if (client != null) {
+      emailC.text = client.email;
+      phoneC.text = client.phone;
+      companyC.text = client.company!;
+      addressC.text = client.address;
+    } else {
+      emailC.clear();
+      phoneC.clear();
+      companyC.clear();
+      addressC.clear();
     }
   }
 

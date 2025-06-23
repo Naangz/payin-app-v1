@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../data/models/client_info_model.dart';
 import 'create_invoice_controller.dart';
 
 class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
@@ -287,12 +288,36 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                _buildTextField(
-                  controller: controller.clientNameController,
-                  label: 'Nama Client',
-                  icon: Icons.person,
-                  isRequired: true,
+                Obx(
+                  () => DropdownButtonFormField<ClientInfo>(
+                    decoration: InputDecoration(
+                      labelText: 'Nama Client',
+                      prefixIcon: const Icon(Icons.person),
+                      border: const OutlineInputBorder(),
+                    ),
+                    isExpanded: true,
+                    value: controller.selectedClient.value,
+                    items:
+                        controller.clients
+                            .map(
+                              (client) => DropdownMenuItem<ClientInfo>(
+                                value: client,
+                                child: Text(client.name),
+                              ),
+                            )
+                            .toList(),
+                    onChanged: (ClientInfo? newClient) {
+                      controller.onSelectClient(newClient);
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Nama client harus dipilih';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
+
                 const SizedBox(height: 20),
                 _buildTextField(
                   controller: controller.clientEmailController,
