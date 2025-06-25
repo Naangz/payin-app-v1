@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../../data/repositories/invoice_repository.dart';
 import '../../../data/models/invoice_model.dart';
 import '../../../data/services/pdf_service.dart';
-import '../../../data/services/email_api_service.dart';
+//import '../../../data/services/email_api_service.dart';
 
 class InvoiceDetailController extends GetxController {
   final InvoiceRepository _invoiceRepository = Get.find();

@@ -570,7 +570,7 @@ class QuotationDetailScreen extends GetView<QuotationDetailController> {
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: controller.sendEmail,
+                  onPressed: () => Get.find<QuotationDetailController>().sendEmail(),
                   icon: const Icon(Icons.email, size: 18),
                   label: const Text('Kirim Email'),
                   style: OutlinedButton.styleFrom(

@@ -16,11 +16,21 @@ class EmailApiService {
     required String html,
     List<int>? pdfBytes,
   }) async {
-    await _dio.post('/', data: {
-      'to': to,
+    final url = '${_dio.options.baseUrl}/';
+
+  try {
+    print('📡 POST $url');
+    await _dio.post('', data: {  'to': to,
       'subject': subject,
       'html': html,
-      if (pdfBytes != null) 'pdf': base64Encode(pdfBytes),
-    });
+      if (pdfBytes != null) 'pdf': base64Encode(pdfBytes),});
+    print('✅ 202 Accepted');
+  } on DioException catch (e) {
+    print('❌ DioException:');
+    print('  type      : ${e.type}');          // connectionTimeout, badCertificate, dll.
+    print('  message   : ${e.message}');
+    print('  response  : ${e.response}');
+    rethrow;
+  }
   }
 }

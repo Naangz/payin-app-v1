@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import '../../../data/repositories/quotation_repository.dart';
 import '../../../data/models/quotation_model.dart';
 import '../../../data/services/pdf_service.dart';
-import '../../../data/services/email_service.dart';
 
 class QuotationDetailController extends GetxController {
   final QuotationRepository _quotationRepository = Get.find();
@@ -11,7 +10,7 @@ class QuotationDetailController extends GetxController {
     final RxBool isLoading = false.obs;
   String? quotationId;
   final PdfService _pdfService = Get.find<PdfService>();
-  final EmailService _emailService = Get.find<EmailService>();
+  final isSending  = false.obs;
 
   @override
   void onInit() {
@@ -91,23 +90,21 @@ class QuotationDetailController extends GetxController {
   }
 
   Future<void> sendEmail() async {
+    final quo = quotation.value;
+    if (quo == null) return;
+
     try {
-      if (quotation.value == null) return;
-      
-      isLoading.value = true;
-      
-      await _quotationRepository.emailQuotation(
-        quotation.value!,
-        to: quotation.value!.clientEmail,
-      );
-      
+      isSending.value = true;
+      await _quotationRepository.emailQuotation(quo, to: quo.clientEmail);
+
+      // jika Anda punya kolom status:
       await updateStatus('sent');
-      Get.snackbar('Berhasil', 'Quotation berhasil dikirim via email',
-          backgroundColor: Colors.green, colorText: Colors.white);
+
+      Get.snackbar('Berhasil', 'Quotation dikirim');
     } catch (e) {
-      Get.snackbar('Error', 'Gagal mengirim email quotation');
+      Get.snackbar('Error', 'Gagal mengirim email');
     } finally {
-      isLoading.value = false;
+      isSending.value = false;
     }
   }
 

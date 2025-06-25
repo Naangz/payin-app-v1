@@ -1,3 +1,5 @@
+import 'quotation_item_model.dart';
+
 class InvoiceItem {
   final String id;
   final String name;
@@ -62,6 +64,17 @@ class InvoiceItem {
     discount: (json['discount'] ?? 0.0).toDouble(),
     unit: json['unit'] ?? 'pcs',
   );
+
+  factory InvoiceItem.fromQuotation(QuotationItem q) => InvoiceItem(
+    id:          q.id,
+    name:        q.name,
+    description: q.description,
+    quantity:    q.quantity,
+    price:       q.price,
+    discount:    q.discount,
+    unit:        q.unit,
+  );
+
 
   // Factory constructor
   factory InvoiceItem.create({

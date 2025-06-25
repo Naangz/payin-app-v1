@@ -19,10 +19,6 @@ class InvoiceBinding extends Bindings {
       Get.lazyPut<PdfService>(() => PdfService());
     }
     
-    if (!Get.isRegistered<EmailService>()) {
-      Get.lazyPut<EmailService>(() => EmailService());
-    }
-    
     // Invoice Controllers
     Get.lazyPut<InvoiceListController>(
       () => InvoiceListController(),

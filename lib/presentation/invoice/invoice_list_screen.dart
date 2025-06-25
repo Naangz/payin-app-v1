@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+//import 'package:pay_in/presentation/invoice/invoice_detail_controller.dart';
 import 'invoice_list_controller.dart';
-import 'widgets/invoice_card.dart';
+//import 'widgets/invoice_card.dart';
+//import 'invoice_detail_controller.dart';
 
 class InvoiceListScreen extends GetView<InvoiceListController> {
   const InvoiceListScreen({super.key});
@@ -515,15 +517,6 @@ class InvoiceListScreen extends GetView<InvoiceListController> {
                         label: 'PDF',
                         color: const Color(0xFFEF4444),
                         onPressed: () => _generatePdf(invoice.id),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildActionButton(
-                        icon: Icons.email,
-                        label: 'Email',
-                        color: const Color(0xFF10B981),
-                        onPressed: () => _sendEmail(invoice.id),
                       ),
                     ),
                   ],

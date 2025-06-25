@@ -22,8 +22,7 @@ class InitialBinding extends Bindings {
     );
     
     Get.lazyPut<EmailApiService>(
-      () => EmailApiService(),
-      fenix: true,
+      () => EmailApiService()
     );
     
     // HiveService sudah di-register di main.dart, jadi tidak perlu di sini

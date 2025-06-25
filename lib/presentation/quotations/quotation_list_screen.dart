@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'quotation_detail_controller.dart';
 import 'quotation_list_controller.dart';
-import 'widgets/quotation_card.dart';
+//import 'widgets/quotation_card.dart';
 
 class QuotationListScreen extends GetView<QuotationListController> {
   const QuotationListScreen({super.key});
@@ -381,7 +382,7 @@ Widget _buildEnhancedQuotationCard(quotation, int index) {
           icon: Icons.email_outlined,
           color: const Color(0xFF059669),
           tooltip: 'Kirim Email',
-          onTap: () => _sendEmail(quotation.id),
+          onTap: () => Get.find<QuotationDetailController>().sendEmail(),
         ),
         const SizedBox(width: 8),
         

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'dart:convert'; // IMPORT INI YANG HILANG untuk jsonDecode dan jsonEncode
 import '../models/quotation_model.dart';
@@ -5,6 +6,9 @@ import '../services/hive_service.dart';
 import '../services/local_storage_service.dart';
 import '../services/pdf_service.dart';
 import '../services/email_api_service.dart';
+import '../models/invoice_model.dart';
+import '../models/invoice_item_model.dart';
+import 'invoice_repository.dart';
 
 class QuotationRepository extends GetxService {
   HiveService? _hiveService;
@@ -160,20 +164,34 @@ class QuotationRepository extends GetxService {
   }
 
   Future<String?> convertQuotationToInvoice(String quotationId) async {
-    try {
-      final quotation = getQuotationById(quotationId);
-      if (quotation == null) return null;
+    final q = getQuotationById(quotationId);
+    if (q == null) return null;
 
-      // Convert quotation to invoice (implementation depends on your invoice model)
-      // This is a placeholder - you'll need to implement based on your invoice structure
-      print('Converting quotation ${quotation.quotationNumber} to invoice');
+    final invoice = Invoice(
+      id:            Invoice.generateId(),
+      invoiceNumber: '',
+      createdDate:   DateTime.now(),
+      dueDate:       DateTime.now().add(const Duration(days: 30)),
+      clientName:    q.clientName,
+      clientEmail:   q.clientEmail,
+      clientPhone:   q.clientPhone,
+      clientAddress: q.clientAddress,
+      clientCompany: q.clientCompany,
 
-      // Return mock invoice ID for now
-      return 'inv_${DateTime.now().millisecondsSinceEpoch}';
-    } catch (e) {
-      print('Error converting quotation to invoice: $e');
-      return null;
-    }
+      // >>> PENYESUAIAN ­­­­­­­­­­­↓↓↓
+      items:         q.items.map(InvoiceItem.fromQuotation).toList(),
+      subtotal:      q.subtotal,        // huruf kecil — sama dg model Invoice
+      tax:           q.tax,
+      discount:      q.discount,
+      total:         q.total,
+      // <<< PENYESUAIAN ↑↑↑
+
+      status:        'draft',
+      notes:         q.notes,
+    );
+
+    final invoiceRepo = Get.find<InvoiceRepository>();
+    return invoiceRepo.createInvoice(invoice);
   }
 
   Future<void> _saveQuotations(List<Quotation> quotations) async {
@@ -207,21 +225,28 @@ class QuotationRepository extends GetxService {
     }
   }
 
-    Future<void> emailQuotation(Quotation quo, {required String to}) async {
-    final pdfBytes = await _pdfService.generateQuotationPdf(quo);   // fileciteturn3file3
+  Future<void> emailQuotation(Quotation q, {required String to}) async {
+    try {
+      final bytes = await PdfService().generateQuotationPdf(q);
+      final html  = '''
+        <p>Hai ${q.clientName},</p>
+        <p>Berikut penawaran <b>#${q.quotationNumber}</b>
+        sebesar <b>${q.formattedTotal}</b>.</p>
+      ''';
 
-    final html = '''
-      <p>Hai ${quo.clientName},</p>
-      <p>Berikut penawaran <b>#${quo.quotationNumber}</b> sebesar
-      <b>${quo.formattedTotal}</b>. PDF terlampir.</p>
-    ''';   // formattedTotal ada di model  fileciteturn3file0
-
-    await _email.sendInvoice(          // fungsi sama; nama tetap generic
-      to: to,
-      subject: 'Quotation #${quo.quotationNumber}',
-      html: html,
-      pdfBytes: pdfBytes,
-    );
+      await _email.sendInvoice(
+        to: to,
+        subject: 'Quotation #${q.quotationNumber}',
+        html: html,
+        pdfBytes: bytes,
+      );
+    } on DioException catch (e) {
+      print('❌ Mail API ${e.response?.statusCode}: ${e.response?.data}');
+      rethrow;
+    } catch (e) {
+      print('❌ emailQuotation error: $e');
+      rethrow;
+    }
   }
 
   LocalStorageService? get localStorage => _localStorage;
