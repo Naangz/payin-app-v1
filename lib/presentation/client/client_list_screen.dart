@@ -59,26 +59,28 @@ class ClientListScreen extends GetView<ClientListController> {
                   // Tampilkan detail atau navigasi
                   showDialog(
                     context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text(client.name),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (client.company != null && client.company!.isNotEmpty)
-                            Text('Perusahaan: ${client.company}'),
-                          Text('Email: ${client.email}'),
-                          Text('Telepon: ${client.phone}'),
-                          Text('Alamat: ${client.address}'),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Tutup'),
+                    builder:
+                        (_) => AlertDialog(
+                          title: Text(client.name),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (client.company != null &&
+                                  client.company!.isNotEmpty)
+                                Text('Perusahaan: ${client.company}'),
+                              Text('Email: ${client.email}'),
+                              Text('Telepon: ${client.phone}'),
+                              Text('Alamat: ${client.address}'),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('Tutup'),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
                   );
                 },
               ),
@@ -95,7 +97,7 @@ class ClientListScreen extends GetView<ClientListController> {
             AppRoutes.ADD_CLIENT,
           );
           if (result == true) {
-            controller.fetchClients(); // Refresh list setelah tambah
+            controller.loadClients(); // Refresh list setelah tambah
           }
         },
       ),

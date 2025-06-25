@@ -83,11 +83,13 @@ class CreateInvoiceController extends GetxController {
     selectedClient.value = client;
 
     if (client != null) {
+      clientNameController.text = client.name;
       emailC.text = client.email;
       phoneC.text = client.phone;
       companyC.text = client.company!;
       addressC.text = client.address;
     } else {
+      clientNameController.clear();
       emailC.clear();
       phoneC.clear();
       companyC.clear();
@@ -344,6 +346,7 @@ class CreateInvoiceController extends GetxController {
         address: address,
         company: company,
       );
+      await _clientListController.loadClients();
     }
   }
 }

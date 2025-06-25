@@ -8,22 +8,22 @@ class ClientListController extends GetxController {
 
   @override
   void onInit() {
-    fetchClients();
+    loadClients();
     super.onInit();
   }
 
-  void fetchClients() async {
+  Future<void> loadClients() async {
     final list = await _repository.getClients();
-    clients.value = list;
+    clients.assignAll(list);
   }
 
   void addClient(ClientInfo client) async {
     await _repository.addClient(client);
-    fetchClients();
+    loadClients();
   }
 
   void deleteClient(String id) async {
     await _repository.deleteClient(id);
-    fetchClients();
+    loadClients();
   }
 }

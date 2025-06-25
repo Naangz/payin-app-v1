@@ -288,33 +288,18 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                Obx(
-                  () => DropdownButtonFormField<ClientInfo>(
-                    decoration: InputDecoration(
-                      labelText: 'Nama Client',
-                      prefixIcon: const Icon(Icons.person),
-                      border: const OutlineInputBorder(),
+                _buildTextField(
+                  controller: controller.clientNameController,
+                  label: 'Nama Client',
+                  icon: Icons.person,
+                  isRequired: true,
+                  suffixIcon: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_drop_down_circle_outlined,
+                      color: Color(0xFF3B82F6),
                     ),
-                    isExpanded: true,
-                    value: controller.selectedClient.value,
-                    items:
-                        controller.clients
-                            .map(
-                              (client) => DropdownMenuItem<ClientInfo>(
-                                value: client,
-                                child: Text(client.name),
-                              ),
-                            )
-                            .toList(),
-                    onChanged: (ClientInfo? newClient) {
-                      controller.onSelectClient(newClient);
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Nama client harus dipilih';
-                      }
-                      return null;
-                    },
+                    tooltip: 'Pilih dari daftar klien',
+                    onPressed: () => _showClientPicker(Get.context!),
                   ),
                 ),
 
@@ -1124,6 +1109,7 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
     bool readOnly = false,
     VoidCallback? onTap,
     void Function(String)? onChanged,
+    Widget? suffixIcon, //
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -1197,8 +1183,42 @@ class CreateInvoiceScreen extends GetView<CreateInvoiceController> {
             horizontal: 20,
             vertical: 18,
           ),
+          suffixIcon: suffixIcon,
+          suffixIconConstraints: const BoxConstraints(
+            minWidth: 40,
+            minHeight: 40,
+          ),
         ),
       ),
+    );
+  }
+
+  void _showClientPicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) {
+        return Obx(() {
+          final clients = controller.clients;
+          return ListView.builder(
+            itemCount: clients.length,
+            itemBuilder: (_, index) {
+              final client = controller.clients[index];
+              return ListTile(
+                leading: const Icon(Icons.person),
+                title: Text(client.name),
+                subtitle: Text(client.email),
+                onTap: () {
+                  Navigator.pop(context);
+                  controller.onSelectClient(client); // isi otomatis
+                },
+              );
+            },
+          );
+        });
+      },
     );
   }
 

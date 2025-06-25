@@ -79,11 +79,13 @@ class CreateQuotationController extends GetxController {
     selectedClient.value = client;
 
     if (client != null) {
+      clientNameController.text = client.name;
       emailC.text = client.email;
       phoneC.text = client.phone;
       companyC.text = client.company!;
       addressC.text = client.address;
     } else {
+      clientNameController.clear();
       emailC.clear();
       phoneC.clear();
       companyC.clear();
@@ -154,6 +156,7 @@ class CreateQuotationController extends GetxController {
         address: clientAddressController.text.trim(),
         company: clientCompanyController.text.trim(),
       );
+      await _clientListController.loadClients();
 
       final quotation = Quotation(
         id: Quotation.generateId(),
